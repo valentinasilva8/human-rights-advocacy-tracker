@@ -1,0 +1,41 @@
+# Research log
+
+Searches on 9 October 2026. Read-only. About one pass over Poland v. Podleśna, Prus, and Gzyra-Iskandar and Hong Kong SAR v. Tam Tak-chi, plus the two fairness-report PDFs already in hand. This is not a finding that unopened documents do not exist.
+
+Proposed rows from this log are in `advocacy_trace/fixtures/proposed_research.json`. They are not approved.
+
+## Poland
+
+**Query:** Podleśna Prus Gzyra-Iskandar appeal Article 196 Płock November 2021 rainbow Virgin Mary court decision.
+
+**Report read:** *Poland vs. Elzbieta Podlesna, Anna Prus, and Joanna Gzyra-Iskandar* (November 2021), Lisa Davis, with ABA Center for Human Rights staff. Cover date is a month. The executive summary says the report is released in advance of the prosecution’s appeal, “the hearing for which is scheduled for November 10.” That sentence does not repeat the year. Trial acquittal is cited as District Court of Płock, II K 296/20, justification dated 2 March 2021. That acquittal is before the report.
+
+**Opened:**
+
+- HFHR, 13 January 2022, [Tęcza nie obraża](https://hfhr.pl/aktualnosci/tecza-nie-obraza-wyrok-uniewinnienie). Says the Regional Court in Płock on 12 January 2022 upheld the acquittal and that the appeals were unfounded. HFHR says it filed an amicus. The amicus PDF was not opened.
+- Rzeczpospolita, publication line 13.01.2022, [Zapadł prawomocny wyrok](https://www.rp.pl/prawo-karne/art19284511-zapadl-prawomocny-wyrok-ws-matki-bozej-z-teczowa-aureola). The lede states the same affirmance. The article says HFHR informs the account of the court’s reasons. Stored as derived from that HFHR account, not as an independent origin.
+
+**Not retrieved:**
+
+- TVN24 URL identified as a lead. A follow-up fetch timed out. No TVN24 passage is stored. Next search: open that URL or the judgment.
+- The appeal judgment. Not found in the pages opened. Do not treat that as “the court did not address the report.”
+
+**Contradiction / dependency:** rp.pl is not a second independent account of the reasons, because it attributes them to HFHR. HFHR and rp.pl agree on the result and the date. Neither is the judgment.
+
+## Tam Tak-chi
+
+**Query:** Tam Tak-chi sedition appeal judgment after April 2022 HKSAR DCCC 927.
+
+**Report read:** *Hong Kong SAR v. Tam Tak-chi* (May 2022), Elizabeth Wilmshurst. Disclaimer: the assessment is the author’s and not necessarily the Clooney Foundation for Justice’s. Conviction in March 2022. Sentence of 40 months and HK$5,000 delivered 20 April 2022. The report is later than both.
+
+**Opened:**
+
+- Court of Appeal, CACC 62/2022, [2024] HKCA 231, 7 March 2024, from a [Columbia-hosted copy](https://globalfreedomofexpression.columbia.edu/wp-content/uploads/2023/07/March-2024-Tam-Tak-Chi-Judgment.pdf). Hearing 4 July 2023. Refuses leave and dismisses the appeals against conviction and sentence. Paragraph 145 holds that Crimes Ordinance ss. 9 and 10 satisfy proportionality, answering counsel (Philip Dykes SC). Recites Reasons for Verdict 2 March 2022, [2022] HKDC 208, and Reasons for Sentence 20 April 2022, [2022] HKDC 343. Text search: no Wilmshurst, TrialWatch, or Clooney.
+- Court of Final Appeal, [2025] HKCFA 4, FACC 12/2024, 6 March 2025, from a BabelCite copy. Appeal dismissed. Holds that the prosecution need not prove an intention to incite violence. Text search: no Wilmshurst, TrialWatch, or Clooney. Official host not confirmed.
+
+**Not retrieved:**
+
+- RTHK URL `https://news.rthk.hk/rthk/en/component/k2/1794531-20250306.htm` returned 404. No RTHK passage is stored. A missing page is not a finding that no story was published.
+- The trial reasons themselves, as a separate document. The dates above are recitals in the Court of Appeal judgment and in the fairness report.
+
+The name search does not establish that the courts never took up the report’s substance without naming it. Reception of the May 2022 report stays “document obtained but reasoning insufficient,” with the reviewer’s reasoning check still false.

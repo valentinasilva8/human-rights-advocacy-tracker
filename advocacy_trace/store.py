@@ -10,15 +10,21 @@ from pathlib import Path
 
 from advocacy_trace.constants import (
     ACCEPTANCE_STATUSES,
+    ACCOUNT_TYPES,
     ARGUMENT_LABELS,
     ATTRIBUTION_ROLES,
+    DISCLAIMER_STATUSES,
     DOCUMENT_TYPES,
     EVIDENCE_LABELS,
     EVENT_TYPES,
+    EXPLICIT_RECEPTION,
     INTERVENTION_TYPES,
     LINK_RELATIONSHIPS,
     LINK_TARGETS,
     NO_UPDATE_EVENT,
+    NOT_STATED,
+    PROVENANCE_VALUES,
+    PUBLIC_ARGUMENT_ROLES,
     RECEPTION_NEEDS_SOURCE,
     RECEPTION_STATUSES,
     REVIEW_STATUSES,
@@ -104,6 +110,13 @@ CREATE TABLE IF NOT EXISTS arguments (
     passage TEXT NOT NULL DEFAULT '',
     location_ref TEXT NOT NULL DEFAULT '',
     legal_authorities TEXT NOT NULL DEFAULT '',
+    institutional_affiliation TEXT NOT NULL DEFAULT '',
+    disclaimer_status TEXT NOT NULL DEFAULT 'not_yet_checked',
+    disclaimer_text TEXT NOT NULL DEFAULT '',
+    principle TEXT NOT NULL DEFAULT '',
+    application TEXT NOT NULL DEFAULT '',
+    remedy_requested TEXT NOT NULL DEFAULT '',
+    claim_supported INTEGER NOT NULL DEFAULT 0 CHECK (claim_supported IN (0, 1)),
     argument_date TEXT,
     argument_date_precision TEXT NOT NULL DEFAULT 'unknown',
     review_status TEXT NOT NULL DEFAULT 'proposed',
@@ -141,6 +154,8 @@ CREATE TABLE IF NOT EXISTS reception_observations (
     passage TEXT NOT NULL DEFAULT '',
     location_ref TEXT NOT NULL DEFAULT '',
     observer_note TEXT NOT NULL DEFAULT '',
+    account_type TEXT NOT NULL DEFAULT 'not_yet_established',
+    reasoning_checked INTEGER NOT NULL DEFAULT 0 CHECK (reasoning_checked IN (0, 1)),
     review_status TEXT NOT NULL DEFAULT 'proposed',
     is_recital INTEGER NOT NULL DEFAULT 0 CHECK (is_recital IN (0, 1)),
     is_synthetic INTEGER NOT NULL DEFAULT 0 CHECK (is_synthetic IN (0, 1))
@@ -152,7 +167,8 @@ CREATE TABLE IF NOT EXISTS evidence_links (
     target_type TEXT NOT NULL,
     target_id TEXT NOT NULL,
     relationship TEXT NOT NULL,
-    independent INTEGER NOT NULL DEFAULT 1 CHECK (independent IN (0, 1))
+    independent INTEGER NOT NULL DEFAULT 0 CHECK (independent IN (0, 1)),
+    provenance TEXT NOT NULL DEFAULT 'unknown'
 );
 
 CREATE TABLE IF NOT EXISTS review_actions (
@@ -164,11 +180,35 @@ CREATE TABLE IF NOT EXISTS review_actions (
     note TEXT NOT NULL DEFAULT '',
     created_at TEXT NOT NULL,
     prior_status TEXT,
-    new_status TEXT
+    new_status TEXT,
+    claim_text TEXT NOT NULL DEFAULT '',
+    evidence_ref TEXT NOT NULL DEFAULT '',
+    claim_supported INTEGER NOT NULL DEFAULT 0 CHECK (claim_supported IN (0, 1)),
+    is_simulated INTEGER NOT NULL DEFAULT 0 CHECK (is_simulated IN (0, 1))
+);
+
+CREATE TABLE IF NOT EXISTS research_attempts (
+    id TEXT PRIMARY KEY,
+    case_id TEXT NOT NULL REFERENCES cases(id),
+    searched_on TEXT,
+    searched_on_precision TEXT NOT NULL DEFAULT 'day',
+    query TEXT NOT NULL,
+    place TEXT NOT NULL,
+    result TEXT NOT NULL,
+    note TEXT NOT NULL DEFAULT '',
+    is_synthetic INTEGER NOT NULL DEFAULT 0 CHECK (is_synthetic IN (0, 1))
 );
 """
 
-BOOL_FIELDS = ("sensitive", "is_synthetic", "is_recital", "independent")
+BOOL_FIELDS = (
+    "sensitive",
+    "is_synthetic",
+    "is_recital",
+    "independent",
+    "claim_supported",
+    "reasoning_checked",
+    "is_simulated",
+)
 _IGNORED_PAYLOAD_KEYS = frozenset(
     {
         "review_status",
@@ -178,7 +218,29 @@ _IGNORED_PAYLOAD_KEYS = frozenset(
         "approve_all",
         "sql",
         "role",
+        "claim_supported",
+        "reasoning_checked",
+        "disclaimer_status",
+        "is_simulated",
     }
+)
+
+ARGUMENT_MATERIAL_FIELDS = (
+    "summary",
+    "reasons",
+    "passage",
+    "location_ref",
+    "legal_authorities",
+    "author_actor",
+    "attribution_role",
+    "institutional_affiliation",
+    "disclaimer_status",
+    "disclaimer_text",
+    "principle",
+    "application",
+    "remedy_requested",
+    "source_id",
+    "intervention_id",
 )
 
 
@@ -206,6 +268,9 @@ class EvidenceStore:
         self.conn.row_factory = sqlite3.Row
         self.conn.execute("PRAGMA foreign_keys = ON")
         self.conn.executescript(SCHEMA)
+        from advocacy_trace.migrate import migrate
+
+        migrate(self.conn)
         self.conn.commit()
 
     def close(self) -> None:
@@ -405,6 +470,12 @@ class EvidenceStore:
         passage: str = "",
         location_ref: str = "",
         legal_authorities: str = "",
+        institutional_affiliation: str = "",
+        disclaimer_status: str = "not_yet_checked",
+        disclaimer_text: str = "",
+        principle: str = "",
+        application: str = "",
+        remedy_requested: str = "",
         labels: list[str] | None = None,
         intervention_id: str | None = None,
         source_id: str | None = None,
@@ -415,7 +486,10 @@ class EvidenceStore:
     ) -> str:
         argument_id = id or _new_id("argument")
         case = self._get_case(case_id)
-        self._check_attribution(author_actor, attribution_role)
+        self._check_attribution(author_actor, attribution_role, institutional_affiliation)
+        self._one_of(disclaimer_status, DISCLAIMER_STATUSES, "Disclaimer status")
+        if disclaimer_status == "stated":
+            self._require_text(disclaimer_text, "Disclaimer text")
         if intervention_id:
             self._must("interventions", intervention_id, "Intervention")
         if source_id:
@@ -427,9 +501,11 @@ class EvidenceStore:
             """
             INSERT INTO arguments (
                 id, case_id, intervention_id, source_id, author_actor, attribution_role,
-                summary, reasons, passage, location_ref, legal_authorities, argument_date,
-                argument_date_precision, review_status, is_synthetic
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'proposed', ?)
+                summary, reasons, passage, location_ref, legal_authorities,
+                institutional_affiliation, disclaimer_status, disclaimer_text,
+                principle, application, remedy_requested, claim_supported,
+                argument_date, argument_date_precision, review_status, is_synthetic
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, 'proposed', ?)
             """,
             (
                 argument_id,
@@ -443,6 +519,12 @@ class EvidenceStore:
                 passage.strip(),
                 location_ref.strip(),
                 legal_authorities.strip(),
+                institutional_affiliation.strip(),
+                disclaimer_status,
+                disclaimer_text.strip(),
+                principle.strip(),
+                application.strip(),
+                remedy_requested.strip(),
                 when,
                 argument_date_precision,
                 int(synthetic),
@@ -528,6 +610,8 @@ class EvidenceStore:
         passage: str = "",
         location_ref: str = "",
         observer_note: str = "",
+        account_type: str = "not_yet_established",
+        reasoning_checked: bool = False,
         is_recital: bool = False,
         is_synthetic: bool = False,
         id: str | None = None,
@@ -545,18 +629,21 @@ class EvidenceStore:
             )
         if status in RECEPTION_NEEDS_SOURCE and not source_id:
             raise ValidationError(
-                f"Reception status '{status}' needs a source. "
-                "Use 'Decision unavailable / insufficient evidence' when the decision is missing."
+                f"Reception status '{status}' needs a cited document. "
+                "Use 'Decision not yet retrieved' or 'Decision sought but unavailable' "
+                "when the decision itself is not in hand."
             )
         if source_id:
             self._must("sources", source_id, "Source")
+        self._one_of(account_type, ACCOUNT_TYPES, "Account type")
         synthetic = bool(is_synthetic or case["is_synthetic"])
         self.conn.execute(
             """
             INSERT INTO reception_observations (
                 id, argument_id, case_id, status, source_id, passage, location_ref,
-                observer_note, review_status, is_recital, is_synthetic
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'proposed', ?, ?)
+                observer_note, account_type, reasoning_checked, review_status,
+                is_recital, is_synthetic
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'proposed', ?, ?)
             """,
             (
                 reception_id,
@@ -567,6 +654,8 @@ class EvidenceStore:
                 passage.strip(),
                 location_ref.strip(),
                 observer_note.strip(),
+                account_type,
+                int(bool(reasoning_checked)),
                 int(bool(is_recital)),
                 int(synthetic),
             ),
@@ -582,6 +671,7 @@ class EvidenceStore:
         target_id: str,
         relationship: str,
         independent: bool | None = None,
+        provenance: str | None = None,
         id: str | None = None,
     ) -> str:
         link_id = id or _new_id("link")
@@ -590,19 +680,76 @@ class EvidenceStore:
         self._one_of(relationship, LINK_RELATIONSHIPS, "Evidence relationship")
         self._target_exists(target_type, target_id)
         if relationship == "duplicates":
+            provenance = "duplicate_copy"
             independent = False
+        if provenance is None:
+            provenance = "unknown"
+        self._one_of(provenance, PROVENANCE_VALUES, "Provenance")
+        # A selected "independent" flag does not establish provenance.
         if independent is None:
-            independent = True
+            independent = False
+        self._invalidate_approval(target_type, target_id)
         self.conn.execute(
             """
             INSERT INTO evidence_links (
-                id, source_id, target_type, target_id, relationship, independent
-            ) VALUES (?, ?, ?, ?, ?, ?)
+                id, source_id, target_type, target_id, relationship, independent, provenance
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)
             """,
-            (link_id, source_id, target_type, target_id, relationship, int(bool(independent))),
+            (
+                link_id,
+                source_id,
+                target_type,
+                target_id,
+                relationship,
+                int(bool(independent)),
+                provenance,
+            ),
         )
         self.conn.commit()
         return link_id
+
+    def add_research_attempt(
+        self,
+        *,
+        case_id: str,
+        query: str,
+        place: str,
+        result: str,
+        note: str = "",
+        searched_on: str | None = None,
+        searched_on_precision: str = "day",
+        is_synthetic: bool = False,
+        id: str | None = None,
+    ) -> str:
+        """Record a search. A not-found result does not mean the document does not exist."""
+
+        attempt_id = id or _new_id("search")
+        self._get_case(case_id)
+        self._require_text(query, "Search query")
+        self._require_text(place, "Search location")
+        self._require_text(result, "Search result")
+        when = normalize_date(searched_on, searched_on_precision)
+        self.conn.execute(
+            """
+            INSERT INTO research_attempts (
+                id, case_id, searched_on, searched_on_precision, query, place,
+                result, note, is_synthetic
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                attempt_id,
+                case_id,
+                when,
+                searched_on_precision,
+                query.strip(),
+                place.strip(),
+                result.strip(),
+                note.strip(),
+                int(bool(is_synthetic)),
+            ),
+        )
+        self.conn.commit()
+        return attempt_id
 
     def review(
         self,
@@ -612,8 +759,10 @@ class EvidenceStore:
         reviewer: str,
         note: str = "",
         edits: dict | None = None,
+        claim_supported: bool = False,
+        reasoning_checked: bool | None = None,
     ) -> str:
-        """Record a human review. Source text cannot call this."""
+        """Record a human review. Source text and model payloads cannot call this."""
 
         if action not in {"approve", "reject", "edit"}:
             raise ValidationError("Review action must be approve, reject, or edit.")
@@ -621,44 +770,79 @@ class EvidenceStore:
         if target_type not in {"argument", "outcome_event", "reception"}:
             raise ValidationError("Review target must be an argument, outcome event, or reception.")
         table = _table_for(target_type)
-        current = self._must(table, target_id, target_type.replace("_", " ").title())
-        prior = current["review_status"]
-        if edits:
-            self._apply_edits(target_type, target_id, edits)
-            current = self._must(table, target_id, target_type)
-        if action == "approve":
-            self._assert_approvable(target_type, target_id)
-            new_status = "approved"
-        elif action == "reject":
-            new_status = "rejected"
-        else:
-            new_status = prior
-        self._one_of(new_status, REVIEW_STATUSES, "Review status")
-        self.conn.execute(
-            f"UPDATE {table} SET review_status = ? WHERE id = ?",
-            (new_status, target_id),
-        )
-        action_id = _new_id("review")
-        self.conn.execute(
-            """
-            INSERT INTO review_actions (
-                id, target_type, target_id, action, reviewer, note, created_at,
-                prior_status, new_status
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """,
-            (
-                action_id,
-                target_type,
-                target_id,
-                action,
-                reviewer.strip(),
-                note.strip(),
-                _now(),
-                prior,
-                new_status,
-            ),
-        )
-        self.conn.commit()
+        try:
+            current = self._must(table, target_id, target_type.replace("_", " ").title())
+            prior = current["review_status"]
+            invalidated = False
+            if reasoning_checked is not None:
+                if target_type != "reception":
+                    raise ValidationError("A reasoning check applies to a reception record.")
+                invalidated = self._apply_edits(
+                    target_type,
+                    target_id,
+                    {"reasoning_checked": bool(reasoning_checked)},
+                ) or invalidated
+            if edits:
+                invalidated = self._apply_edits(target_type, target_id, edits) or invalidated
+            if action == "approve":
+                self._assert_approvable(
+                    target_type,
+                    target_id,
+                    claim_supported=claim_supported,
+                )
+                if target_type == "argument":
+                    self.conn.execute(
+                        "UPDATE arguments SET claim_supported = 1 WHERE id = ?",
+                        (target_id,),
+                    )
+                new_status = "approved"
+            elif action == "reject":
+                if target_type == "argument":
+                    self.conn.execute(
+                        "UPDATE arguments SET claim_supported = 0 WHERE id = ?",
+                        (target_id,),
+                    )
+                new_status = "rejected"
+            elif invalidated:
+                new_status = "proposed"
+            else:
+                new_status = prior
+            self._one_of(new_status, REVIEW_STATUSES, "Review status")
+            self.conn.execute(
+                f"UPDATE {table} SET review_status = ? WHERE id = ?",
+                (new_status, target_id),
+            )
+            claim_text, evidence_ref = self._review_snapshot(target_type, target_id)
+            action_id = _new_id("review")
+            simulated = reviewer.strip() == "synthetic-reviewer"
+            self.conn.execute(
+                """
+                INSERT INTO review_actions (
+                    id, target_type, target_id, action, reviewer, note, created_at,
+                    prior_status, new_status, claim_text, evidence_ref,
+                    claim_supported, is_simulated
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    action_id,
+                    target_type,
+                    target_id,
+                    action,
+                    reviewer.strip(),
+                    note.strip(),
+                    _now(),
+                    prior,
+                    new_status,
+                    claim_text,
+                    evidence_ref,
+                    int(bool(claim_supported) and action == "approve" and target_type == "argument"),
+                    int(simulated),
+                ),
+            )
+            self.conn.commit()
+        except Exception:
+            self.conn.rollback()
+            raise
         return action_id
 
     def ingest_untrusted_text(self, source_id: str, text: str) -> None:
@@ -787,18 +971,25 @@ class EvidenceStore:
         return self._must("sources", source_id, "Source")
 
     def arguments_for_actor(self, actor: str) -> list[dict]:
-        """Arguments made by an actor, not arguments a report merely describes."""
+        """Arguments whose named author is this actor.
 
-        if actor.strip().lower() in TRIALWATCH_AUTHORS:
+        Searching for TrialWatch returns institutional rows only. A named expert
+        stays under their own name even if their affiliation mentions TrialWatch.
+        """
+
+        key = actor.strip().lower()
+        if key in TRIALWATCH_AUTHORS:
             return [
                 item
                 for item in self.list_arguments()
-                if item["attribution_role"] == "trialwatch_argument"
+                if item["author_actor"].strip().lower() in TRIALWATCH_AUTHORS
+                and item["attribution_role"] == "trialwatch_argument"
             ]
         return [
             item
             for item in self.list_arguments()
-            if item["author_actor"] == actor and item["attribution_role"] == "partner_argument"
+            if item["author_actor"].strip() == actor.strip()
+            and item["attribution_role"] != "ai_suggested"
         ]
 
     def outcome_events(self, case_id: str, participant_id: str | None = None) -> list[dict]:
@@ -838,12 +1029,17 @@ class EvidenceStore:
         ).fetchall()
         return [_row(row) for row in rows]
 
-    def independent_support_count(self, event_id: str) -> int:
-        """Count distinct original sources. Copies of one report count once."""
+    def independent_support_count(self, event_id: str, target_type: str = "outcome_event") -> int:
+        """Count distinct origins whose provenance for this claim is independent.
+
+        Unknown provenance, a duplicate, shared underlying reporting, and another
+        document from the same organization do not add to the count. A stored
+        independent flag without that provenance does not add to the count.
+        """
 
         origins: set[str] = set()
-        for link in self.evidence_links_for("outcome_event", event_id):
-            if link["relationship"] != "supports" or not link["independent"]:
+        for link in self.evidence_links_for(target_type, event_id):
+            if link["relationship"] != "supports" or link.get("provenance") != "independent":
                 continue
             source = self._must("sources", link["source_id"], "Source")
             origins.add(source["duplicate_of_source_id"] or source["id"])
@@ -881,8 +1077,10 @@ class EvidenceStore:
         date_from: str | None = None,
         date_to: str | None = None,
         review_status: str | None = "approved",
-        attribution_role: str | None = "trialwatch_argument",
+        attribution_role: str | None = None,
+        attribution_roles: tuple[str, ...] | None = None,
         include_synthetic: bool = True,
+        exclude_sensitive: bool = False,
     ) -> dict:
         hidden_unknown_dates = 0
         matched = []
@@ -890,9 +1088,13 @@ class EvidenceStore:
         cases = {item["id"]: item for item in self.list_cases()}
         for argument in self.list_arguments():
             case = cases[argument["case_id"]]
+            if exclude_sensitive and case["sensitive"]:
+                continue
             if review_status and argument["review_status"] != review_status:
                 continue
             if attribution_role and argument["attribution_role"] != attribution_role:
+                continue
+            if attribution_roles and argument["attribution_role"] not in attribution_roles:
                 continue
             if not include_synthetic and (argument["is_synthetic"] or case["is_synthetic"]):
                 continue
@@ -929,8 +1131,9 @@ class EvidenceStore:
         found = self.search_arguments(
             label=label,
             review_status="approved",
-            attribution_role="trialwatch_argument",
+            attribution_roles=PUBLIC_ARGUMENT_ROLES,
             include_synthetic=include_synthetic,
+            exclude_sensitive=True,
         )
         case_ids = sorted({item["case_id"] for item in found["arguments"]})
         unknown_cases = []
@@ -961,8 +1164,9 @@ class EvidenceStore:
             "excluded_unverified_outcomes": len(unverified) if not include_synthetic else 0,
             "causation": False,
             "note": (
-                "Counts are descriptive. They are not a success rate. "
-                "Multiple arguments in one case count once toward unique cases. "
+                "This count is approved TrialWatch or partner arguments with this label, "
+                "after sensitive cases are left out. Unique cases count a proceeding once. "
+                "It is not a count of verified cases and it is not a success rate. "
                 "Unknown outcomes stay in the denominator."
             ),
         }
@@ -971,34 +1175,97 @@ class EvidenceStore:
         return self.summarize(label, include_synthetic=False)
 
     def public_export(self, *, include_synthetic: bool = False) -> dict:
-        """Export records that are safe to share. Sensitive rows are always omitted."""
+        """Approved, non-sensitive records only.
+
+        Proposed rows, reviewer notes, unresolved questions, and research notes
+        stay out. Approval does not include the source file itself.
+        """
 
         all_cases = self.list_cases()
         sensitive = [case for case in all_cases if case["sensitive"]]
-        cases = [
-            case
+        eligible = {
+            case["id"]: case
             for case in all_cases
             if not case["sensitive"] and (include_synthetic or not case["is_synthetic"])
-        ]
-        case_ids = {case["id"] for case in cases}
+        }
         arguments = [
-            item for item in self.list_arguments() if item["case_id"] in case_ids
+            _public_argument(item)
+            for item in self.list_arguments()
+            if item["case_id"] in eligible
+            and item["review_status"] == "approved"
+            and item["attribution_role"] != "ai_suggested"
         ]
+        argument_ids = {item["id"] for item in arguments}
         outcomes = [
-            item for item in self._all("outcome_events") if item["case_id"] in case_ids
+            _public_outcome(item)
+            for item in self._all("outcome_events")
+            if item["case_id"] in eligible and item["review_status"] == "approved"
+        ]
+        receptions = [
+            _public_reception(item)
+            for item in self._all("reception_observations")
+            if item["review_status"] == "approved" and item["argument_id"] in argument_ids
+        ]
+        visible_case_ids = {item["case_id"] for item in arguments} | {
+            item["case_id"] for item in outcomes
+        }
+        cases = [_public_case(eligible[case_id]) for case_id in sorted(visible_case_ids)]
+        source_ids = {
+            item["source_id"]
+            for item in arguments + receptions
+            if item.get("source_id")
+        }
+        for argument in arguments:
+            if argument.get("intervention_id"):
+                intervention = self._must("interventions", argument["intervention_id"], "Intervention")
+                if intervention.get("source_id"):
+                    source_ids.add(intervention["source_id"])
+        for outcome in outcomes:
+            for link in self.evidence_links_for("outcome_event", outcome["id"]):
+                source_ids.add(link["source_id"])
+        sources = []
+        for source_id in sorted(source_ids):
+            source = self.get_source(source_id)
+            if source["is_synthetic"] and not include_synthetic:
+                continue
+            sources.append(_public_source(source))
+        interventions = [
+            _public_intervention(item)
+            for item in self._all("interventions")
+            if item["case_id"] in visible_case_ids
+            and (include_synthetic or not eligible[item["case_id"]]["is_synthetic"])
         ]
         payload = {
             "cases": cases,
             "arguments": arguments,
             "outcome_events": outcomes,
+            "receptions": receptions,
+            "sources": sources,
+            "interventions": interventions,
             "real_case_count": len([case for case in cases if not case["is_synthetic"]]),
+            "approved_argument_count": len(
+                [item for item in arguments if not item["is_synthetic"]]
+            ),
             "omitted_sensitive_count": len(sensitive),
+            "count_note": (
+                "real_case_count is the number of non-synthetic cases with at least one "
+                "approved, non-sensitive argument or outcome in this export. "
+                "It is not a count of verified cases. "
+                "approved_argument_count is approved non-synthetic arguments in this export, "
+                "excluding AI suggestions. "
+                "Approval does not authorize redistribution of the source PDF or other copyrighted text."
+            ),
+            "includes_full_documents": False,
         }
         encoded = json.dumps(payload)
         for case in sensitive:
             if case["id"] in encoded or case["title"] in encoded:
                 raise ValidationError(
                     "Public export included a sensitive case. Remove it from the export payload."
+                )
+            if case.get("unresolved_questions") and case["unresolved_questions"] in encoded:
+                raise ValidationError(
+                    "Public export included a restricted research note."
                 )
         return payload
 
@@ -1016,7 +1283,7 @@ class EvidenceStore:
             f"Unique cases: {summary['unique_cases']}",
             f"Arguments in those cases: {summary['argument_count']}",
             f"Cases with no verified subsequent outcome: {summary['unknown_outcome_cases']}",
-            f"Verified real cases: {real['unique_cases']}",
+            f"Real cases with an approved proportionality argument: {real['unique_cases']}",
             f"Synthetic cases excluded from the real-case count: {real['excluded_synthetic_cases']}",
             "",
             "Documented sequences, where the demo or reviewed rows have them, are chronological only.",
@@ -1031,7 +1298,24 @@ class EvidenceStore:
         ]
         return "\n".join(lines)
 
-    def _assert_approvable(self, target_type: str, target_id: str) -> None:
+    def research_attempts_for_case(self, case_id: str) -> list[dict]:
+        rows = self.conn.execute(
+            """
+            SELECT * FROM research_attempts
+            WHERE case_id = ?
+            ORDER BY COALESCE(searched_on, ''), id
+            """,
+            (case_id,),
+        ).fetchall()
+        return [_row(row) for row in rows]
+
+    def _assert_approvable(
+        self,
+        target_type: str,
+        target_id: str,
+        *,
+        claim_supported: bool = False,
+    ) -> None:
         if target_type == "argument":
             argument = self.get_argument(target_id)
             if not argument["passage"]:
@@ -1050,7 +1334,33 @@ class EvidenceStore:
                 )
             if not argument["labels"]:
                 raise ValidationError("An approved argument needs at least one label.")
-            self._check_attribution(argument["author_actor"], argument["attribution_role"])
+            for field, label in (
+                ("principle", "the legal standard stated in the source"),
+                ("application", "the application of that standard to the facts"),
+                ("remedy_requested", "the remedy requested"),
+            ):
+                if not str(argument[field]).strip():
+                    raise ValidationError(
+                        f"An approved argument needs {label}. "
+                        f"Use '{NOT_STATED}' when the source does not state it."
+                    )
+            if argument["disclaimer_status"] == "not_yet_checked":
+                raise ValidationError(
+                    "Disclaimer status is not yet checked. Record that the source states a "
+                    "disclaimer, or that none is stated. Do not invent disclaimer text."
+                )
+            if argument["disclaimer_status"] == "stated" and not argument["disclaimer_text"].strip():
+                raise ValidationError("A stated disclaimer needs the disclaimer text from the source.")
+            self._check_attribution(
+                argument["author_actor"],
+                argument["attribution_role"],
+                argument["institutional_affiliation"],
+            )
+            if not claim_supported:
+                raise ValidationError(
+                    "Approval requires an explicit check that the passage supports this claim. "
+                    "A quotation and a location are not that check."
+                )
             return
         if target_type == "outcome_event":
             event = self.get_outcome(target_id)
@@ -1073,38 +1383,96 @@ class EvidenceStore:
         reception = self._must("reception_observations", target_id, "Reception")
         if reception["is_recital"] and reception["status"] in ACCEPTANCE_STATUSES:
             raise ValidationError("A recital cannot be approved as acceptance.")
-        if reception["status"] in RECEPTION_NEEDS_SOURCE:
+        status = reception["status"]
+        if status in RECEPTION_NEEDS_SOURCE:
             if not reception["source_id"] or not reception["passage"]:
                 raise ValidationError(
                     "An approved reception finding needs a source passage."
                 )
+        if status in EXPLICIT_RECEPTION:
+            self._require_reception_account(reception)
+            if not reception["reasoning_checked"]:
+                raise ValidationError(
+                    "A reviewer must check that the passage supports this reception finding."
+                )
+        if status == "Not addressed in the available decision":
+            if reception["account_type"] != "authority_document":
+                raise ValidationError(
+                    "Not addressed in the available decision needs the decision itself. "
+                    "A secondary account is a different record."
+                )
+            if not reception["reasoning_checked"]:
+                raise ValidationError(
+                    "A reviewer must check the decision's reasoning before recording "
+                    "that the argument was not addressed."
+                )
+            self._require_reception_account(reception)
+        if status == "Document obtained but reasoning insufficient":
+            if not reception["reasoning_checked"]:
+                raise ValidationError(
+                    "A reviewer must record that they read the document and its reasoning "
+                    "was not enough to determine reception."
+                )
+        if status in {"Decision not yet retrieved", "Decision sought but unavailable"}:
+            if reception["account_type"] == "authority_document" and reception["passage"]:
+                raise ValidationError(
+                    f"'{status}' means the decision's reasoning is not in hand. "
+                    "Use a reception status that matches the document you have."
+                )
 
-    def _apply_edits(self, target_type: str, target_id: str, edits: dict) -> None:
+    def _require_reception_account(self, reception: dict) -> None:
+        if reception["account_type"] == "authority_document":
+            source = self.get_source(reception["source_id"])
+            if source["document_type"] not in {"judgment", "un_opinion", "submission"}:
+                raise ValidationError(
+                    "An explicit response needs the responding authority's own document, "
+                    "or account_type 'secondary_account' when the record is someone else's report of it."
+                )
+            return
+        if reception["account_type"] == "secondary_account":
+            return
+        raise ValidationError(
+            "An explicit institutional response needs the authority's own document "
+            "or a clearly labeled secondary account."
+        )
+
+    def _apply_edits(self, target_type: str, target_id: str, edits: dict) -> bool:
         allowed = {
-            "argument": {
-                "summary",
-                "reasons",
+            "argument": set(ARGUMENT_MATERIAL_FIELDS),
+            "outcome_event": {
+                "description",
+                "event_type",
+                "evidence_label",
+                "procedural_stage",
+                "finality",
+            },
+            "reception": {
+                "status",
                 "passage",
                 "location_ref",
-                "legal_authorities",
-                "author_actor",
-                "attribution_role",
+                "observer_note",
+                "source_id",
+                "account_type",
+                "reasoning_checked",
             },
-            "outcome_event": {"description", "event_type", "evidence_label", "procedural_stage", "finality"},
-            "reception": {"status", "passage", "location_ref", "observer_note"},
         }[target_type]
         unknown = set(edits) - allowed - {"labels"}
         if unknown:
             raise ValidationError(
                 "Those fields cannot be edited here: " + ", ".join(sorted(unknown))
             )
+        table = _table_for(target_type)
+        current = self._must(table, target_id, target_type.replace("_", " ").title())
+        material_changed = False
         if target_type == "argument":
-            current = self.get_argument(target_id)
             author = edits.get("author_actor", current["author_actor"])
             role = edits.get("attribution_role", current["attribution_role"])
-            self._check_attribution(author, role)
+            affiliation = edits.get("institutional_affiliation", current["institutional_affiliation"])
+            self._check_attribution(author, role, affiliation)
             if "labels" in edits:
                 labels = self._clean_labels(list(edits["labels"]))
+                if labels != self.labels_for(target_id):
+                    material_changed = True
                 self.conn.execute(
                     "DELETE FROM argument_labels WHERE argument_id = ?",
                     (target_id,),
@@ -1114,6 +1482,9 @@ class EvidenceStore:
                         "INSERT INTO argument_labels (argument_id, label) VALUES (?, ?)",
                         (target_id, label),
                     )
+            if edits.get("disclaimer_status", current["disclaimer_status"]) == "stated":
+                text = edits.get("disclaimer_text", current["disclaimer_text"])
+                self._require_text(text, "Disclaimer text")
         assignments = []
         values: list[object] = []
         for key, value in edits.items():
@@ -1125,18 +1496,101 @@ class EvidenceStore:
                 self._one_of(value, EVIDENCE_LABELS, "Evidence label")
             if key == "attribution_role":
                 self._one_of(value, ATTRIBUTION_ROLES, "Attribution role")
+            if key == "disclaimer_status":
+                self._one_of(value, DISCLAIMER_STATUSES, "Disclaimer status")
             if key == "status":
                 self._one_of(value, RECEPTION_STATUSES, "Reception status")
+            if key == "account_type":
+                self._one_of(value, ACCOUNT_TYPES, "Account type")
+            if key == "reasoning_checked":
+                stored = int(bool(value))
+            elif isinstance(value, str):
+                stored = value.strip()
+            else:
+                stored = value
+            previous = current.get(key)
+            if key == "reasoning_checked":
+                previous = int(bool(previous))
+            if previous != stored and key != "observer_note":
+                material_changed = True
             assignments.append(f"{key} = ?")
-            values.append(value.strip() if isinstance(value, str) else value)
+            values.append(stored)
         if assignments:
             values.append(target_id)
             self.conn.execute(
-                f"UPDATE {_table_for(target_type)} SET {', '.join(assignments)} WHERE id = ?",
+                f"UPDATE {table} SET {', '.join(assignments)} WHERE id = ?",
                 values,
             )
+        if material_changed and current["review_status"] == "approved":
+            self._invalidate_approval(target_type, target_id)
+            return True
+        return False
 
-    def _check_attribution(self, author_actor: str, attribution_role: str) -> None:
+    def _invalidate_approval(self, target_type: str, target_id: str) -> None:
+        table = _table_for(target_type)
+        current = self._must(table, target_id, target_type.replace("_", " ").title())
+        if current["review_status"] != "approved":
+            return
+        if target_type == "argument":
+            self.conn.execute(
+                """
+                UPDATE arguments
+                SET review_status = 'proposed', claim_supported = 0
+                WHERE id = ?
+                """,
+                (target_id,),
+            )
+            return
+        self.conn.execute(
+            f"UPDATE {table} SET review_status = 'proposed' WHERE id = ?",
+            (target_id,),
+        )
+
+    def _review_snapshot(self, target_type: str, target_id: str) -> tuple[str, str]:
+        if target_type == "argument":
+            argument = self.get_argument(target_id)
+            claim = " | ".join(
+                part
+                for part in (
+                    argument["summary"],
+                    argument["author_actor"],
+                    argument["attribution_role"],
+                    argument["passage"],
+                )
+                if part
+            )
+            evidence = " | ".join(
+                part
+                for part in (argument.get("source_id") or "", argument["location_ref"])
+                if part
+            )
+            return claim, evidence
+        if target_type == "outcome_event":
+            event = self.get_outcome(target_id)
+            links = self.evidence_links_for("outcome_event", target_id)
+            evidence = ", ".join(
+                f"{link['source_id']}:{link['provenance']}" for link in links
+            )
+            return event["description"], evidence
+        reception = self._must("reception_observations", target_id, "Reception")
+        claim = f"{reception['status']} | {reception['passage']}"
+        evidence = " | ".join(
+            part
+            for part in (
+                reception.get("source_id") or "",
+                reception["location_ref"],
+                reception["account_type"],
+            )
+            if part
+        )
+        return claim, evidence
+
+    def _check_attribution(
+        self,
+        author_actor: str,
+        attribution_role: str,
+        institutional_affiliation: str = "",
+    ) -> None:
         self._require_text(author_actor, "Argument author")
         self._one_of(attribution_role, ATTRIBUTION_ROLES, "Attribution role")
         author_key = author_actor.strip().lower()
@@ -1151,9 +1605,12 @@ class EvidenceStore:
             )
         if attribution_role == "trialwatch_argument" and author_key not in TRIALWATCH_AUTHORS:
             raise ValidationError(
-                "A TrialWatch argument must name TrialWatch as the author. "
-                "Use partner_argument, defense_counsel_described, or another role instead."
+                "A TrialWatch institutional argument must name TrialWatch as the author. "
+                "Name the expert and use partner_argument. "
+                "Affiliation with TrialWatch does not establish that the expert spoke for TrialWatch."
             )
+        if institutional_affiliation and attribution_role == "ai_suggested":
+            return
 
     def _clean_labels(self, labels: list[str]) -> list[str]:
         chosen: list[str] = []
@@ -1200,6 +1657,35 @@ class EvidenceStore:
             raise ValidationError(
                 f"{label} must be one of: {', '.join(allowed)}. Got {value!r}."
             )
+
+
+def _public_case(case: dict) -> dict:
+    hidden = {"unresolved_questions"}
+    return {key: value for key, value in case.items() if key not in hidden}
+
+
+def _public_argument(argument: dict) -> dict:
+    return dict(argument)
+
+
+def _public_outcome(event: dict) -> dict:
+    return dict(event)
+
+
+def _public_reception(reception: dict) -> dict:
+    hidden = {"observer_note"}
+    return {key: value for key, value in reception.items() if key not in hidden}
+
+
+def _public_source(source: dict) -> dict:
+    hidden = {"untrusted_text"}
+    published = {key: value for key, value in source.items() if key not in hidden}
+    published["full_document_included"] = False
+    return published
+
+
+def _public_intervention(intervention: dict) -> dict:
+    return dict(intervention)
 
 
 def _table_for(target_type: str) -> str:

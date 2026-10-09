@@ -6,7 +6,9 @@ This project is not a product of the Clooney Foundation for Justice, TrialWatch,
 
 ## Question the prototype answers
 
-Show the cases in which TrialWatch advanced a proportionality argument. For each one, show what was argued, what response is documented, and what happened to the defendant afterward.
+What was argued, by whom and through which intervention; what documented response exists; and what happened afterward.
+
+The tracker is for TrialWatch or an advocacy team reading its own work. It surfaces patterns and evidence gaps. It does not claim that an argument caused an outcome. Comparing cases, and any lawyer-facing drafting, wait until several person-approved cases exist. See [cross-case-roadmap.md](cross-case-roadmap.md).
 
 ## Organizing principle
 

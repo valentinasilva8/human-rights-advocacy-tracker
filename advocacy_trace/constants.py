@@ -80,6 +80,9 @@ RECEPTION_STATUSES = (
     "Explicitly rejected",
     "Discussed without clear resolution",
     "Not addressed in the available decision",
+    "Decision not yet retrieved",
+    "Decision sought but unavailable",
+    "Document obtained but reasoning insufficient",
     "Decision unavailable / insufficient evidence",
     "Not applicable",
 )
@@ -92,8 +95,35 @@ RECEPTION_NEEDS_SOURCE = frozenset(
         "Partially accepted",
         "Explicitly rejected",
         "Discussed without clear resolution",
+        "Not addressed in the available decision",
+        "Document obtained but reasoning insufficient",
     }
 )
+
+EXPLICIT_RECEPTION = frozenset(
+    {
+        "Explicitly accepted",
+        "Partially accepted",
+        "Explicitly rejected",
+        "Discussed without clear resolution",
+    }
+)
+
+DISCLAIMER_STATUSES = ("not_yet_checked", "not_stated_in_source", "stated")
+
+PROVENANCE_VALUES = (
+    "unknown",
+    "duplicate_copy",
+    "derived_from_shared_original",
+    "same_organization_distinct",
+    "independent",
+)
+
+ACCOUNT_TYPES = ("not_yet_established", "authority_document", "secondary_account")
+
+PUBLIC_ARGUMENT_ROLES = ("trialwatch_argument", "partner_argument")
+
+NOT_STATED = "not stated"
 
 LINK_RELATIONSHIPS = ("supports", "quotes", "duplicates", "conflicts")
 LINK_TARGETS = ("argument", "outcome_event", "reception")

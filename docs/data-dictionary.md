@@ -2,7 +2,7 @@
 
 SQLite tables in `advocacy_trace`. Identifiers are text. Dates are text plus a precision of `day` (`YYYY-MM-DD`), `month` (`YYYY-MM`), `year` (`YYYY`), or `unknown`. Unknown precision stores no date value. Publication date, event date, retrieval date, and last-verified date are different columns.
 
-`sensitive` and `is_synthetic` are booleans. Synthetic rows are excluded from real-case summaries. Sensitive rows are excluded from the public export.
+`sensitive` and `is_synthetic` are booleans. Synthetic rows are excluded from real-case summaries. Sensitive rows, proposed rows, reviewer notes, and research notes are excluded from public screens and from the public export. Approval does not include the source file.
 
 ## cases
 
@@ -17,7 +17,7 @@ One proceeding. A person can appear in more than one case. Cases are not merged 
 | is_synthetic | Fictional demonstration row |
 | opened_on, opened_on_precision | When the proceeding opened, if known |
 | last_verified_on, last_verified_on_precision | When a person last checked the record |
-| unresolved_questions | Open questions shown on the case screen |
+| unresolved_questions | Open questions. Shown on the internal review screen. Omitted from public views and from the public export |
 
 ## participants and case_participants
 
@@ -46,7 +46,13 @@ One argument advanced or described in a source.
 - `announcement_only`
 - `ai_suggested`
 
-`author_actor` is who made the argument. A `defense_counsel_described` row cannot name TrialWatch as the author. A `trialwatch_argument` row must name TrialWatch.
+`author_actor` is who made the argument. A `defense_counsel_described` row cannot name TrialWatch as the author. A `trialwatch_argument` row is institutional and must name TrialWatch. A named expert stays a `partner_argument` under their own name. Affiliation does not change that role.
+
+`institutional_affiliation` is stored separately. `disclaimer_status` is `not_yet_checked`, `not_stated_in_source`, or `stated`. `stated` requires `disclaimer_text` from the source. Do not invent a disclaimer to fill `not_yet_checked`.
+
+`principle`, `application`, and `remedy_requested` are required before approval. The text `not stated` is a real value when the source is silent.
+
+`claim_supported` is set only by a human approval that records the check. A quotation and a page are not enough. Untrusted extraction cannot set it. If the claim, attribution, or supporting evidence changes after approval, the row returns to `proposed` and `claim_supported` is cleared.
 
 `passage` and `location_ref` are required before approval. `review_status` is `proposed`, `approved`, or `rejected`.
 
@@ -70,14 +76,24 @@ The store will not accept a call that declares the event date to be the source's
 
 How an authority dealt with one argument, if a source supports that observation.
 
-`status` is one of: Explicitly accepted, Partially accepted, Explicitly rejected, Discussed without clear resolution, Not addressed in the available decision, Decision unavailable / insufficient evidence, Not applicable.
+`status` is one of: Explicitly accepted, Partially accepted, Explicitly rejected, Discussed without clear resolution, Not addressed in the available decision, Decision not yet retrieved, Decision sought but unavailable, Document obtained but reasoning insufficient, Decision unavailable / insufficient evidence, Not applicable.
+
+`account_type` is `not_yet_established`, `authority_document`, or `secondary_account`. An explicit response needs the authority's own document, or `secondary_account` when the record is someone else's report of it. A court judgment is the right document for court reception. Another authority can be documented by that authority's own document.
+
+`reasoning_checked` is a reviewer's check of the reasoning. It is required before approving “Not addressed in the available decision,” an explicit response, or “Document obtained but reasoning insufficient.” “Decision not yet retrieved” and “Decision sought but unavailable” mean the decision's reasoning is not in hand. They are not findings that nothing exists.
 
 `is_recital` marks a passage that only recounts the argument. A recital cannot be stored as Explicitly accepted or Partially accepted.
 
 ## evidence_links
 
-Connects a source to an argument, outcome event, or reception. `relationship` is `supports`, `quotes`, `duplicates`, or `conflicts`. A `duplicates` link is not independent corroboration. Independent support is counted by the original source, so two articles that copy one press release count once.
+Connects a source to an argument, outcome event, or reception. `relationship` is `supports`, `quotes`, `duplicates`, or `conflicts`.
+
+`provenance` is `unknown`, `duplicate_copy`, `derived_from_shared_original`, `same_organization_distinct`, or `independent`. The support count uses only `independent` origins for that claim. A selected independent flag does not raise the count. Unknown provenance stays unknown. Two documents from one organization can both be kept; they are not two independent origins. A duplicate copy counts once, with the original.
 
 ## review_actions
 
-Append-only. `action` is `approve`, `reject`, or `edit`. Each row stores the reviewer, the note, the previous status, and the new status. Nothing in source text can insert this row by itself.
+Append-only. `action` is `approve`, `reject`, or `edit`. Each row stores the reviewer, the time, the note, the previous status, the new status, the claim text, the evidence location, and whether the support check was made. `is_simulated` marks the fictional reviewer `synthetic-reviewer`. Nothing in source text can insert this row by itself.
+
+## research_attempts
+
+One search: query, place, date, and result. A result of not found in this search is not a finding that a document does not exist. These rows are internal. They are omitted from public views and from `public_export`.

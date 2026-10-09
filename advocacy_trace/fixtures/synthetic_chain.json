@@ -194,6 +194,11 @@
       "passage": "The report argues that the restriction is disproportionate because a two-year prison sentence for a single satirical post goes beyond the stated aim, and the court was not shown to have considered a correction or a civil remedy.",
       "location_ref": "Synthetic report, p. 12, para. 44",
       "legal_authorities": "Mentioned in the synthetic report only: Exampleland Constitution art. 19; ICCPR art. 19(3).",
+      "institutional_affiliation": "TrialWatch",
+      "disclaimer_status": "not_stated_in_source",
+      "principle": "A restriction must be proportionate to the aim stated for it.",
+      "application": "A two-year prison sentence was sought for one satirical post, and a correction or civil remedy was not addressed.",
+      "remedy_requested": "not stated",
       "labels": ["Proportionality", "Necessity"],
       "argument_date": "2022-03-15",
       "argument_date_precision": "day",
@@ -211,6 +216,11 @@
       "passage": "The report argues that forbidding any future post about the official is disproportionate because it restrains speech that has not occurred and is not linked to a defined risk.",
       "location_ref": "Synthetic report, p. 15, para. 51",
       "legal_authorities": "Mentioned in the synthetic report only: ICCPR art. 19(3).",
+      "institutional_affiliation": "TrialWatch",
+      "disclaimer_status": "not_stated_in_source",
+      "principle": "A prior restraint must be proportionate and tied to a defined risk.",
+      "application": "The order covers future posts about the official that have not been made.",
+      "remedy_requested": "not stated",
       "labels": ["Proportionality"],
       "argument_date": "2022-03-15",
       "argument_date_precision": "day",
@@ -228,6 +238,11 @@
       "passage": "The report argues that the offense is vague because 'harmful to public calm' is undefined and leaves officials to decide which criticism is criminal.",
       "location_ref": "Synthetic report, p. 9, para. 31",
       "legal_authorities": "Mentioned in the synthetic report only: Exampleland Criminal Code s. 4.",
+      "institutional_affiliation": "TrialWatch",
+      "disclaimer_status": "not_stated_in_source",
+      "principle": "An offense must define the conduct it punishes.",
+      "application": "The phrase 'harmful to public calm' is undefined.",
+      "remedy_requested": "not stated",
       "labels": ["Vagueness"],
       "argument_date": "2022-03-15",
       "argument_date_precision": "day",
@@ -245,6 +260,11 @@
       "passage": "Counsel submitted that the charge sheet was filed out of time.",
       "location_ref": "Synthetic report, p. 4, para. 10",
       "legal_authorities": "",
+      "institutional_affiliation": "",
+      "disclaimer_status": "not_stated_in_source",
+      "principle": "not stated",
+      "application": "Counsel submitted that the charge sheet was filed out of time.",
+      "remedy_requested": "not stated",
       "labels": ["unmapped—review required"],
       "argument_date": "2022-03-15",
       "argument_date_precision": "day",
@@ -331,6 +351,8 @@
       "passage": "The appellate reasons summarize the proportionality submission and neither adopt nor reject it.",
       "location_ref": "Synthetic judgment, p. 7, para. 22",
       "observer_note": "Summary of an argument is not endorsement. The conviction was affirmed in a separate holding.",
+      "account_type": "authority_document",
+      "reasoning_checked": true,
       "is_recital": false,
       "is_synthetic": true
     },
@@ -343,6 +365,8 @@
       "passage": "The court recited the prior-restraint submission while describing the procedural history.",
       "location_ref": "Synthetic judgment, p. 3, para. 8",
       "observer_note": "This passage recites the argument. Recital is not acceptance.",
+      "account_type": "authority_document",
+      "reasoning_checked": true,
       "is_recital": true,
       "is_synthetic": true
     }
@@ -368,7 +392,8 @@
       "target_type": "outcome_event",
       "target_id": "out_conviction",
       "relationship": "supports",
-      "independent": true
+      "independent": true,
+      "provenance": "independent"
     },
     {
       "id": "link_judgment_appeal",
@@ -376,7 +401,8 @@
       "target_type": "outcome_event",
       "target_id": "out_appeal",
       "relationship": "supports",
-      "independent": true
+      "independent": true,
+      "provenance": "independent"
     },
     {
       "id": "link_news_sentence",
@@ -384,7 +410,8 @@
       "target_type": "outcome_event",
       "target_id": "out_sentence",
       "relationship": "supports",
-      "independent": true
+      "independent": true,
+      "provenance": "independent"
     },
     {
       "id": "link_news_dup",
@@ -392,7 +419,8 @@
       "target_type": "outcome_event",
       "target_id": "out_sentence",
       "relationship": "duplicates",
-      "independent": false
+      "independent": false,
+      "provenance": "duplicate_copy"
     },
     {
       "id": "link_judgment_reception",
@@ -400,14 +428,15 @@
       "target_type": "reception",
       "target_id": "rec_discussed",
       "relationship": "supports",
-      "independent": true
+      "independent": true,
+      "provenance": "independent"
     }
   ],
   "reviews": [
-    {"target_type": "argument", "target_id": "arg_prop_sentence", "action": "approve", "reviewer": "synthetic-reviewer", "note": "Demonstration approval of a fictional proportionality argument."},
-    {"target_type": "argument", "target_id": "arg_prop_prior", "action": "approve", "reviewer": "synthetic-reviewer", "note": "Demonstration approval of a second fictional proportionality argument in the same case."},
-    {"target_type": "argument", "target_id": "arg_vague", "action": "approve", "reviewer": "synthetic-reviewer", "note": "Demonstration approval of a vagueness argument in the same case."},
-    {"target_type": "argument", "target_id": "arg_counsel", "action": "approve", "reviewer": "synthetic-reviewer", "note": "Kept as counsel's argument described in the report, not as TrialWatch's."},
+    {"target_type": "argument", "target_id": "arg_prop_sentence", "action": "approve", "reviewer": "synthetic-reviewer", "claim_supported": true, "note": "Simulated review, not a human approval. The fictional passage supports the fictional claim."},
+    {"target_type": "argument", "target_id": "arg_prop_prior", "action": "approve", "reviewer": "synthetic-reviewer", "claim_supported": true, "note": "Simulated review, not a human approval."},
+    {"target_type": "argument", "target_id": "arg_vague", "action": "approve", "reviewer": "synthetic-reviewer", "claim_supported": true, "note": "Simulated review, not a human approval."},
+    {"target_type": "argument", "target_id": "arg_counsel", "action": "approve", "reviewer": "synthetic-reviewer", "claim_supported": true, "note": "Simulated review. Kept as counsel's argument described in the report, not as TrialWatch's."},
     {"target_type": "outcome_event", "target_id": "out_conviction", "action": "approve", "reviewer": "synthetic-reviewer", "note": "Fictional conviction supported by the synthetic judgment."},
     {"target_type": "outcome_event", "target_id": "out_appeal", "action": "approve", "reviewer": "synthetic-reviewer", "note": "Affirmance does not delete the trial conviction."},
     {"target_type": "outcome_event", "target_id": "out_sentence", "action": "approve", "reviewer": "synthetic-reviewer", "note": "Single fictional news source. Event date is 2 April 2023, not the publication date."},

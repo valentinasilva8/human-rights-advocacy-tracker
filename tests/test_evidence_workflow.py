@@ -220,14 +220,37 @@ def test_sensitive_records_are_excluded_from_public_export(store):
         id="case_secret",
         sensitive=True,
         is_synthetic=False,
+        unresolved_questions="Secret research note that must stay internal.",
+    )
+    store.add_case(title="Proposed-only fictional case", id="case_waiting", is_synthetic=False)
+    store.add_source(
+        title="Fictional public report",
+        document_type="fairness_report",
+        author_actor="TrialWatch",
+        id="source_public",
+    )
+    argument_id = _approvable_argument(store, case_id="case_public", source_id="source_public")
+    store.review("argument", argument_id, "approve", reviewer="ada", claim_supported=True)
+    waiting_id = _approvable_argument(
+        store,
+        case_id="case_waiting",
+        source_id="source_public",
+        id="arg_waiting",
+        summary="A proposed claim that must stay out of the public export.",
     )
     exported = store.public_export()
     encoded = str(exported)
     assert "case_public" in encoded
     assert "case_secret" not in encoded
     assert "Sensitive fictional case" not in encoded
+    assert "Secret research note" not in encoded
+    assert "case_waiting" not in encoded
+    assert "arg_waiting" not in encoded
+    assert waiting_id == "arg_waiting"
     assert exported["omitted_sensitive_count"] == 1
     assert exported["real_case_count"] == 1
+    assert exported["approved_argument_count"] == 1
+    assert exported["includes_full_documents"] is False
 
 
 def test_demo_export_has_no_real_cases_and_no_sensitive_rows(demo):
@@ -239,6 +262,9 @@ def test_demo_export_has_no_real_cases_and_no_sensitive_rows(demo):
     titles = [case["title"] for case in with_demo["cases"]]
     assert any("A. Rivera" in title for title in titles)
     assert all("Sensitive" not in title for title in titles)
+    encoded = str(with_demo)
+    assert "This record is fictional" not in encoded
+    assert "synthetic-reviewer" not in encoded
 
 
 def test_unverified_records_are_excluded_from_verified_summaries(store):
@@ -251,21 +277,19 @@ def test_unverified_records_are_excluded_from_verified_summaries(store):
         author_actor="Court of Nowhere",
         id="source_real",
     )
-    argument_id = store.add_argument(
+    argument_id = _approvable_argument(
+        store,
         case_id="case_real",
         source_id="source_real",
-        author_actor="TrialWatch",
-        attribution_role="trialwatch_argument",
         summary="The report argues that the restriction is disproportionate because the penalty is imprisonment for one post.",
         reasons="The fictional source discusses severity.",
         passage="The report argues that the restriction is disproportionate because imprisonment was imposed for one post.",
         location_ref="p. 2, para. 5",
-        labels=["Proportionality"],
         argument_date="2021-05-01",
         argument_date_precision="day",
         id="arg_real",
     )
-    store.review("argument", argument_id, "approve", reviewer="ada")
+    store.review("argument", argument_id, "approve", reviewer="ada", claim_supported=True)
     event_id = store.add_outcome_event(
         case_id="case_real",
         participant_id="person_real",
@@ -370,7 +394,7 @@ def test_learning_brief_states_limits_and_is_not_a_success_rate(demo):
     assert "does not claim that an argument caused an outcome" in brief
     assert "success rate" in brief
     assert "%" not in brief
-    assert "Verified real cases: 0" in brief
+    assert "Real cases with an approved proportionality argument: 0" in brief
     assert "Unique cases: 1" in brief
 
 
@@ -392,6 +416,471 @@ def test_demo_chain_answers_the_proportionality_question(demo):
         "Appeal decided",
         "Sentence modification",
     ]
+
+
+def test_named_expert_is_not_relabelled_as_trialwatch(store):
+    _case_and_source(store)
+    with pytest.raises(ValidationError, match="does not establish"):
+        store.add_argument(
+            case_id="case_1",
+            source_id="source_1",
+            author_actor="Elizabeth Wilmshurst",
+            attribution_role="trialwatch_argument",
+            institutional_affiliation="TrialWatch Expert Panel",
+            summary="A named expert's analysis.",
+            passage="The statute is overbroad.",
+            location_ref="p. 2",
+            labels=["Broadness"],
+        )
+    argument_id = store.add_argument(
+        case_id="case_1",
+        source_id="source_1",
+        author_actor="Elizabeth Wilmshurst",
+        attribution_role="partner_argument",
+        institutional_affiliation="TrialWatch Expert Panel",
+        disclaimer_status="stated",
+        disclaimer_text="The views are the author's and not necessarily those of the foundation.",
+        summary="The report argues that the statute is overbroad because it covers political slogans.",
+        reasons="The source says the ordinance criminalises political speech.",
+        principle="A speech offense must not be overbroad.",
+        application="The ordinance was applied to political slogans.",
+        remedy_requested="not stated",
+        passage="The ordinance is overbroad because it criminalises political slogans.",
+        location_ref="p. 2",
+        labels=["Broadness"],
+    )
+    stored = store.get_argument(argument_id)
+    assert stored["author_actor"] == "Elizabeth Wilmshurst"
+    assert stored["attribution_role"] == "partner_argument"
+    assert "arg_expert" not in {item["id"] for item in store.arguments_for_actor("TrialWatch")}
+    assert store.arguments_for_actor("Elizabeth Wilmshurst")[0]["id"] == argument_id
+    store.review("argument", argument_id, "approve", reviewer="ada", claim_supported=True)
+    from advocacy_trace.views import explorer_view
+
+    view = explorer_view(
+        store,
+        label="Broadness",
+        country=None,
+        intervention_type=None,
+        date_from=None,
+        date_to=None,
+        review_status="proposed",
+        include_synthetic=False,
+    )
+    assert {row["argument"]["id"] for row in view["rows"]} == {argument_id}
+    assert view["real_cases_with_approved_argument"] == 1
+    caption = str(view["rows"][0]["argument"])
+    assert "TrialWatch Expert Panel" in caption
+    assert "not necessarily" in caption
+
+
+def test_material_change_invalidates_approval(store):
+    _case_and_source(store)
+    argument_id = _approvable_argument(store)
+    store.review("argument", argument_id, "approve", reviewer="ada", claim_supported=True)
+    assert store.get_argument(argument_id)["claim_supported"] is True
+    store.review(
+        "argument",
+        argument_id,
+        "edit",
+        reviewer="ada",
+        edits={"summary": "A different claim from the one that was approved."},
+    )
+    revised = store.get_argument(argument_id)
+    assert revised["review_status"] == "proposed"
+    assert revised["claim_supported"] is False
+    assert store.public_export()["arguments"] == []
+    store.add_evidence_link(
+        source_id="source_1",
+        target_type="argument",
+        target_id=argument_id,
+        relationship="supports",
+        independent=True,
+    )
+    store.review("argument", argument_id, "approve", reviewer="ada", claim_supported=True)
+    store.add_evidence_link(
+        source_id="source_1",
+        target_type="argument",
+        target_id=argument_id,
+        relationship="quotes",
+        provenance="unknown",
+    )
+    assert store.get_argument(argument_id)["review_status"] == "proposed"
+
+
+def test_unknown_provenance_does_not_inflate_support(store):
+    _case_and_source(store)
+    store.add_participant(name="Defendant", id="person_1")
+    event_id = store.add_outcome_event(
+        case_id="case_1",
+        participant_id="person_1",
+        event_type="Acquittal",
+        description="A fictional later order.",
+        evidence_label="Single-source report",
+        event_date="2022-01-12",
+        event_date_precision="day",
+    )
+    store.add_source(
+        title="Same organization, second document",
+        document_type="news",
+        author_actor="TrialWatch",
+        id="source_same_org",
+    )
+    store.add_source(
+        title="Reprint",
+        document_type="news",
+        author_actor="Wire",
+        duplicate_of_source_id="source_1",
+        id="source_copy",
+    )
+    store.add_evidence_link(
+        source_id="source_1",
+        target_type="outcome_event",
+        target_id=event_id,
+        relationship="supports",
+        independent=True,
+        provenance="unknown",
+    )
+    store.add_evidence_link(
+        source_id="source_same_org",
+        target_type="outcome_event",
+        target_id=event_id,
+        relationship="supports",
+        provenance="same_organization_distinct",
+    )
+    store.add_evidence_link(
+        source_id="source_copy",
+        target_type="outcome_event",
+        target_id=event_id,
+        relationship="duplicates",
+        independent=True,
+    )
+    assert store.independent_support_count(event_id) == 0
+    store.add_source(
+        title="Separate outlet",
+        document_type="news",
+        author_actor="Other outlet",
+        id="source_other",
+    )
+    store.add_evidence_link(
+        source_id="source_other",
+        target_type="outcome_event",
+        target_id=event_id,
+        relationship="supports",
+        provenance="independent",
+    )
+    assert store.independent_support_count(event_id) == 1
+
+
+def test_reception_statuses_stay_distinct(store):
+    _case_and_source(store)
+    argument_id = _approvable_argument(store)
+    store.review("argument", argument_id, "approve", reviewer="ada", claim_supported=True)
+    missing = store.add_reception(
+        argument_id=argument_id,
+        case_id="case_1",
+        status="Decision not yet retrieved",
+        observer_note="The judgment has not been opened.",
+    )
+    sought = store.add_reception(
+        argument_id=argument_id,
+        case_id="case_1",
+        status="Decision sought but unavailable",
+        observer_note="The court registry did not produce it in this search.",
+    )
+    assert store._must("reception_observations", missing, "Reception")["status"] != store._must(
+        "reception_observations", sought, "Reception"
+    )["status"]
+    not_addressed = store.add_reception(
+        argument_id=argument_id,
+        case_id="case_1",
+        status="Not addressed in the available decision",
+        source_id="source_1",
+        passage="The court decided jurisdiction and did not discuss this argument.",
+        location_ref="para. 4",
+        account_type="authority_document",
+        reasoning_checked=False,
+    )
+    with pytest.raises(ValidationError, match="check the decision"):
+        store.review("reception", not_addressed, "approve", reviewer="ada")
+    store.add_source(
+        title="Fictional judgment",
+        document_type="judgment",
+        author_actor="Court of Nowhere",
+        id="source_judgment",
+    )
+    checked = store.add_reception(
+        argument_id=argument_id,
+        case_id="case_1",
+        status="Not addressed in the available decision",
+        source_id="source_judgment",
+        passage="The reasons discuss sentence and do not mention this submission.",
+        location_ref="p. 9",
+        account_type="authority_document",
+        reasoning_checked=True,
+    )
+    store.review("reception", checked, "approve", reviewer="ada")
+    secondary = store.add_reception(
+        argument_id=argument_id,
+        case_id="case_1",
+        status="Explicitly rejected",
+        source_id="source_1",
+        passage="A news article says the court rejected the point.",
+        location_ref="page body",
+        account_type="authority_document",
+        reasoning_checked=True,
+    )
+    with pytest.raises(ValidationError, match="secondary_account"):
+        store.review("reception", secondary, "approve", reviewer="ada")
+    store.review(
+        "reception",
+        secondary,
+        "approve",
+        reviewer="ada",
+        edits={"account_type": "secondary_account"},
+    )
+    approved = store._must("reception_observations", secondary, "Reception")
+    assert approved["account_type"] == "secondary_account"
+    assert approved["review_status"] == "approved"
+
+
+def test_counts_follow_the_selected_filter(store):
+    from advocacy_trace.views import explorer_view
+
+    store.add_participant(name="One", id="person_a")
+    store.add_case(title="Proportionality matter", country="Poland", id="case_pl")
+    store.add_case(title="Vagueness matter", country="Hong Kong", id="case_hk")
+    store.add_case(title="Restricted matter", country="Poland", sensitive=True, id="case_hidden")
+    store.add_source(
+        title="Report",
+        document_type="fairness_report",
+        author_actor="TrialWatch",
+        id="source_1",
+    )
+    first = _approvable_argument(store, case_id="case_pl", id="arg_pl")
+    second = _approvable_argument(
+        store,
+        case_id="case_hk",
+        id="arg_hk",
+        labels=["Vagueness"],
+        summary="The report argues that the offense is vague because the verb is undefined.",
+        passage="The report argues that the offense is vague because the verb is undefined.",
+        principle="An offense must define the prohibited act.",
+        application="The charging verb is undefined.",
+    )
+    hidden = _approvable_argument(store, case_id="case_hidden", id="arg_hidden")
+    for argument_id in (first, second, hidden):
+        store.review("argument", argument_id, "approve", reviewer="ada", claim_supported=True)
+    proportionality = explorer_view(
+        store,
+        label="Proportionality",
+        country=None,
+        intervention_type=None,
+        date_from=None,
+        date_to=None,
+        review_status="approved",
+        include_synthetic=False,
+    )
+    vagueness = explorer_view(
+        store,
+        label="Vagueness",
+        country=None,
+        intervention_type=None,
+        date_from=None,
+        date_to=None,
+        review_status="approved",
+        include_synthetic=False,
+    )
+    assert proportionality["real_cases_with_approved_argument"] == 1
+    assert vagueness["real_cases_with_approved_argument"] == 1
+    assert proportionality["argument_count"] == 1
+    encoded = str(store.public_export())
+    assert "arg_hidden" not in encoded
+    assert "case_hidden" not in encoded
+
+
+def test_migration_keeps_existing_rows_and_does_not_bless_them(tmp_path):
+    import sqlite3
+
+    path = tmp_path / "legacy.sqlite"
+    conn = sqlite3.connect(path)
+    conn.execute(
+        """
+        CREATE TABLE arguments (
+            id TEXT PRIMARY KEY,
+            case_id TEXT NOT NULL,
+            intervention_id TEXT,
+            source_id TEXT,
+            author_actor TEXT NOT NULL,
+            attribution_role TEXT NOT NULL,
+            summary TEXT NOT NULL DEFAULT '',
+            reasons TEXT NOT NULL DEFAULT '',
+            passage TEXT NOT NULL DEFAULT '',
+            location_ref TEXT NOT NULL DEFAULT '',
+            legal_authorities TEXT NOT NULL DEFAULT '',
+            argument_date TEXT,
+            argument_date_precision TEXT NOT NULL DEFAULT 'unknown',
+            review_status TEXT NOT NULL DEFAULT 'proposed',
+            is_synthetic INTEGER NOT NULL DEFAULT 0
+        )
+        """
+    )
+    conn.execute(
+        """
+        CREATE TABLE review_actions (
+            id TEXT PRIMARY KEY,
+            target_type TEXT NOT NULL,
+            target_id TEXT NOT NULL,
+            action TEXT NOT NULL,
+            reviewer TEXT NOT NULL,
+            note TEXT NOT NULL DEFAULT '',
+            created_at TEXT NOT NULL,
+            prior_status TEXT,
+            new_status TEXT
+        )
+        """
+    )
+    conn.execute(
+        """
+        CREATE TABLE evidence_links (
+            id TEXT PRIMARY KEY,
+            source_id TEXT NOT NULL,
+            target_type TEXT NOT NULL,
+            target_id TEXT NOT NULL,
+            relationship TEXT NOT NULL,
+            independent INTEGER NOT NULL DEFAULT 1
+        )
+        """
+    )
+    conn.execute(
+        """
+        INSERT INTO arguments (
+            id, case_id, author_actor, attribution_role, summary, review_status, is_synthetic
+        ) VALUES ('real_legacy', 'case_legacy', 'TrialWatch', 'trialwatch_argument',
+                  'Legacy claim text that must survive migration.', 'approved', 0)
+        """
+    )
+    conn.execute(
+        """
+        INSERT INTO arguments (
+            id, case_id, author_actor, attribution_role, summary, review_status, is_synthetic
+        ) VALUES ('arg_prop_sentence', 'case_rivera', 'TrialWatch', 'trialwatch_argument',
+                  'Synthetic summary kept.', 'approved', 1)
+        """
+    )
+    conn.execute(
+        """
+        INSERT INTO review_actions (
+            id, target_type, target_id, action, reviewer, created_at, new_status
+        ) VALUES (
+            'review_old', 'argument', 'arg_prop_sentence', 'approve',
+            'synthetic-reviewer', '2026-01-01T00:00:00+00:00', 'approved'
+        )
+        """
+    )
+    conn.execute(
+        """
+        INSERT INTO evidence_links (
+            id, source_id, target_type, target_id, relationship, independent
+        ) VALUES ('link_news_sentence', 'src_news', 'outcome_event', 'out_sentence', 'supports', 1)
+        """
+    )
+    conn.commit()
+    conn.close()
+
+    store = EvidenceStore(path)
+    legacy = store.get_argument("real_legacy")
+    assert legacy["summary"] == "Legacy claim text that must survive migration."
+    assert legacy["review_status"] == "proposed"
+    assert legacy["claim_supported"] is False
+    synthetic = store.get_argument("arg_prop_sentence")
+    assert synthetic["review_status"] == "approved"
+    assert synthetic["claim_supported"] is True
+    assert synthetic["is_synthetic"] is True
+    assert "proportionate" in synthetic["principle"]
+    provenance = store.conn.execute(
+        "SELECT provenance FROM evidence_links WHERE id = 'link_news_sentence'"
+    ).fetchone()[0]
+    assert provenance == "independent"
+    simulated = store.conn.execute(
+        "SELECT is_simulated FROM review_actions WHERE id = 'review_old'"
+    ).fetchone()[0]
+    assert simulated == 1
+    store.add_case(title="After migration", id="case_after")
+    store.add_source(
+        title="Later source",
+        document_type="fairness_report",
+        author_actor="TrialWatch",
+        id="source_after",
+    )
+    fresh_id = _approvable_argument(
+        store,
+        case_id="case_after",
+        source_id="source_after",
+        id="arg_after",
+    )
+    store.review("argument", fresh_id, "approve", reviewer="ada", claim_supported=True)
+    store.close()
+    reopened = EvidenceStore(path)
+    assert reopened.get_argument("arg_after")["review_status"] == "approved"
+    assert reopened.get_argument("real_legacy")["review_status"] == "proposed"
+    reopened.close()
+
+
+def test_proposed_research_stays_out_of_public_outputs(demo):
+    from advocacy_trace.research import load_proposed_research
+    from advocacy_trace.views import case_view, explorer_view
+
+    load_proposed_research(demo)
+    load_proposed_research(demo)
+    poland = demo.get_argument("pl_arg_proportionality")
+    assert poland["review_status"] == "proposed"
+    assert poland["author_actor"] == "Lisa Davis"
+    assert poland["attribution_role"] == "partner_argument"
+    assert demo.independent_support_count("out_pl_appeal_podlesna") == 0
+    exported = str(demo.public_export())
+    assert "case_poland" not in exported
+    assert "case_tam" not in exported
+    assert "Lisa Davis" not in exported
+    assert "Elżbieta" not in exported
+    public_case = case_view(demo, "case_poland", audience="public")
+    assert public_case["omitted"] is True
+    internal = case_view(demo, "case_poland", audience="internal")
+    assert internal["research_attempts"]
+    assert "not_found_in_this_search" in {item["result"] for item in internal["research_attempts"]}
+    view = explorer_view(
+        demo,
+        label=None,
+        country="Poland",
+        intervention_type=None,
+        date_from=None,
+        date_to=None,
+        review_status="approved",
+        include_synthetic=False,
+    )
+    assert view["rows"] == []
+    assert view["real_cases_with_approved_argument"] == 0
+
+
+def _approvable_argument(store, **overrides):
+    fields = {
+        "case_id": "case_1",
+        "source_id": "source_1",
+        "author_actor": "TrialWatch",
+        "attribution_role": "trialwatch_argument",
+        "institutional_affiliation": "TrialWatch",
+        "disclaimer_status": "not_stated_in_source",
+        "summary": "The report argues that the restriction is disproportionate because the penalty is imprisonment.",
+        "reasons": "The fictional source discusses severity.",
+        "principle": "A penalty must be proportionate to the stated aim.",
+        "application": "Imprisonment was imposed for one post.",
+        "remedy_requested": "not stated",
+        "passage": "The report argues that the restriction is disproportionate because imprisonment was imposed for one post.",
+        "location_ref": "p. 2",
+        "labels": ["Proportionality"],
+    }
+    fields.update(overrides)
+    return store.add_argument(**fields)
 
 
 def _case_and_source(store, **source_fields):

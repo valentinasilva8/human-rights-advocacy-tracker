@@ -76,6 +76,25 @@ Exclude: the mere fact of a conviction or an acquittal. The outcome is a separat
 
 Necessity and proportionality often appear together. Label both when the source makes both points, and keep the reasons distinct. Vagueness and broadness can appear together. Do not collapse them into a single "speech" tag.
 
+## Reception
+
+Keep these separate:
+
+- Explicitly accepted, partially accepted, or explicitly rejected, with the authority's own document or a labeled secondary account.
+- Discussed without a clear disposition.
+- Not addressed in the available decision. This needs the decision and a reviewer's check of its reasoning.
+- Decision not yet retrieved.
+- Decision sought but unavailable.
+- Document obtained, but the reasoning is not enough to say how the argument was received.
+
+A verdict dated before the intervention is not a response to that intervention. “Not found in this search” is not “does not exist.”
+
+## Approval
+
+Approval records the reviewer, the time, the claim, and the evidence. The reviewer must check that the passage supports that claim. A model payload cannot set the check. If the claim, the attribution, or the supporting evidence changes, the approval no longer applies.
+
+`not stated` and `not yet checked` are different. Do not invent a disclaimer the source does not contain.
+
 ## Uncertainty
 
 - Partial or missing dates stay partial or missing.
