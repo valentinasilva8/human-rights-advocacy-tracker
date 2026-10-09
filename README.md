@@ -50,7 +50,7 @@ Publication date, event date, retrieval date, and last-verified date are stored 
 
 The committed example is fictional: Exampleland v. A. Rivera. It is marked synthetic and is excluded from real-case metrics. Do not add real reports or articles to git. See [docs/source-reuse-policy.md](docs/source-reuse-policy.md).
 
-A separate index lists the public TrialWatch report pages, including 47 graded freedom-of-expression reports: [docs/trialwatch-report-index.md](docs/trialwatch-report-index.md). Those rows are links and fairness grades, not extracted arguments. How that index should and should not be used is in [docs/argument-bank-assessment.md](docs/argument-bank-assessment.md). The next real case to review is Cambodia v. Kong Raiya.
+A separate index lists the public TrialWatch report pages, including 47 graded freedom-of-expression reports: [docs/trialwatch-report-index.md](docs/trialwatch-report-index.md). Those rows are links and fairness grades, not extracted arguments. How that index should and should not be used is in [docs/argument-bank-assessment.md](docs/argument-bank-assessment.md). Proposed clusters from the first six reports are in [docs/first-argument-clusters.md](docs/first-argument-clusters.md). They are not approved and they are not in the demo database.
 
 ## TrialWatch pages
 
@@ -74,3 +74,4 @@ A separate index lists the public TrialWatch report pages, including 47 graded f
 - [Evaluation plan](docs/evaluation-plan.md)
 - [TrialWatch report index](docs/trialwatch-report-index.md)
 - [Argument bank assessment](docs/argument-bank-assessment.md)
+- [First argument clusters](docs/first-argument-clusters.md)
