@@ -12,7 +12,7 @@ How Advocacy Trace uses this list:
 
 All 96 entries on https://cfj.org/reports/ ("96 results" on the page; the same 96 are in the sitemap), as fetched on 9 Oct 2026.
 90 are distinct reports; 6 are translations or summaries of another report; 2 pages have no PDF.
-Grade = the A–F grade TrialWatch gave the trial, read from the PDF (see `data/trialwatch_reports.csv` for the source text of each grade).
+Grade = the A–F fairness grade recorded in the other project's index, which says it was read from the PDF. That CSV is not in this repository, and the grade text has not been checked again here.
 
 ## 1. Graded trials with freedom-of-expression analysis (core set) (47)
 
