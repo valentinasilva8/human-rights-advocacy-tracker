@@ -19,7 +19,7 @@ Only after reuse is settled, and only with a narrow allowlist, caching, a delay 
 
 ## What this repository stores
 
-Committed data is limited to a fictional demonstration fixture. Do not commit full reports, articles, judgments, or sensitive case files. Prefer a source link, a short reviewed excerpt, and a derived record.
+Committed material is the fictional demonstration fixture plus a catalog of public report titles and links in [trialwatch-report-index.md](trialwatch-report-index.md). Do not commit full reports, articles, judgments, or sensitive case files. Prefer a source link, a short reviewed excerpt, and a derived record. Keyword tags and A–F grades from another project are notes, not approved arguments or outcomes.
 
 Downloaded files and the local SQLite database stay in ignored directories (`downloads/`, `data/`).
 
