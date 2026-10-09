@@ -1,0 +1,417 @@
+{
+  "participants": [
+    {
+      "id": "person_rivera",
+      "name": "A. Rivera (synthetic)",
+      "description": "Fictional defendant used only to demonstrate the evidence chain."
+    }
+  ],
+  "cases": [
+    {
+      "id": "case_rivera",
+      "title": "Exampleland v. A. Rivera (synthetic demonstration)",
+      "country": "Exampleland",
+      "court": "Court of Exampleland",
+      "case_number": "SYN-2022-014",
+      "charges": "Fictional speech offense used only for this demonstration",
+      "proceeding_type": "criminal",
+      "procedural_stage": "appeal decided",
+      "finality": "appeal decided; later sentence modification on record",
+      "sensitive": false,
+      "is_synthetic": true,
+      "opened_on": "2022-01-20",
+      "opened_on_precision": "day",
+      "last_verified_on": "2024-02-01",
+      "last_verified_on_precision": "day",
+      "unresolved_questions": "This record is fictional. A real case still needs the underlying report PDF and a separate external source before an outcome is treated as verified."
+    },
+    {
+      "id": "case_rivera_second",
+      "title": "Exampleland v. A. Rivera (second proceeding, synthetic)",
+      "country": "Exampleland",
+      "court": "Court of Exampleland",
+      "case_number": "SYN-2023-088",
+      "charges": "A later fictional charge that is a different proceeding",
+      "proceeding_type": "criminal",
+      "procedural_stage": "unknown",
+      "finality": "unknown",
+      "sensitive": false,
+      "is_synthetic": true,
+      "opened_on": "2023-11-02",
+      "opened_on_precision": "day",
+      "last_verified_on": "2024-02-01",
+      "last_verified_on_precision": "day",
+      "unresolved_questions": "No later event has been imported for this second proceeding. The outcome is unknown."
+    },
+    {
+      "id": "case_sensitive",
+      "title": "Sensitive synthetic matter (must not be exported)",
+      "country": "Exampleland",
+      "court": "Restricted demonstration court",
+      "case_number": "SYN-RESTRICTED",
+      "charges": "Restricted fictional matter",
+      "proceeding_type": "criminal",
+      "procedural_stage": "unknown",
+      "finality": "unknown",
+      "sensitive": true,
+      "is_synthetic": true,
+      "opened_on_precision": "unknown",
+      "last_verified_on_precision": "unknown",
+      "unresolved_questions": "Restricted demonstration row. It must never appear in a public export."
+    }
+  ],
+  "links": [
+    {"case_id": "case_rivera", "participant_id": "person_rivera", "role_in_case": "defendant"},
+    {"case_id": "case_rivera_second", "participant_id": "person_rivera", "role_in_case": "defendant"}
+  ],
+  "sources": [
+    {
+      "id": "src_report",
+      "title": "Synthetic fairness report on Exampleland v. A. Rivera",
+      "document_type": "fairness_report",
+      "author_actor": "TrialWatch",
+      "url": "https://example.invalid/synthetic/rivera-fairness-report",
+      "publication_date": "2022-03-15",
+      "publication_date_precision": "day",
+      "retrieval_date": "2026-10-09",
+      "retrieval_date_precision": "day",
+      "fingerprint": "synthetic-sha256:rivera-report",
+      "extraction_version": "demo-1",
+      "rights_note": "Fictional text written for this prototype. Not a CFJ document.",
+      "is_synthetic": true
+    },
+    {
+      "id": "src_judgment",
+      "title": "Synthetic judgment, Court of Exampleland",
+      "document_type": "judgment",
+      "author_actor": "Court of Exampleland",
+      "url": "https://example.invalid/synthetic/rivera-judgment",
+      "publication_date": "2022-11-20",
+      "publication_date_precision": "day",
+      "retrieval_date": "2026-10-09",
+      "retrieval_date_precision": "day",
+      "fingerprint": "synthetic-sha256:rivera-judgment",
+      "extraction_version": "demo-1",
+      "rights_note": "Fictional judgment text written for this prototype.",
+      "is_synthetic": true
+    },
+    {
+      "id": "src_news",
+      "title": "Synthetic news report of a sentence modification",
+      "document_type": "news",
+      "author_actor": "Exampleland Daily (synthetic)",
+      "url": "https://example.invalid/synthetic/rivera-sentence",
+      "publication_date": "2023-04-04",
+      "publication_date_precision": "day",
+      "retrieval_date": "2026-10-09",
+      "retrieval_date_precision": "day",
+      "fingerprint": "synthetic-sha256:rivera-news",
+      "extraction_version": "demo-1",
+      "rights_note": "Fictional article. The event date below is not this publication date.",
+      "is_synthetic": true
+    },
+    {
+      "id": "src_news_dup",
+      "title": "Synthetic reprint of the sentence-modification article",
+      "document_type": "news",
+      "author_actor": "Wire copy (synthetic)",
+      "url": "https://example.invalid/synthetic/rivera-sentence-reprint",
+      "publication_date": "2023-04-05",
+      "publication_date_precision": "day",
+      "retrieval_date": "2026-10-09",
+      "retrieval_date_precision": "day",
+      "fingerprint": "synthetic-sha256:rivera-news-reprint",
+      "extraction_version": "demo-1",
+      "rights_note": "Reprint of the fictional article. Not an independent source.",
+      "duplicate_of_source_id": "src_news",
+      "is_synthetic": true
+    },
+    {
+      "id": "src_later_report",
+      "title": "Synthetic report published after the verdict",
+      "document_type": "fairness_report",
+      "author_actor": "TrialWatch",
+      "url": "https://example.invalid/synthetic/rivera-later-comment",
+      "publication_date": "2024-01-10",
+      "publication_date_precision": "day",
+      "retrieval_date": "2026-10-09",
+      "retrieval_date_precision": "day",
+      "fingerprint": "synthetic-sha256:rivera-later",
+      "extraction_version": "demo-1",
+      "rights_note": "Fictional later comment. It does not precede the 2022 conviction.",
+      "is_synthetic": true
+    },
+    {
+      "id": "src_blog",
+      "title": "Synthetic unverified blog",
+      "document_type": "other",
+      "author_actor": "Anonymous blog (synthetic)",
+      "url": "https://example.invalid/synthetic/unverified-blog",
+      "publication_date": "2023-08-01",
+      "publication_date_precision": "day",
+      "retrieval_date": "2026-10-09",
+      "retrieval_date_precision": "day",
+      "fingerprint": "synthetic-sha256:unverified-blog",
+      "extraction_version": "demo-1",
+      "rights_note": "Fictional unverified claim. It must not enter a verified summary.",
+      "is_synthetic": true
+    }
+  ],
+  "interventions": [
+    {
+      "id": "int_report",
+      "case_id": "case_rivera",
+      "source_id": "src_report",
+      "actor": "TrialWatch",
+      "intervention_type": "fairness_report",
+      "attribution_basis": "document_authored",
+      "intervention_date": "2022-03-15",
+      "intervention_date_precision": "day",
+      "description": "Synthetic fairness report discussing the fictional prosecution."
+    },
+    {
+      "id": "int_later",
+      "case_id": "case_rivera",
+      "source_id": "src_later_report",
+      "actor": "TrialWatch",
+      "intervention_type": "fairness_report",
+      "attribution_basis": "document_authored",
+      "intervention_date": "2024-01-10",
+      "intervention_date_precision": "day",
+      "description": "A later synthetic comment. It is dated after the conviction and is not treated as explaining that conviction."
+    }
+  ],
+  "arguments": [
+    {
+      "id": "arg_prop_sentence",
+      "case_id": "case_rivera",
+      "intervention_id": "int_report",
+      "source_id": "src_report",
+      "author_actor": "TrialWatch",
+      "attribution_role": "trialwatch_argument",
+      "summary": "The report argues that the restriction is disproportionate because a two-year prison sentence was sought for one satirical post.",
+      "reasons": "The fictional report compares imprisonment with the stated aim of protecting public order and notes that a correction or a civil remedy was not addressed.",
+      "passage": "The report argues that the restriction is disproportionate because a two-year prison sentence for a single satirical post goes beyond the stated aim, and the court was not shown to have considered a correction or a civil remedy.",
+      "location_ref": "Synthetic report, p. 12, para. 44",
+      "legal_authorities": "Mentioned in the synthetic report only: Exampleland Constitution art. 19; ICCPR art. 19(3).",
+      "labels": ["Proportionality", "Necessity"],
+      "argument_date": "2022-03-15",
+      "argument_date_precision": "day",
+      "is_synthetic": true
+    },
+    {
+      "id": "arg_prop_prior",
+      "case_id": "case_rivera",
+      "intervention_id": "int_report",
+      "source_id": "src_report",
+      "author_actor": "TrialWatch",
+      "attribution_role": "trialwatch_argument",
+      "summary": "The report argues that a ban on future posts about the same official is a disproportionate prior restraint.",
+      "reasons": "The fictional report says the order covers speech that has not been made and is not tied to a specific threat.",
+      "passage": "The report argues that forbidding any future post about the official is disproportionate because it restrains speech that has not occurred and is not linked to a defined risk.",
+      "location_ref": "Synthetic report, p. 15, para. 51",
+      "legal_authorities": "Mentioned in the synthetic report only: ICCPR art. 19(3).",
+      "labels": ["Proportionality"],
+      "argument_date": "2022-03-15",
+      "argument_date_precision": "day",
+      "is_synthetic": true
+    },
+    {
+      "id": "arg_vague",
+      "case_id": "case_rivera",
+      "intervention_id": "int_report",
+      "source_id": "src_report",
+      "author_actor": "TrialWatch",
+      "attribution_role": "trialwatch_argument",
+      "summary": "The report argues that the offense is vague because it turns on speech 'harmful to public calm' without defining that phrase.",
+      "reasons": "The fictional report says the phrase gives officials open-ended discretion.",
+      "passage": "The report argues that the offense is vague because 'harmful to public calm' is undefined and leaves officials to decide which criticism is criminal.",
+      "location_ref": "Synthetic report, p. 9, para. 31",
+      "legal_authorities": "Mentioned in the synthetic report only: Exampleland Criminal Code s. 4.",
+      "labels": ["Vagueness"],
+      "argument_date": "2022-03-15",
+      "argument_date_precision": "day",
+      "is_synthetic": true
+    },
+    {
+      "id": "arg_counsel",
+      "case_id": "case_rivera",
+      "intervention_id": "int_report",
+      "source_id": "src_report",
+      "author_actor": "Counsel for A. Rivera",
+      "attribution_role": "defense_counsel_described",
+      "summary": "The report describes counsel's argument that the charge sheet was filed out of time. That is counsel's argument, not TrialWatch's reasoning.",
+      "reasons": "The fictional report attributes the filing-deadline point to counsel and does not adopt it as the report's own argument.",
+      "passage": "Counsel submitted that the charge sheet was filed out of time.",
+      "location_ref": "Synthetic report, p. 4, para. 10",
+      "legal_authorities": "",
+      "labels": ["unmapped—review required"],
+      "argument_date": "2022-03-15",
+      "argument_date_precision": "day",
+      "is_synthetic": true
+    },
+    {
+      "id": "arg_ai",
+      "case_id": "case_rivera",
+      "intervention_id": "int_report",
+      "source_id": "src_report",
+      "author_actor": "Unattributed extraction",
+      "attribution_role": "ai_suggested",
+      "summary": "A model suggested a further proportionality point, but no passage was captured.",
+      "reasons": "",
+      "passage": "",
+      "location_ref": "",
+      "legal_authorities": "",
+      "labels": ["Proportionality"],
+      "argument_date_precision": "unknown",
+      "is_synthetic": true
+    }
+  ],
+  "outcomes": [
+    {
+      "id": "out_conviction",
+      "case_id": "case_rivera",
+      "participant_id": "person_rivera",
+      "event_type": "Conviction",
+      "description": "The fictional trial court convicted A. Rivera and imposed two years' imprisonment.",
+      "evidence_label": "Primary-source supported",
+      "event_date": "2022-06-01",
+      "event_date_precision": "day",
+      "procedural_stage": "trial judgment",
+      "finality": "superseded on appeal only as to the appellate holding; the trial conviction remains on the record",
+      "is_synthetic": true
+    },
+    {
+      "id": "out_appeal",
+      "case_id": "case_rivera",
+      "participant_id": "person_rivera",
+      "event_type": "Appeal decided",
+      "description": "The fictional appellate court affirmed the conviction. The trial conviction stays on the record.",
+      "evidence_label": "Primary-source supported",
+      "event_date": "2022-11-20",
+      "event_date_precision": "day",
+      "procedural_stage": "appeal",
+      "finality": "affirmance",
+      "supersedes_event_id": "out_conviction",
+      "is_synthetic": true
+    },
+    {
+      "id": "out_sentence",
+      "case_id": "case_rivera",
+      "participant_id": "person_rivera",
+      "event_type": "Sentence modification",
+      "description": "A fictional news report says the sentence was reduced to a fine on 2 April 2023. The article was published two days later. This is not an acquittal and is not attributed to the fairness report.",
+      "evidence_label": "Single-source report",
+      "event_date": "2023-04-02",
+      "event_date_precision": "day",
+      "procedural_stage": "post-appeal",
+      "finality": "sentence modified; conviction not vacated in this record",
+      "is_synthetic": true
+    },
+    {
+      "id": "out_unverified",
+      "case_id": "case_rivera",
+      "participant_id": "person_rivera",
+      "event_type": "Release",
+      "description": "An unverified fictional blog claims a release. This row stays unapproved and is not a finding.",
+      "evidence_label": "Unverified",
+      "event_date_precision": "unknown",
+      "procedural_stage": "unknown",
+      "finality": "unknown",
+      "is_synthetic": true
+    }
+  ],
+  "receptions": [
+    {
+      "id": "rec_discussed",
+      "argument_id": "arg_prop_sentence",
+      "case_id": "case_rivera",
+      "status": "Discussed without clear resolution",
+      "source_id": "src_judgment",
+      "passage": "The appellate reasons summarize the proportionality submission and neither adopt nor reject it.",
+      "location_ref": "Synthetic judgment, p. 7, para. 22",
+      "observer_note": "Summary of an argument is not endorsement. The conviction was affirmed in a separate holding.",
+      "is_recital": false,
+      "is_synthetic": true
+    },
+    {
+      "id": "rec_recital",
+      "argument_id": "arg_prop_prior",
+      "case_id": "case_rivera",
+      "status": "Discussed without clear resolution",
+      "source_id": "src_judgment",
+      "passage": "The court recited the prior-restraint submission while describing the procedural history.",
+      "location_ref": "Synthetic judgment, p. 3, para. 8",
+      "observer_note": "This passage recites the argument. Recital is not acceptance.",
+      "is_recital": true,
+      "is_synthetic": true
+    }
+  ],
+  "evidence_links": [
+    {
+      "id": "link_report_sentence",
+      "source_id": "src_report",
+      "target_type": "argument",
+      "target_id": "arg_prop_sentence",
+      "relationship": "quotes"
+    },
+    {
+      "id": "link_report_prior",
+      "source_id": "src_report",
+      "target_type": "argument",
+      "target_id": "arg_prop_prior",
+      "relationship": "quotes"
+    },
+    {
+      "id": "link_judgment_conviction",
+      "source_id": "src_judgment",
+      "target_type": "outcome_event",
+      "target_id": "out_conviction",
+      "relationship": "supports",
+      "independent": true
+    },
+    {
+      "id": "link_judgment_appeal",
+      "source_id": "src_judgment",
+      "target_type": "outcome_event",
+      "target_id": "out_appeal",
+      "relationship": "supports",
+      "independent": true
+    },
+    {
+      "id": "link_news_sentence",
+      "source_id": "src_news",
+      "target_type": "outcome_event",
+      "target_id": "out_sentence",
+      "relationship": "supports",
+      "independent": true
+    },
+    {
+      "id": "link_news_dup",
+      "source_id": "src_news_dup",
+      "target_type": "outcome_event",
+      "target_id": "out_sentence",
+      "relationship": "duplicates",
+      "independent": false
+    },
+    {
+      "id": "link_judgment_reception",
+      "source_id": "src_judgment",
+      "target_type": "reception",
+      "target_id": "rec_discussed",
+      "relationship": "supports",
+      "independent": true
+    }
+  ],
+  "reviews": [
+    {"target_type": "argument", "target_id": "arg_prop_sentence", "action": "approve", "reviewer": "synthetic-reviewer", "note": "Demonstration approval of a fictional proportionality argument."},
+    {"target_type": "argument", "target_id": "arg_prop_prior", "action": "approve", "reviewer": "synthetic-reviewer", "note": "Demonstration approval of a second fictional proportionality argument in the same case."},
+    {"target_type": "argument", "target_id": "arg_vague", "action": "approve", "reviewer": "synthetic-reviewer", "note": "Demonstration approval of a vagueness argument in the same case."},
+    {"target_type": "argument", "target_id": "arg_counsel", "action": "approve", "reviewer": "synthetic-reviewer", "note": "Kept as counsel's argument described in the report, not as TrialWatch's."},
+    {"target_type": "outcome_event", "target_id": "out_conviction", "action": "approve", "reviewer": "synthetic-reviewer", "note": "Fictional conviction supported by the synthetic judgment."},
+    {"target_type": "outcome_event", "target_id": "out_appeal", "action": "approve", "reviewer": "synthetic-reviewer", "note": "Affirmance does not delete the trial conviction."},
+    {"target_type": "outcome_event", "target_id": "out_sentence", "action": "approve", "reviewer": "synthetic-reviewer", "note": "Single fictional news source. Event date is 2 April 2023, not the publication date."},
+    {"target_type": "reception", "target_id": "rec_discussed", "action": "approve", "reviewer": "synthetic-reviewer", "note": "Discussed, not accepted."},
+    {"target_type": "reception", "target_id": "rec_recital", "action": "approve", "reviewer": "synthetic-reviewer", "note": "Recital stored as discussion, not as acceptance."}
+  ]
+}
