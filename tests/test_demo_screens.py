@@ -206,6 +206,88 @@ def test_proposed_real_row_is_not_in_the_public_models(tmp_path):
     assert case["omitted"] is True
 
 
+def test_recorded_poland_approvals_are_the_only_real_public_rows(tmp_path):
+    from advocacy_trace.seed import open_store
+
+    store = open_store(tmp_path / "approved.sqlite")
+    assert store.get_argument("pl_arg_legality")["review_status"] == "approved"
+    assert store.get_argument("pl_arg_proportionality")["review_status"] == "approved"
+    assert store.get_argument("tam_arg_breadth")["review_status"] == "proposed"
+
+    explorer = public_explorer(store, include_synthetic=False)
+    brief = public_brief(explorer)
+    case = public_case(store, "case_poland", "pl_int_report")
+    blob = "\n".join([_strings(explorer), _strings(brief), _strings(case)])
+    assert {row["argument"]["id"] for row in explorer["matched_rows"]} == {
+        "pl_arg_legality",
+        "pl_arg_proportionality",
+    }
+    assert explorer["counts"]["real_cases"] == 1
+    assert explorer["counts"]["unique_cases"] == 1
+    assert explorer["counts"]["demonstration_cases"] == 0
+    assert explorer["counts"]["matched_arguments"] == 2
+    assert explorer["counts"]["unknown_outcome_cases"] == 1
+    assert "do not approve or verify the case" in explorer["case_scope_note"]
+    assert "success rate" in explorer["counts"]["count_note"]
+
+    by_id = {row["argument"]["id"]: row for row in explorer["matched_rows"]}
+    legality = by_id["pl_arg_legality"]
+    proportionality = by_id["pl_arg_proportionality"]
+    assert "Article 196 is not precise" in legality["argument"]["passage"]
+    assert legality["argument"]["location_ref"] == "Fairness report, printed p. 3, PDF page 4"
+    assert set(legality["argument"]["labels"]) == {"Legality", "Broadness"}
+    assert "necessity and proportionality requirements" in proportionality["argument"]["passage"]
+    assert proportionality["argument"]["location_ref"] == "Fairness report, printed p. 4, PDF page 5"
+    assert set(proportionality["argument"]["labels"]) == {"Necessity", "Proportionality"}
+    for row in (legality, proportionality):
+        assert row["when"] == "2021-11 (month)"
+        assert row["author"]["author"] == "Lisa Davis"
+        assert "City University of New York" in row["author"]["affiliation"]
+        assert "American Bar Association" in row["author"]["disclaimer"]
+        assert "should likewise be rejected" in row["argument"]["remedy_requested"]
+        assert "Recommendations from Professor Lisa Davis" in row["argument"]["remedy_requested"]
+        assert row["argument"]["passage"] not in row["argument"]["remedy_requested"]
+        links = {link["label"]: link["url"] for link in row["source"]["links"]}
+        assert links["Report page"] == (
+            "https://cfj.org/reports/poland-vs-elzbieta-podlesna-anna-prus-and-joanna-gzyra-iskandar/"
+        )
+        assert links["PDF"] == (
+            "https://cfj.org/wp-content/uploads/2023/07/trial-observation-report-poland-lgbt.pdf"
+        )
+        assert row["source"]["when"] == "2021-11 (month)"
+        assert "rights_note" not in row["source"]
+
+    assert case["court_reception_note"].startswith("Court reception is not established")
+    assert "not acceptance and it is not rejection" in case["court_reception_note"]
+    assert case["chronology_note"].startswith("The public chronology is incomplete")
+    assert {item["kind"] for item in case["items"]} == {"intervention"}
+    assert case["case"]["proceeding_note"].startswith("II K 296/20 is the trial case number")
+    assert all(item["established"] is False for item in case["receptions"])
+    assert brief["facts"]["developments"] == []
+    assert brief["facts"]["documented_reception"] == []
+    assert {item["argument_id"] for item in brief["facts"]["unknown_reception"]} == {
+        "pl_arg_legality",
+        "pl_arg_proportionality",
+    }
+    assert all(item["remedy_note"].endswith("not an impact finding.") for item in brief["facts"]["engagement"])
+    assert "Follow-up search coverage is not in the public record." in brief["facts"]["evidence_gaps"]
+    assert "not a finding that implementation failed" in brief["facts"]["implementation_status"]
+    walkthrough = public_explorer(_walkthrough(tmp_path), include_synthetic=True)
+    assert "pl_arg_legality" not in _strings(walkthrough)
+    assert walkthrough["synthetic_banner"]
+    for marker in (
+        "Wilmshurst",
+        "Private comparison",
+        "Tęcza nie obraża",
+        "orzeczenia.ms.gov.pl",
+        "Helsińska Fundacja",
+        "tam_arg_breadth",
+        "TVN24",
+        "PRIVATE-SEARCH-NOTE",
+    ):
+        assert marker not in blob
+
+
 def test_public_entry_cannot_reach_internal_review():
     source = inspect.getsource(public_app)
     tree = ast.parse(source)
@@ -250,22 +332,55 @@ def test_public_app_screens_exclude_internal_controls(tmp_path, monkeypatch):
     app.run()
     assert not app.exception
     text = _app_text(app)
-    assert "No approved real records match this selection" in text
-    assert "Lisa Davis" not in text
+    assert "Matched approved arguments: 2" in text
+    assert "Real cases with an approved argument in this selection: 1" in text
+    assert "does not approve or verify the case" in text
+    assert "Lisa Davis" in text
+    assert "Article 196 is not precise" in text
+    assert "necessity and proportionality requirements" in text
+    assert "2021-11 (month)" in text
+    assert "trial-observation-report-poland-lgbt.pdf" in text
+    assert "cfj.org/reports/poland-vs-elzbieta-podlesna" in text
     assert "Wilmshurst" not in text
+    assert "Private comparison" not in text
+    assert "Tęcza nie obraża" not in text
     assert "Approve" not in text
     assert [radio.options for radio in app.sidebar.radio if radio.label == "Screen"] == [
         ["Argument Explorer", "Case Evidence", "Advocacy Learning Brief"]
     ]
+    assert not any(button.label == "Approve" for button in app.button)
 
+    app.sidebar.radio[1].set_value("Case Evidence").run()
+    text = _app_text(app)
+    assert "Court reception is not established" in text
+    assert "not acceptance and it is not rejection" in text
+    assert "The public chronology is incomplete" in text
+    assert "II K 296/20 is the trial case number" in text
+    assert "No approved public record in this band." in text
+    assert "Wilmshurst" not in text
+    assert "Tęcza nie obraża" not in text
+    assert not any(button.label == "Approve" for button in app.button)
+
+    app.sidebar.radio[1].set_value("Advocacy Learning Brief").run()
+    text = _app_text(app)
+    assert "Not a human-reviewed brief" in text
+    assert "cannot support a general or cross-case conclusion" in text
+    assert "not an impact finding" in text
+    assert "No approved outcome or later development is in this selection" in text
+    assert "Article 196 is not precise" in text
+    assert "Wilmshurst" not in text
+
+    app.sidebar.radio[1].set_value("Argument Explorer").run()
     app.sidebar.radio[0].set_value("Synthetic walkthrough").run()
     from_box = next(box for box in app.sidebar.text_input if box.label == "From date")
     from_box.set_value("2023-05-01").run()
     to_box = next(box for box in app.sidebar.text_input if box.label == "To date")
     to_box.set_value("2023-05-31").run()
     text = _app_text(app)
+    assert "Synthetic demonstration" in text
     assert "Matched approved arguments: 2" in text
     assert "Date unknown" in text
+    assert "Article 196 is not precise" not in text
     assert "INTERNAL-PROPOSED" not in text
 
     app.sidebar.radio[1].set_value("Case Evidence").run()

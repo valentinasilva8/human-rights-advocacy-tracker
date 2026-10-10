@@ -1,13 +1,15 @@
 """Public screen models for Advocacy Trace.
 
-Built from the safeguards snapshot 3acf94a. This module reads approved public
-projections only. It does not approve records or change stored evidence.
+This module reads approved public projections only. It does not approve
+records, seed approvals, or change stored evidence. Recorded approvals are
+applied by open_store, which the evidence agent owns.
 
 The evidence agent keeps views, the store, constants, migrations, approval,
 and the evidence fixtures. Public rendering lives here so the two sides do
 not both edit app.py.
 
-Contract gaps at that snapshot, left for the evidence agent:
+Fields still absent from the public case projection, left for the evidence
+agent. The argument-only preview does not wait on them:
 
 - Follow-up search coverage is stored on research attempts, and the public
   case projection omits those attempts. Public screens say the coverage is
@@ -16,11 +18,12 @@ Contract gaps at that snapshot, left for the evidence agent:
   shown as failed implementation.
 - An approved outcome does not carry a source URL on the public case
   projection. The direct link is shown only when an argument source already
-  includes one.
+  includes one. Outcome source links are not invented.
 """
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 from advocacy_trace.constants import (
@@ -65,6 +68,27 @@ SYNTHETIC_BANNER = (
     "Synthetic demonstration. These records are fictional. "
     "They are excluded from real-case counts."
 )
+CASE_SCOPE = (
+    "The rows in this selection are approved arguments. "
+    "They do not approve or verify the case."
+)
+COURT_RECEPTION_NOT_ESTABLISHED = (
+    "Court reception is not established. "
+    "No approved reception record is in this public selection. "
+    "That absence is not acceptance and it is not rejection."
+)
+CHRONOLOGY_INCOMPLETE = (
+    "The public chronology is incomplete. "
+    "It shows approved records only. "
+    "Outcomes and receptions that have not been approved are omitted. "
+    "A missing record is not a finding that a court accepted or rejected an argument, "
+    "and it is not a finding that nothing else happened."
+)
+REMEDY_NOTE = (
+    "Requested remedy, cited separately from the quotation. "
+    "This is the author's request. It is not a court outcome and it is not an impact finding."
+)
+_URL_RE = re.compile(r"https://[^\s)>\"]+")
 ROLE_TEXT = {
     "trialwatch_argument": "institutional advocacy, with TrialWatch named as the author",
     "partner_argument": "named expert or partner",
@@ -89,6 +113,7 @@ _ARGUMENT_KEYS = (
     "labels",
     "argument_date",
     "argument_date_precision",
+    "remedy_requested",
     "public_limitation",
     "evidence_basis",
     "is_synthetic",
@@ -113,6 +138,7 @@ _SOURCE_KEYS = (
     "document_type",
     "publication_date",
     "publication_date_precision",
+    "rights_note",
 )
 _EVENT_KEYS = (
     "id",
@@ -185,6 +211,7 @@ def public_explorer(
         "include_synthetic": include_synthetic,
         "synthetic_banner": SYNTHETIC_BANNER if include_synthetic else "",
         "empty_real": EMPTY_REAL if counts["real_cases"] == 0 and not include_synthetic else "",
+        "case_scope_note": CASE_SCOPE if counts["matched_arguments"] else "",
         "date_rule": DATE_RULE,
         "date_error": date_error,
         "filters": {
@@ -228,6 +255,7 @@ def public_case(
     reference = _reference(interventions, reference_intervention_id)
     items = _chronology_items(view, reference)
     coverage = _coverage(case, items)
+    receptions = _case_receptions(view)
     return {
         "audience": "public",
         "omitted": False,
@@ -242,7 +270,11 @@ def public_case(
             "charges": case.get("charges") or NOT_RECORDED,
             "procedural_stage": case.get("procedural_stage") or NOT_RECORDED,
             "finality": case.get("finality") or NOT_RECORDED,
+            "proceeding_note": case.get("proceeding_note") or "",
         },
+        "case_scope_note": CASE_SCOPE,
+        "court_reception_note": "" if any(item["established"] for item in receptions) else COURT_RECEPTION_NOT_ESTABLISHED,
+        "chronology_note": "" if any(item["kind"] == "outcome" for item in items) else CHRONOLOGY_INCOMPLETE,
         "reference_intervention": _intervention_public(reference) if reference else None,
         "other_interventions_note": (
             "Other interventions stay visible in their own bands. "
@@ -258,7 +290,7 @@ def public_case(
             "unknown": "Relative timing unknown",
         },
         "items": items,
-        "receptions": _case_receptions(view),
+        "receptions": receptions,
         "coverage": coverage,
         "gaps": [gap for gap in view.get("gaps") or [] if "PRIVATE" not in gap],
         "contract_gaps": _contract_gaps(),
@@ -328,7 +360,7 @@ def _prepare_row(row: dict, case_payload: dict | None) -> dict:
     if case_payload:
         for item in case_payload.get("arguments") or []:
             if item["argument"]["id"] == argument.get("id") and item.get("source"):
-                source = _pick(item["source"], _SOURCE_KEYS)
+                source = _public_source(_pick(item["source"], _SOURCE_KEYS))
                 break
     return {
         "argument": argument,
@@ -437,7 +469,9 @@ def _counts(rows: list[dict]) -> dict:
         "unknown_outcome_cases": len(unknown_outcomes),
         "count_note": (
             "Real cases and demonstration cases are counted separately. "
-            "Demonstration cases are not real matters."
+            "Demonstration cases are not real matters. "
+            "A real case in this count has an approved argument. "
+            "That does not approve or verify the case, and it is not a success rate."
         ),
     }
 
@@ -493,14 +527,14 @@ def _chronology_items(view: dict, reference: dict | None) -> list[dict]:
         arguments_by_intervention.setdefault(intervention_id, []).append(
             {
                 "argument": argument,
-                "source": _pick(item.get("source") or {}, _SOURCE_KEYS) if item.get("source") else None,
+                "source": _public_source(_pick(item.get("source") or {}, _SOURCE_KEYS)) if item.get("source") else None,
                 "receptions": [_pick(reception, _RECEPTION_KEYS) for reception in item.get("receptions") or []],
             }
         )
     for intervention in view.get("interventions") or []:
         band = "reference" if reference and intervention["id"] == reference["id"] else _band(reference, intervention.get("intervention_date"), intervention.get("intervention_date_precision") or "unknown")
         linked = arguments_by_intervention.get(intervention["id"], [])
-        url = next((entry["source"]["url"] for entry in linked if entry.get("source") and entry["source"].get("url")), None)
+        links = _links_from_entries(linked)
         items.append(
             {
                 "id": intervention["id"],
@@ -511,7 +545,8 @@ def _chronology_items(view: dict, reference: dict | None) -> list[dict]:
                 "detail": {
                     "quotation": intervention.get("description") or "No description is in the public record.",
                     "location": NOT_RECORDED,
-                    "url": url or "Direct link is not in the public record.",
+                    "url": links[0]["url"] if links else "Direct link is not in the public record.",
+                    "links": links,
                     "limitation": "",
                     "evidence_basis_caption": "",
                     "linked_arguments": [
@@ -535,6 +570,7 @@ def _chronology_items(view: dict, reference: dict | None) -> list[dict]:
                     "quotation": picked.get("description") or "No description is in the public record.",
                     "location": NOT_RECORDED,
                     "url": "Direct link is not in the public record.",
+                    "links": [],
                     "limitation": picked.get("public_limitation") or "",
                     "evidence_basis_caption": _basis(picked.get("evidence_basis")),
                     "evidence_label": picked.get("evidence_label") or NOT_RECORDED,
@@ -676,6 +712,8 @@ def _case_receptions(view: dict) -> list[dict]:
 
 def _engagement(row: dict) -> dict:
     source = row.get("source") or {}
+    links = list(source.get("links") or _source_links(source))
+    remedy = (row["argument"].get("remedy_requested") or "").strip()
     return {
         "argument_id": row["argument"]["id"],
         "case_title": row["case"]["title"],
@@ -684,8 +722,11 @@ def _engagement(row: dict) -> dict:
         "intervention_type": (row.get("intervention") or {}).get("intervention_type") or NOT_RECORDED,
         "quotation": row["argument"].get("passage") or "",
         "location": row["argument"].get("location_ref") or NOT_RECORDED,
+        "remedy": remedy,
+        "remedy_note": REMEDY_NOTE if remedy else "",
         "source_title": source.get("title") or NOT_RECORDED,
-        "source_url": source.get("url") or "Direct link is not in the public record.",
+        "source_url": links[0]["url"] if links else "Direct link is not in the public record.",
+        "links": links,
         "when": row["when"],
     }
 
@@ -837,19 +878,76 @@ def _author(argument: dict) -> dict:
 def _argument_detail(entry: dict) -> dict:
     argument = entry["argument"]
     source = entry.get("source") or {}
+    links = list(source.get("links") or _source_links(source))
+    remedy = (argument.get("remedy_requested") or "").strip()
     return {
         "id": argument.get("id"),
         "author": _author(argument),
         "summary": argument.get("summary") or "",
         "quotation": argument.get("passage") or "",
         "location": argument.get("location_ref") or NOT_RECORDED,
-        "url": source.get("url") or "Direct link is not in the public record.",
+        "remedy": remedy,
+        "remedy_note": REMEDY_NOTE if remedy else "",
+        "url": links[0]["url"] if links else "Direct link is not in the public record.",
+        "links": links,
         "source_title": source.get("title") or NOT_RECORDED,
         "when": _format_date(argument.get("argument_date"), argument.get("argument_date_precision")),
         "limitation": argument.get("public_limitation") or "",
         "evidence_basis_caption": _basis(argument.get("evidence_basis")),
         "labels": argument.get("labels") or [],
     }
+
+
+def _public_source(source: dict) -> dict:
+    public = dict(source)
+    public["links"] = _source_links(public)
+    public["when"] = _format_date(public.get("publication_date"), public.get("publication_date_precision"))
+    public.pop("rights_note", None)
+    return public
+
+
+def _source_links(source: dict | None) -> list[dict]:
+    """Report page from the public URL, plus any other https links in the rights note."""
+
+    if not source:
+        return []
+    found: list[dict] = []
+    seen: set[str] = set()
+
+    def add(url: str, *, from_url_field: bool) -> None:
+        cleaned = url.strip().rstrip(").,;")
+        if not cleaned.startswith("https://") or cleaned in seen:
+            return
+        seen.add(cleaned)
+        found.append({"url": cleaned, "label": _link_label(cleaned, from_url_field=from_url_field)})
+
+    primary = str(source.get("url") or "")
+    if primary:
+        add(primary, from_url_field=True)
+    for match in _URL_RE.findall(str(source.get("rights_note") or "")):
+        add(match, from_url_field=False)
+    return found
+
+
+def _links_from_entries(entries: list[dict]) -> list[dict]:
+    found: list[dict] = []
+    seen: set[str] = set()
+    for entry in entries:
+        for link in (entry.get("source") or {}).get("links") or _source_links(entry.get("source")):
+            if link["url"] in seen:
+                continue
+            seen.add(link["url"])
+            found.append(link)
+    return found
+
+
+def _link_label(url: str, *, from_url_field: bool) -> str:
+    path = url.split("?", 1)[0].split("#", 1)[0].lower()
+    if path.endswith(".pdf"):
+        return "PDF"
+    if from_url_field:
+        return "Report page"
+    return "Source page"
 
 
 def _intervention_public(intervention: dict | None) -> dict | None:

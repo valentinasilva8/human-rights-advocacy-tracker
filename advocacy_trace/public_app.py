@@ -16,6 +16,7 @@ import streamlit as st
 
 from advocacy_trace.demo_screens import (
     NOT_RECORDED,
+    REMEDY_NOTE,
     SYNTHETIC_BANNER,
     open_walkthrough_store,
     public_brief,
@@ -29,6 +30,7 @@ SCREENS = ("Argument Explorer", "Case Evidence", "Advocacy Learning Brief")
 
 def main() -> None:
     st.set_page_config(page_title="Advocacy Trace", layout="wide")
+    st.set_option("client.toolbarMode", "viewer")
     st.title("Advocacy Trace")
     st.caption(
         "Independent hackathon prototype for reading advocacy evidence. "
@@ -112,6 +114,8 @@ def _explorer(explorer: dict) -> None:
     if explorer["date_error"]:
         st.write(explorer["date_error"])
     _counts(explorer["counts"])
+    if explorer.get("case_scope_note"):
+        st.write(explorer["case_scope_note"])
     if explorer["outside_selection_count"]:
         st.write(
             f"{explorer['outside_selection_count']} approved argument(s) have a recorded label, "
@@ -146,10 +150,14 @@ def _rows(rows: list[dict], heading: str) -> None:
         argument = row["argument"]
         case = row["case"]
         title = f"{case['title']} — {', '.join(argument.get('labels') or [])}"
-        with st.expander(title):
+        with st.expander(title, expanded=True):
             if case["is_synthetic"]:
                 st.write(SYNTHETIC_BANNER)
             st.write(argument.get("summary") or "")
+            st.caption("Quotation")
+            st.write(argument.get("passage") or "")
+            st.write(f"Page reference: {argument.get('location_ref') or NOT_RECORDED}")
+            _remedy(argument.get("remedy_requested"))
             author = row["author"]
             st.write(f"Author: {author['author']}")
             st.write(f"Role: {author['role']}")
@@ -158,6 +166,7 @@ def _rows(rows: list[dict], heading: str) -> None:
             intervention = row.get("intervention") or {}
             st.write(f"Intervention type: {intervention.get('intervention_type') or NOT_RECORDED}")
             st.write(f"Argument date: {row['when']}")
+            _source_block(row.get("source"))
             st.write(f"Documented reception: {row['reception']['statement']}")
             developments = row["developments"]
             if developments["latest"]:
@@ -229,17 +238,20 @@ def _case(store, explorer: dict) -> None:
         view = public_case(store, case_id, reference_id)
     if view["synthetic_banner"]:
         st.write(view["synthetic_banner"])
+    if view.get("case_scope_note"):
+        st.write(view["case_scope_note"])
     case = view["case"]
-    st.write(
-        {
-            "Jurisdiction": case["country"],
-            "Court": case["court"],
-            "Case number": case["case_number"],
-            "Charges": case["charges"],
-            "Procedural stage": case["procedural_stage"],
-            "Finality": case["finality"],
-        }
-    )
+    st.write(f"Jurisdiction: {case['country']}")
+    st.write(f"Court: {case['court']}")
+    st.write(f"Case number: {case['case_number']}")
+    st.write(f"Charges: {case['charges']}")
+    st.write(f"Procedural stage: {case['procedural_stage']}")
+    st.write(f"Finality: {case['finality']}")
+    st.write(f"Proceeding note: {case.get('proceeding_note') or NOT_RECORDED}")
+    if view.get("court_reception_note"):
+        st.write(view["court_reception_note"])
+    if view.get("chronology_note"):
+        st.write(view["chronology_note"])
     coverage = view["coverage"]
     st.subheader("Coverage")
     st.write(f"Record review date: {coverage['record_review']}")
@@ -281,7 +293,7 @@ def _case(store, explorer: dict) -> None:
         st.subheader("Selected record")
         st.write(detail["quotation"])
         st.write(f"Location: {detail['location']}")
-        st.write(f"Direct link: {detail['url']}")
+        _write_links(detail.get("links"), detail.get("url"))
         if detail.get("limitation"):
             st.write(f"Limitation: {detail['limitation']}")
         if detail.get("evidence_basis_caption"):
@@ -293,9 +305,11 @@ def _case(store, explorer: dict) -> None:
         for argument in detail.get("linked_arguments") or []:
             st.write(f"{argument['author']['author']} — {argument['author']['role']}")
             st.write(argument["summary"])
+            st.caption("Quotation")
             st.write(argument["quotation"])
-            st.write(f"Location: {argument['location']}")
-            st.write(f"Direct link: {argument['url']}")
+            st.write(f"Page reference: {argument['location']}")
+            _remedy(argument.get("remedy"), argument.get("remedy_note"))
+            _write_links(argument.get("links"), argument.get("url"))
             st.write(f"Argument date: {argument['when']}")
             if argument["limitation"]:
                 st.write(f"Limitation: {argument['limitation']}")
@@ -339,9 +353,10 @@ def _brief(brief: dict) -> None:
         st.write(f"Author: {author['author']}")
         st.write(f"Role: {author['role']}")
         st.write(f"Quotation: {item['quotation']}")
-        st.write(f"Location: {item['location']}")
+        st.write(f"Page reference: {item['location']}")
+        _remedy(item.get("remedy"), item.get("remedy_note"))
         st.write(f"Source: {item['source_title']}")
-        st.write(f"Direct link: {item['source_url']}")
+        _write_links(item.get("links"), item.get("source_url"))
     st.subheader("Documented reception")
     if not facts["documented_reception"]:
         st.write("No approved reception is in this selection.")
@@ -361,7 +376,10 @@ def _brief(brief: dict) -> None:
         st.write(item["statement"])
     st.subheader("Documented developments")
     if not facts["developments"]:
-        st.write("No approved development is in this selection.")
+        st.write(
+            "No approved outcome or later development is in this selection. "
+            "That absence is not an outcome and it is not an impact finding."
+        )
     for item in facts["developments"]:
         st.write(f"{item['case_title']} · {item['event_type']} · {item['when']}")
         st.write(item["description"])
@@ -383,10 +401,10 @@ def _brief(brief: dict) -> None:
 
 def _counts(counts: dict) -> None:
     st.write(f"Matched approved arguments: {counts['matched_arguments']}")
-    st.write(f"Unique cases in this selection: {counts['unique_cases']}")
-    st.write(f"Real cases in this selection: {counts['real_cases']}")
+    st.write(f"Cases with an approved argument in this selection: {counts['unique_cases']}")
+    st.write(f"Real cases with an approved argument in this selection: {counts['real_cases']}")
     st.write(f"Demonstration cases in this selection, not real: {counts['demonstration_cases']}")
-    st.write(f"Cases in this selection with no verified subsequent outcome: {counts['unknown_outcome_cases']}")
+    st.write(f"Cases in this selection with no approved outcome record: {counts['unknown_outcome_cases']}")
     st.caption(counts["count_note"])
 
 
@@ -409,6 +427,33 @@ def _intervention_label(view: dict, item_id: str) -> str:
 def _item_label(view: dict, item_id: str) -> str:
     item = next(item for item in view["items"] if item["id"] == item_id)
     return f"{view['bands'][item['band']]}: {item['title']} · {item['when']}"
+
+
+def _remedy(text: str | None, note: str | None = None) -> None:
+    remedy = (text or "").strip()
+    if not remedy:
+        return
+    st.write(note or REMEDY_NOTE)
+    st.write(remedy)
+
+
+def _source_block(source: dict | None) -> None:
+    if not source:
+        st.write("Direct link is not in the public record.")
+        return
+    title = source.get("title") or NOT_RECORDED
+    when = source.get("when") or NOT_RECORDED
+    st.write(f"Source: {title}")
+    st.write(f"Source publication date: {when}")
+    _write_links(source.get("links"), source.get("url"))
+
+
+def _write_links(links: list[dict] | None, fallback: str | None = None) -> None:
+    if links:
+        for link in links:
+            st.markdown(f"[{link['label']}]({link['url']})")
+        return
+    st.write(f"Direct link: {fallback or 'Direct link is not in the public record.'}")
 
 
 def _basis_line(value: str | None) -> str:
