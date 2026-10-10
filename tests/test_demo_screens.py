@@ -226,7 +226,15 @@ def test_recorded_poland_approvals_are_the_only_real_public_rows(tmp_path):
     assert explorer["counts"]["unique_cases"] == 1
     assert explorer["counts"]["demonstration_cases"] == 0
     assert explorer["counts"]["matched_arguments"] == 2
-    assert explorer["counts"]["unknown_outcome_cases"] == 1
+    assert explorer["counts"]["unknown_outcome_cases"] == 0
+    assert explorer["export_counts"]["real_case_count"] == 1
+    assert explorer["export_counts"]["approved_argument_count"] == 2
+    assert explorer["export_counts"]["reception_count"] == 0
+    assert set(explorer["export_counts"]["outcome_event_ids"]) == {
+        "out_pl_appeal_podlesna",
+        "out_pl_appeal_prus",
+        "out_pl_appeal_gzyra",
+    }
     assert "do not approve or verify the case" in explorer["case_scope_note"]
     assert "success rate" in explorer["counts"]["count_note"]
 
@@ -257,13 +265,34 @@ def test_recorded_poland_approvals_are_the_only_real_public_rows(tmp_path):
         assert row["source"]["when"] == "2021-11 (month)"
         assert "rights_note" not in row["source"]
 
-    assert case["court_reception_note"].startswith("Court reception is not established")
+    assert case["court_reception_note"].startswith("Court reception of the report is not established")
     assert "not acceptance and it is not rejection" in case["court_reception_note"]
     assert case["chronology_note"].startswith("The public chronology is incomplete")
-    assert {item["kind"] for item in case["items"]} == {"intervention"}
+    appeal = next(item for item in case["items"] if item["kind"] == "outcome")
+    assert appeal["id"] == "pl_decision_appeal_2022-01-12"
+    assert appeal["when"] == "2022-01-12 (day)"
+    assert appeal["band"] == "after"
+    assert "3 defendant-specific rows" in appeal["detail"]["defendants_note"]
+    assert "Podleśna, Prus, and Gzyra-Iskandar" in appeal["detail"]["defendants_note"]
+    assert "HFHR reported" in appeal["detail"]["quotation"]
+    assert "judgment itself was not retrieved" in appeal["detail"]["limitation"]
+    assert "not a statement that 12 January 2022 is the latest known development" in appeal["detail"]["limitation"]
+    assert "does not establish acceptance or rejection" in appeal["detail"]["limitation"]
+    labels = {link["label"] for link in appeal["detail"]["links"]}
+    urls = {link["url"] for link in appeal["detail"]["links"]}
+    assert "Helsinki Foundation for Human Rights (organization account)" in labels
+    assert "https://hfhr.pl/aktualnosci/tecza-nie-obraza-wyrok-uniewinnienie" in urls
+    assert "https://www.rp.pl/prawo-karne/art19284511-zapadl-prawomocny-wyrok-ws-matki-bozej-z-teczowa-aureola" in urls
+    assert "https://oko.press/tecza-nie-obraza-prawomocny-wyrok-sadu-apelacyjnego-w-plocku" in urls
+    assert case["coverage"]["latest_documented_event"] == "2022-01-12 (day)"
+    assert case["coverage"]["latest_documented_event_note"] == (
+        "Latest approved event in this dataset. "
+        "This is not a claim that it is the latest development in the case."
+    )
     assert case["case"]["proceeding_note"].startswith("II K 296/20 is the trial case number")
     assert all(item["established"] is False for item in case["receptions"])
-    assert brief["facts"]["developments"] == []
+    assert len(brief["facts"]["developments"]) == 1
+    assert brief["facts"]["developments"][0]["event_id"] == "pl_decision_appeal_2022-01-12"
     assert brief["facts"]["documented_reception"] == []
     assert {item["argument_id"] for item in brief["facts"]["unknown_reception"]} == {
         "pl_arg_legality",
@@ -284,6 +313,12 @@ def test_recorded_poland_approvals_are_the_only_real_public_rows(tmp_path):
         "tam_arg_breadth",
         "TVN24",
         "PRIVATE-SEARCH-NOTE",
+        "Amnesty",
+        "28 March 2024",
+        "Historical analysis",
+        "did not personally inspect",
+        "pl_search_amnesty",
+        "out_pl_acquit",
     ):
         assert marker not in blob
 
@@ -352,9 +387,14 @@ def test_public_app_screens_exclude_internal_controls(tmp_path, monkeypatch):
 
     app.sidebar.radio[1].set_value("Case Evidence").run()
     text = _app_text(app)
-    assert "Court reception is not established" in text
+    assert "Court reception of the report is not established" in text
     assert "not acceptance and it is not rejection" in text
     assert "The public chronology is incomplete" in text
+    assert "2022-01-12 (day)" in text
+    assert "HFHR reported" in text
+    assert "3 defendant-specific rows" in text
+    assert "Latest approved event in this dataset" in text
+    assert "not a claim that it is the latest development" in text
     assert "II K 296/20 is the trial case number" in text
     assert "No approved public record in this band." in text
     assert "Wilmshurst" not in text
@@ -366,7 +406,13 @@ def test_public_app_screens_exclude_internal_controls(tmp_path, monkeypatch):
     assert "Not a human-reviewed brief" in text
     assert "cannot support a general or cross-case conclusion" in text
     assert "not an impact finding" in text
-    assert "No approved outcome or later development is in this selection" in text
+    assert "2022-01-12 (day)" in text
+    assert "Latest approved event in this dataset" in text
+    assert "not a claim that it is the latest development" in text
+    assert "HFHR reported" in text
+    assert "judgment itself was not retrieved" in text
+    assert "3 defendant-specific rows" in text
+    assert "Amnesty" not in text
     assert "Article 196 is not precise" in text
     assert "Wilmshurst" not in text
 

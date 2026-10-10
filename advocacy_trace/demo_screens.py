@@ -73,9 +73,13 @@ CASE_SCOPE = (
     "They do not approve or verify the case."
 )
 COURT_RECEPTION_NOT_ESTABLISHED = (
-    "Court reception is not established. "
+    "Court reception of the report is not established. "
     "No approved reception record is in this public selection. "
     "That absence is not acceptance and it is not rejection."
+)
+LATEST_IN_DATASET = (
+    "Latest approved event in this dataset. "
+    "This is not a claim that it is the latest development in the case."
 )
 CHRONOLOGY_INCOMPLETE = (
     "The public chronology is incomplete. "
@@ -142,6 +146,8 @@ _SOURCE_KEYS = (
 )
 _EVENT_KEYS = (
     "id",
+    "decision_id",
+    "participant_id",
     "event_type",
     "event_date",
     "event_date_precision",
@@ -184,6 +190,8 @@ def public_explorer(
     if date_error:
         date_from = None
         date_to = None
+    export = store.public_export(include_synthetic=include_synthetic)
+    outcome_links = _outcome_links(store, export)
     found = explorer_view(
         store,
         label=None,
@@ -195,7 +203,10 @@ def public_explorer(
         include_synthetic=include_synthetic,
     )
     cases = _public_cases(store, {row["case"]["id"] for row in found["rows"]})
-    prepared = [_prepare_row(row, cases.get(row["case"]["id"])) for row in found["rows"]]
+    prepared = [
+        _prepare_row(row, cases.get(row["case"]["id"]), outcome_links)
+        for row in found["rows"]
+    ]
     matched, date_unknown, unrecorded, outside = _partition(
             prepared,
             label=label,
@@ -228,6 +239,12 @@ def public_explorer(
         "unrecorded_rows": unrecorded,
         "outside_selection_count": outside,
         "counts": counts,
+        "export_counts": {
+            "real_case_count": export.get("real_case_count", 0),
+            "approved_argument_count": export.get("approved_argument_count", 0),
+            "outcome_event_ids": [item["id"] for item in export.get("outcome_events") or []],
+            "reception_count": len(export.get("receptions") or []),
+        },
         "selectable_case_ids": _case_ids(matched, date_unknown, unrecorded),
         "contract_gaps": _contract_gaps(),
     }
@@ -253,7 +270,13 @@ def public_case(
     case = view["case"]
     interventions = list(view.get("interventions") or [])
     reference = _reference(interventions, reference_intervention_id)
-    items = _chronology_items(view, reference)
+    export = store.public_export(include_synthetic=bool(case.get("is_synthetic")))
+    items = _chronology_items(
+        view,
+        reference,
+        _outcome_links(store, export),
+        case.get("title") or "",
+    )
     coverage = _coverage(case, items)
     receptions = _case_receptions(view)
     return {
@@ -274,7 +297,7 @@ def public_case(
         },
         "case_scope_note": CASE_SCOPE,
         "court_reception_note": "" if any(item["established"] for item in receptions) else COURT_RECEPTION_NOT_ESTABLISHED,
-        "chronology_note": "" if any(item["kind"] == "outcome" for item in items) else CHRONOLOGY_INCOMPLETE,
+        "chronology_note": CHRONOLOGY_INCOMPLETE,
         "reference_intervention": _intervention_public(reference) if reference else None,
         "other_interventions_note": (
             "Other interventions stay visible in their own bands. "
@@ -347,14 +370,17 @@ def _public_cases(store: EvidenceStore, case_ids: set[str]) -> dict[str, dict]:
     return found
 
 
-def _prepare_row(row: dict, case_payload: dict | None) -> dict:
+def _prepare_row(row: dict, case_payload: dict | None, outcome_links: dict[str, list[dict]] | None = None) -> dict:
     argument = _pick(row["argument"], _ARGUMENT_KEYS)
     case = row["case"]
     interventions = {
         item["id"]: item for item in (case_payload or {}).get("interventions") or []
     }
     intervention = interventions.get(argument.get("intervention_id") or "")
-    events = [_pick(event, _EVENT_KEYS) for event in row["outcome"].get("events") or []]
+    events = _group_events([_pick(event, _EVENT_KEYS) for event in row["outcome"].get("events") or []])
+    for event in events:
+        event["links"] = _links_for_rows(outcome_links, event.get("defendant_row_ids") or [])
+        event["defendants_note"] = _defendants_note(event, case.get("title") or "")
     receptions = [_pick(item, _RECEPTION_KEYS) for item in row.get("receptions") or []]
     source = None
     if case_payload:
@@ -514,7 +540,12 @@ def _filter_fields(rows: list[dict]) -> dict:
     }
 
 
-def _chronology_items(view: dict, reference: dict | None) -> list[dict]:
+def _chronology_items(
+    view: dict,
+    reference: dict | None,
+    outcome_links: dict[str, list[dict]] | None = None,
+    case_title: str = "",
+) -> list[dict]:
     items: list[dict] = []
     arguments_by_intervention: dict[str, list[dict]] = {}
     for item in view.get("arguments") or []:
@@ -555,28 +586,35 @@ def _chronology_items(view: dict, reference: dict | None) -> list[dict]:
                 },
             }
         )
-    for event in view.get("outcomes") or []:
-        if event.get("review_status") != "approved":
-            continue
-        picked = _pick(event, _EVENT_KEYS)
+    approved = [
+        _pick(event, _EVENT_KEYS)
+        for event in view.get("outcomes") or []
+        if event.get("review_status") == "approved"
+    ]
+    for picked in _group_events(approved):
+        links = _links_for_rows(outcome_links, picked.get("defendant_row_ids") or [])
+        defendants_note = _defendants_note(picked, case_title)
         items.append(
             {
-                "id": picked.get("id"),
+                "id": picked.get("decision_id") or picked.get("id") if len(picked.get("defendant_row_ids") or []) > 1 else picked.get("id"),
                 "kind": "outcome",
                 "band": _band(reference, picked.get("event_date"), picked.get("event_date_precision") or "unknown"),
                 "title": picked.get("event_type") or "Development",
                 "when": _format_date(picked.get("event_date"), picked.get("event_date_precision")),
+                "summary_lines": [line for line in (defendants_note, picked.get("description") or "") if line],
                 "detail": {
                     "quotation": picked.get("description") or "No description is in the public record.",
                     "location": NOT_RECORDED,
-                    "url": "Direct link is not in the public record.",
-                    "links": [],
+                    "url": links[0]["url"] if links else "Direct link is not in the public record.",
+                    "links": links,
+                    "defendants_note": defendants_note,
                     "limitation": picked.get("public_limitation") or "",
                     "evidence_basis_caption": _basis(picked.get("evidence_basis")),
                     "evidence_label": picked.get("evidence_label") or NOT_RECORDED,
                     "disposition_note": (
                         "This is a later development in the proceeding. "
-                        "It is not a finding about how an authority received an argument."
+                        "It is not a finding about how an authority received an argument. "
+                        "Court reception of the report is not established."
                     ),
                 },
             }
@@ -647,7 +685,7 @@ def _coverage(case: dict, items: list[dict]) -> dict:
         ),
         "latest_documented_event": latest["when"] if latest else "not recorded",
         "latest_documented_event_label": latest["label"] if latest else "",
-        "latest_documented_event_note": note,
+        "latest_documented_event_note": LATEST_IN_DATASET if latest else note,
         "follow_up_search_coverage": FOLLOW_UP_COVERAGE,
     }
 
@@ -746,20 +784,25 @@ def _developments(rows: list[dict]) -> list[dict]:
     found = []
     for row in rows:
         for event in row["developments"]["events"]:
-            if event.get("id") in seen:
+            key = event.get("decision_id") or event.get("id")
+            if key in seen:
                 continue
-            seen.add(event.get("id"))
+            seen.add(key)
             found.append(
                 {
                     "case_title": row["case"]["title"],
-                    "event_id": event.get("id"),
+                    "event_id": event.get("decision_id") or event.get("id"),
                     "event_type": event.get("event_type"),
                     "when": _format_date(event.get("event_date"), event.get("event_date_precision")),
                     "description": event.get("description") or "",
+                    "defendants_note": event.get("defendants_note") or "",
+                    "links": event.get("links") or [],
                     "limitation": event.get("public_limitation") or "",
                     "evidence_basis_caption": _basis(event.get("evidence_basis")),
+                    "dataset_note": LATEST_IN_DATASET,
                     "reception_note": (
                         "This development is not a reception finding. "
+                        "Court reception of the report is not established. "
                         "Reception is recorded only in the reception sections."
                     ),
                 }
@@ -825,11 +868,12 @@ def _development_summary(events: list[dict]) -> dict:
         "events": events,
         "latest": latest["event"] if latest else None,
         "latest_when": latest["when"] if latest else "",
-        "latest_note": note,
+        "latest_note": LATEST_IN_DATASET if latest else note,
         "undated": undated,
         "statement": (
-            "Dated approved developments are listed with the precision that was stored. "
-            "They are not a success or failure score, and they do not show that an argument caused the event."
+            "Dated approved events in this dataset are listed with the precision that was stored. "
+            "They are not a success or failure score, and they do not show that an argument caused the event. "
+            "An incomplete list is not a finding that no other development occurred."
             if events
             else (
                 "No verified subsequent outcome is on record. Unknown is not a finding that "
@@ -992,6 +1036,100 @@ def _input_precision(value: str) -> str:
     raise ValidationError(
         f"Could not read '{value}' as a date. Use YYYY-MM-DD, YYYY-MM, or YYYY."
     )
+
+
+def _group_events(events: list[dict]) -> list[dict]:
+    """Collapse defendant-specific rows that share one decision_id."""
+
+    groups: dict[str, dict] = {}
+    order: list[str] = []
+    for event in events:
+        key = (event.get("decision_id") or "").strip() or event.get("id") or ""
+        if key not in groups:
+            order.append(key)
+            groups[key] = {
+                "id": event.get("id"),
+                "decision_id": (event.get("decision_id") or "").strip(),
+                "event_type": event.get("event_type"),
+                "event_date": event.get("event_date"),
+                "event_date_precision": event.get("event_date_precision"),
+                "description": event.get("description") or "",
+                "public_limitation": event.get("public_limitation") or "",
+                "evidence_basis": event.get("evidence_basis"),
+                "evidence_label": event.get("evidence_label"),
+                "review_status": event.get("review_status"),
+                "defendant_row_ids": [],
+            }
+        row_id = event.get("id")
+        if row_id and row_id not in groups[key]["defendant_row_ids"]:
+            groups[key]["defendant_row_ids"].append(row_id)
+    return [groups[key] for key in order]
+
+
+def _defendants_note(event: dict, case_title: str) -> str:
+    row_ids = event.get("defendant_row_ids") or []
+    if len(row_ids) < 2:
+        return ""
+    named = f" The case title names them: {case_title}." if case_title else ""
+    return (
+        f"One approved event. {len(row_ids)} defendant-specific rows share it. "
+        f"They are not separate decisions.{named}"
+    )
+
+
+def _outcome_links(store: EvidenceStore, export: dict) -> dict[str, list[dict]]:
+    """Source links for outcome ids that the approved export already includes."""
+
+    sources = {item["id"]: item for item in export.get("sources") or []}
+    allowed = {item["id"] for item in export.get("outcome_events") or []}
+    found: dict[str, list[dict]] = {}
+    for outcome_id in allowed:
+        links = []
+        seen: set[str] = set()
+        for link in store.evidence_links_for("outcome_event", outcome_id):
+            source = sources.get(link["source_id"])
+            url = str((source or {}).get("url") or "").strip()
+            if not url or url in seen:
+                continue
+            seen.add(url)
+            links.append(
+                {
+                    "url": url,
+                    "label": _outcome_source_label(source, link),
+                    "note": _provenance_note(link.get("provenance")),
+                }
+            )
+        found[outcome_id] = links
+    return found
+
+
+def _links_for_rows(outcome_links: dict[str, list[dict]] | None, row_ids: list[str]) -> list[dict]:
+    found: list[dict] = []
+    seen: set[str] = set()
+    for row_id in row_ids:
+        for link in (outcome_links or {}).get(row_id) or []:
+            if link["url"] in seen:
+                continue
+            seen.add(link["url"])
+            found.append(link)
+    return found
+
+
+def _outcome_source_label(source: dict, link: dict) -> str:
+    author = source.get("author_actor") or "Source"
+    if link.get("provenance") == "derived_from_shared_original":
+        return f"{author} (not an independent origin)"
+    if source.get("author_actor") == "Helsinki Foundation for Human Rights":
+        return f"{author} (organization account)"
+    return author
+
+
+def _provenance_note(provenance: str | None) -> str:
+    if provenance == "derived_from_shared_original":
+        return "Draws on the same account. Not an independent origin."
+    if provenance == "independent":
+        return "Separate report in this export. Not the judgment."
+    return ""
 
 
 def _pick(row: dict, keys: tuple[str, ...]) -> dict:

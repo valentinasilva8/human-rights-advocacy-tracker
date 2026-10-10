@@ -172,11 +172,20 @@ def _rows(rows: list[dict], heading: str) -> None:
             if developments["latest"]:
                 latest = developments["latest"]
                 st.write(
-                    f"Latest approved development that can be ordered: "
+                    "Latest approved event in this dataset: "
                     f"{latest.get('event_type')} · {developments['latest_when']}"
                 )
+                st.write(developments["latest_note"])
             else:
                 st.write(developments["latest_note"])
+            for event in developments["events"]:
+                if event.get("defendants_note"):
+                    st.write(event["defendants_note"])
+                if event.get("description"):
+                    st.write(event["description"])
+                if event.get("public_limitation"):
+                    st.write(f"Limitation: {event['public_limitation']}")
+                _write_links(event.get("links"))
             for event in developments["undated"]:
                 st.write(f"Approved development with date unknown: {event.get('event_type')}")
             st.write(developments["statement"])
@@ -259,7 +268,7 @@ def _case(store, explorer: dict) -> None:
     latest = coverage["latest_documented_event"]
     label = coverage["latest_documented_event_label"]
     st.write(
-        "Latest documented event date: "
+        "Latest approved event in this dataset: "
         + (f"{label} · {latest}" if label else latest)
     )
     st.write(coverage["latest_documented_event_note"])
@@ -282,6 +291,8 @@ def _case(store, explorer: dict) -> None:
             continue
         for item in band_items:
             st.write(f"{item['title']} · {item['when']}")
+            for line in item.get("summary_lines") or []:
+                st.write(line)
     item_ids = [item["id"] for item in view["items"]]
     if item_ids:
         selected = st.selectbox(
@@ -294,6 +305,8 @@ def _case(store, explorer: dict) -> None:
         st.write(detail["quotation"])
         st.write(f"Location: {detail['location']}")
         _write_links(detail.get("links"), detail.get("url"))
+        if detail.get("defendants_note"):
+            st.write(detail["defendants_note"])
         if detail.get("limitation"):
             st.write(f"Limitation: {detail['limitation']}")
         if detail.get("evidence_basis_caption"):
@@ -383,10 +396,15 @@ def _brief(brief: dict) -> None:
     for item in facts["developments"]:
         st.write(f"{item['case_title']} · {item['event_type']} · {item['when']}")
         st.write(item["description"])
+        if item.get("defendants_note"):
+            st.write(item["defendants_note"])
+        _write_links(item.get("links"))
         if item["limitation"]:
             st.write(f"Limitation: {item['limitation']}")
         if item["evidence_basis_caption"]:
             st.write(item["evidence_basis_caption"])
+        if item.get("dataset_note"):
+            st.write(item["dataset_note"])
         st.write(item["reception_note"])
     st.subheader("Evidence gaps")
     for gap in facts["evidence_gaps"]:
@@ -452,6 +470,10 @@ def _write_links(links: list[dict] | None, fallback: str | None = None) -> None:
     if links:
         for link in links:
             st.markdown(f"[{link['label']}]({link['url']})")
+            if link.get("note"):
+                st.write(link["note"])
+        return
+    if fallback is None and not links:
         return
     st.write(f"Direct link: {fallback or 'Direct link is not in the public record.'}")
 
