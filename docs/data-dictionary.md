@@ -12,6 +12,7 @@ One proceeding. A person can appear in more than one case. Cases are not merged 
 | --- | --- |
 | id, title | Stable id and human title |
 | country, court, case_number, charges | Proceeding identity. Empty means unknown |
+| proceeding_note | What the case number refers to. Public. For Poland, II K 296/20 is the trial number. An appeal docket has not been verified |
 | proceeding_type, procedural_stage, finality | Stage and finality. Not a success label |
 | sensitive | Restricted from public export |
 | is_synthetic | Fictional demonstration row |
