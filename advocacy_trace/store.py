@@ -792,6 +792,7 @@ class EvidenceStore:
         edits: dict | None = None,
         claim_supported: bool = False,
         reasoning_checked: bool | None = None,
+        created_at: str | None = None,
     ) -> str:
         """Record a human review. Source text and model payloads cannot call this."""
 
@@ -861,12 +862,16 @@ class EvidenceStore:
                     action,
                     reviewer.strip(),
                     note.strip(),
-                    _now(),
+                    created_at or _now(),
                     prior,
                     new_status,
                     claim_text,
                     evidence_ref,
-                    int(bool(claim_supported) and action == "approve" and target_type == "argument"),
+                    int(
+                        bool(claim_supported)
+                        and action == "approve"
+                        and target_type in {"argument", "outcome_event"}
+                    ),
                     int(simulated),
                 ),
             )

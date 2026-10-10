@@ -320,6 +320,247 @@ def public_preview(store: EvidenceStore, argument_id: str) -> dict:
     }
 
 
+APPEAL_OUTCOME_IDS = (
+    "out_pl_appeal_podlesna",
+    "out_pl_appeal_prus",
+    "out_pl_appeal_gzyra",
+)
+
+APPEAL_DECISION_ID = "pl_decision_appeal_2022-01-12"
+
+HFHR_POLISH_PASSAGES = (
+    "12 stycznia 2022 r. Sąd Okręgowy w Płocku utrzymał w mocy wyrok uniewinniający trzy aktywistki oskarżone o obrazę uczuć religijnych za to, że w 2019 r. rozpowszechniały naklejki z wizerunkiem Matki Bożej Częstochowskiej z tęczową aureolą. Wyrok jest prawomocny.",
+    "Sąd drugiej instancji 12 stycznia 2022 utrzymał w mocy zaskarżony wyrok i uniewinnił aktywistki. Sąd Okręgowy w Płocku zaznaczył w uzasadnieniu, że wniesione apelacje były bezzasadne.",
+    "Helsińska Fundacja Praw Człowieka złożyła w sprawie opinię przyjaciela sądu.",
+)
+
+HFHR_ENGLISH_TRANSLATION = (
+    "On 12 January 2022 the Regional Court in Płock upheld the acquitting judgment of three activists "
+    "accused of offending religious feelings for distributing, in 2019, stickers with the image of "
+    "Our Lady of Częstochowa with a rainbow halo. The judgment is final. "
+    "On 12 January 2022 the second-instance court upheld the appealed judgment and acquitted the activists. "
+    "The Regional Court in Płock noted in its reasoning that the appeals that had been filed were unfounded. "
+    "The Helsinki Foundation for Human Rights filed an amicus opinion in the case."
+)
+
+RP_POLISH_PASSAGES = (
+    "Sąd Okręgowy w Płocku utrzymał w mocy wyrok uniewinniający trzy aktywistki oskarżone o obrazę uczuć religijnych.",
+    "informuje Helsińska Fundacja Praw Człowieka, która złożyła w sprawie opinię przyjaciela sądu.",
+)
+
+RP_ENGLISH_TRANSLATION = (
+    "The Regional Court in Płock upheld the acquitting judgment of three activists accused of offending religious feelings. "
+    "rp.pl says the Helsinki Foundation for Human Rights, which filed an amicus opinion, is the source of that account."
+)
+
+IDENTIFICATION_NOTE = (
+    "The HFHR passage does not name Elżbieta Podleśna, Anna Prus, or Joanna Gzyra-Iskandar, "
+    "and it does not cite II K 296/20. It identifies three activists, the Regional Court in Płock, "
+    "12 January 2022, a charge of offending religious feelings, and 2019 stickers of Our Lady of "
+    "Częstochowa with a rainbow halo. OKO.press, a same-day courtroom report, names Elżbieta Podleśna, "
+    "Anna Prus, and Joanna Gzyra-Iskandar and says the appellate court on 12 January 2022 upheld the "
+    "acquittal. That report supports the identity match. The November 2021 fairness report cites "
+    "II K 296/20 as the District Court of Płock trial number for the justification dated 2 March 2021. "
+    "II K 296/20 remains the trial number. ARTICLE 19 footnote 1 cites V Ka 418/21 for the 12 January 2022 "
+    "judgment from an unofficial translation. That number is recorded only with ARTICLE 19's attribution. "
+    "Each row is one defendant's result of the same decision. Three rows are not three decisions."
+)
+
+NOT_ACCEPTANCE_NOTE = (
+    "Reception of Lisa Davis's report remains unestablished. "
+    "pl_rec_legality and pl_rec_proportionality stay proposed, with status "
+    "'Decision not yet retrieved'. An appeal result, including this reported affirmance, "
+    "does not establish that the court accepted her arguments. "
+    "That absence is not a finding that the court ignored the arguments."
+)
+
+
+def appeal_outcome_preview(store: EvidenceStore) -> dict:
+    """How the Poland appeal would read beside the two approved arguments.
+
+    This does not approve the outcomes, does not change their evidence label,
+    and does not treat the reported result as reception of Lisa Davis's report.
+    The live public export still omits these rows.
+    """
+
+    approved_ids = ("pl_arg_legality", "pl_arg_proportionality")
+    arguments = []
+    for argument_id in approved_ids:
+        argument = store.get_argument(argument_id)
+        arguments.append(
+            {
+                "id": argument["id"],
+                "review_status": argument["review_status"],
+                "summary": argument["summary"],
+                "passage": argument["passage"],
+                "author_actor": argument["author_actor"],
+                "attribution_role": argument["attribution_role"],
+                "labels": argument["labels"],
+                "evidence_basis": argument.get("evidence_basis") or "not_yet_established",
+                "evidence_basis_caption": evidence_basis_caption(argument.get("evidence_basis")),
+                "public_limitation": argument.get("public_limitation") or "",
+                "reception_note": RECEPTION_NOT_ESTABLISHED,
+            }
+        )
+    hfhr = store.get_source("pl_src_hfhr")
+    rp = store.get_source("pl_src_rp")
+    names = {
+        person["id"]: person["name"]
+        for person in store.participants_for_case("case_poland")
+    }
+    amicus = [
+        person
+        for person in store.participants_for_case("case_poland")
+        if person["role_in_case"] == "amicus"
+    ]
+    rows = []
+    for outcome_id in APPEAL_OUTCOME_IDS:
+        event = store.get_outcome(outcome_id)
+        claim, _quotations = _split_claim(event["description"])
+        links = []
+        for link in store.evidence_links_for("outcome_event", outcome_id):
+            source = store.get_source(link["source_id"])
+            links.append(
+                {
+                    "source_id": source["id"],
+                    "title": source["title"],
+                    "url": source.get("url"),
+                    "author_actor": source["author_actor"],
+                    "publication_date": source.get("publication_date"),
+                    "relationship": link["relationship"],
+                    "provenance": link.get("provenance"),
+                }
+            )
+        rows.append(
+            {
+                "id": event["id"],
+                "stored_review_status": event["review_status"],
+                "participant_id": event["participant_id"],
+                "participant_name": names.get(event["participant_id"], ""),
+                "event_type": event["event_type"],
+                "event_date": event["event_date"],
+                "event_date_precision": event["event_date_precision"],
+                "proposed_public_claim": claim,
+                "evidence_label": event["evidence_label"],
+                "evidence_basis": event.get("evidence_basis") or "not_yet_established",
+                "evidence_basis_caption": evidence_basis_caption(event.get("evidence_basis")),
+                "public_limitation": event.get("public_limitation") or "",
+                "decision_id": event.get("decision_id"),
+                "independent_support_count": store.independent_support_count(outcome_id),
+                "sources": links,
+            }
+        )
+    counts = store.decision_counts("case_poland")
+    explorer = explorer_view(
+        store,
+        label=None,
+        country="Poland",
+        intervention_type=None,
+        date_from=None,
+        date_to=None,
+        review_status="approved",
+        include_synthetic=False,
+    )
+    return {
+        "preview_only": True,
+        "this_call_approved_nothing": True,
+        "approval_gate": (
+            "Calling this preview approves nothing. "
+            "The approval gate still refuses an Unverified outcome. "
+            "A reviewed organization account uses evidence label Single-source report "
+            "and evidence basis organization_account. "
+            "That is not a primary-source finding. "
+            f"Stored label: {rows[0]['evidence_label'] if rows else 'missing'}. "
+            f"Stored review status: {rows[0]['stored_review_status'] if rows else 'missing'}."
+        ),
+        "current_public_explorer": {
+            "filter": "Poland, no argument-label filter, so both approved arguments match",
+            "argument_count": explorer["argument_count"],
+            "unique_cases": explorer["unique_cases"],
+            "real_cases_with_approved_argument": explorer["real_cases_with_approved_argument"],
+            "argument_ids": [row["argument"]["id"] for row in explorer["rows"]],
+            "outcome_status": explorer["rows"][0]["outcome"]["status"] if explorer["rows"] else "unknown",
+        },
+        "approved_arguments": arguments,
+        "if_approved_display": {
+            "case_id": "case_poland",
+            "alongside": [item["id"] for item in arguments],
+            "shared_decision_id": APPEAL_DECISION_ID,
+            "appeal_outcome_rows": len(rows),
+            "appeal_decisions": 1,
+            "decision_count_note": (
+                "The three defendant-specific rows share one decision_id. "
+                "They are not three decisions. "
+                f"The Poland proceeding as stored has {counts['defendants']} defendants, "
+                f"{counts['proceedings']} proceeding, {counts['decisions']} decisions, "
+                f"{counts['interventions']} intervention, and {counts['outcome_rows']} outcome rows. "
+                "HFHR is an amicus participant, not a defendant and not an intervention."
+            ),
+            "event_date": "2022-01-12",
+            "hfhr_publication_date": hfhr.get("publication_date"),
+            "date_note": (
+                "The event date is 12 January 2022, the court date HFHR states. "
+                "The HFHR page is dated 13 January 2022. "
+                "rp.pl's publication line is 13.01.2022. "
+                "A later page stamp is not a new event. "
+                "The publication date is not the event date."
+            ),
+            "hfhr_source": {
+                "id": hfhr["id"],
+                "title": hfhr["title"],
+                "url": hfhr.get("url"),
+                "author_actor": hfhr["author_actor"],
+                "publication_date": hfhr.get("publication_date"),
+            },
+            "polish_passage": list(HFHR_POLISH_PASSAGES),
+            "english_translation_label": "English translation",
+            "english_translation": HFHR_ENGLISH_TRANSLATION,
+            "identification": IDENTIFICATION_NOTE,
+            "amicus": {
+                "participant_id": amicus[0]["id"] if amicus else "",
+                "name": amicus[0]["name"] if amicus else "",
+                "role_in_case": amicus[0]["role_in_case"] if amicus else "",
+                "brief_retrieved": False,
+            },
+            "evidence_category": rows[0]["evidence_label"] if rows else "",
+            "evidence_basis": "organization_account",
+            "evidence_basis_caption": evidence_basis_caption("organization_account"),
+            "public_limitation": rows[0]["public_limitation"] if rows else "",
+            "rp_pl": {
+                "id": rp["id"],
+                "url": rp.get("url"),
+                "publication_date": rp.get("publication_date"),
+                "provenance": "derived_from_shared_original",
+                "role": (
+                    "rp.pl draws on HFHR's account. It is not an independent confirmation "
+                    "and it is not a second origin."
+                ),
+                "polish_passage": list(RP_POLISH_PASSAGES),
+                "english_translation_label": "English translation",
+                "english_translation": RP_ENGLISH_TRANSLATION,
+            },
+            "reception": NOT_ACCEPTANCE_NOTE,
+            "defendant_rows": rows,
+            "case_counts": counts,
+        },
+        "omitted_from_this_preview": [
+            "proposed_trial_acquittals",
+            "tam_records",
+            "observer_note",
+            "unresolved_questions",
+            "research_attempts",
+        ],
+    }
+
+
+def _split_claim(description: str) -> tuple[str, str]:
+    marker = " Quotation from HFHR"
+    if marker not in description:
+        return description.strip(), ""
+    claim, quotations = description.split(marker, 1)
+    return claim.strip(), quotations.strip()
+
+
 def evidence_basis_caption(value: str | None) -> str:
     return EVIDENCE_BASIS_PUBLIC.get(value or "not_yet_established", "")
 

@@ -43,7 +43,7 @@
       "last_verified_on": "2026-10-09",
       "last_verified_on_precision": "day",
       "unresolved_questions": "Search date 9 October 2026, not an approval. The appeal judgment was not retrieved. A search of orzeczenia.ms.gov.pl did not return the Article 196 appeal. Nearby Płock files II Ko 28/21 and II Ko 37/21 are different cases. The report cover is November 2021 and says the appeal hearing is scheduled for November 10, without repeating the year. rp.pl attributes its account of the court's reasons to HFHR, so those two pages are not independent origins. A follow-up fetch of the TVN24 URL timed out. HFHR reported filing an amicus; the brief was not retrieved. The March 2021 acquittal predates the report.",
-      "proceeding_note": "II K 296/20 is the trial case number. The report cites it for the District Court of Płock justification dated 2 March 2021, in footnote 2 on printed p. 3. An appeal docket number has not been verified."
+      "proceeding_note": "II K 296/20 is the trial case number. The fairness report cites it for the District Court of Płock justification dated 2 March 2021, in footnote 2 on printed p. 3. An appeal docket has not been verified against the judgment. ARTICLE 19's amicus brief, footnote 1, cites Ref. No. V Ka 418/21 for the 12 January 2022 judgment of the District Court in Płock, Fifth Criminal Appeals Division, and says that citation is based on an unofficial translation. V Ka 418/21 is recorded only with that ARTICLE 19 attribution."
     },
     {
       "id": "case_tam",
@@ -114,7 +114,7 @@
       "publication_date_precision": "day",
       "retrieval_date": "2026-10-09",
       "retrieval_date_precision": "day",
-      "rights_note": "Secondary account read 9 October 2026. Not the appeal judgment. Not redistributed.",
+      "rights_note": "Retained account from the earlier source review. This approval did not retrieve the page again. Not the appeal judgment. Not redistributed. Quotation retained: “12 stycznia 2022 r. Sąd Okręgowy w Płocku utrzymał w mocy wyrok uniewinniający trzy aktywistki oskarżone o obrazę uczuć religijnych za to, że w 2019 r. rozpowszechniały naklejki z wizerunkiem Matki Bożej Częstochowskiej z tęczową aureolą. Wyrok jest prawomocny.” Quotation retained: “Sąd drugiej instancji 12 stycznia 2022 utrzymał w mocy zaskarżony wyrok i uniewinnił aktywistki. Sąd Okręgowy w Płocku zaznaczył w uzasadnieniu, że wniesione apelacje były bezzasadne.” Quotation retained: “Helsińska Fundacja Praw Człowieka złożyła w sprawie opinię przyjaciela sądu.” English translation: On 12 January 2022 the Regional Court in Płock upheld the acquitting judgment of three activists accused of offending religious feelings for distributing, in 2019, stickers with the image of Our Lady of Częstochowa with a rainbow halo. The judgment is final. The second-instance court said the appeals were unfounded. HFHR said it filed an amicus opinion. The page date is 13 January 2022. The event date is stored separately as 12 January 2022.",
       "is_synthetic": false
     },
     {
@@ -127,7 +127,7 @@
       "publication_date_precision": "day",
       "retrieval_date": "2026-10-09",
       "retrieval_date_precision": "day",
-      "rights_note": "The article's account of the court's reasons is attributed to HFHR. Not an independent origin. Not redistributed.",
+      "rights_note": "The article's account of the court's reasons is attributed to HFHR. Not an independent origin. Not redistributed. Quotation retained: “Sąd Okręgowy w Płocku utrzymał w mocy wyrok uniewinniający trzy aktywistki oskarżone o obrazę uczuć religijnych.” Quotation retained: “informuje Helsińska Fundacja Praw Człowieka, która złożyła w sprawie opinię przyjaciela sądu.” English translation: The Regional Court in Płock upheld the acquitting judgment of three activists accused of offending religious feelings. rp.pl says HFHR, which filed an amicus opinion, is the source of that account. Publication line 13.01.2022. A later page stamp is not a new event.",
       "is_synthetic": false
     },
     {
@@ -179,6 +179,32 @@
       "retrieval_date": "2026-10-09",
       "retrieval_date_precision": "day",
       "rights_note": "Official judiciary press summary, opened 9 October 2026. The page states: “This summary is not part of the Judgment.” The full reasons were not opened. Short quotation only. Not redistributed.",
+      "is_synthetic": false
+    },
+    {
+      "id": "pl_src_oko",
+      "title": "OKO.press: Matka Boska w tęczowej aureoli nie obraża, aktywistki niewinne",
+      "document_type": "news",
+      "author_actor": "Maciek Piasecki and Agnieszka Jędrzejczyk",
+      "url": "https://oko.press/tecza-nie-obraza-prawomocny-wyrok-sadu-apelacyjnego-w-plocku",
+      "publication_date": "2022-01-12",
+      "publication_date_precision": "day",
+      "retrieval_date": "2026-10-10",
+      "retrieval_date_precision": "day",
+      "rights_note": "Same-day courtroom report. OKO.press says it transmitted the hearing. The article does not cite HFHR. It is a separate newsroom, so its provenance for the identity match is independent. It is not the judgment. Not redistributed. Quotation: “Elżbieta Podleśna, Anna Prus i Joanna Gzyra-Iskandar są niewinne obrazy uczuć religijnych.” Quotation: “Sąd odwoławczy w środę 12 stycznia 2022 utrzymał uniewinniający wyrok sądu rejonowego w Płocku.” English translation: Elżbieta Podleśna, Anna Prus, and Joanna Gzyra-Iskandar are not guilty of offending religious feelings. On Wednesday 12 January 2022 the appellate court upheld the acquitting judgment of the district court in Płock.",
+      "is_synthetic": false
+    },
+    {
+      "id": "pl_src_article19",
+      "title": "ARTICLE 19 expert opinion, Rainbow Holy Mary",
+      "document_type": "amicus",
+      "author_actor": "ARTICLE 19",
+      "url": "https://www.article19.org/wp-content/uploads/2024/03/Amicus_Poland-Rainbow-Holy-Mary_EN.pdf",
+      "publication_date": "2024-03",
+      "publication_date_precision": "month",
+      "retrieval_date": "2026-10-10",
+      "retrieval_date_precision": "day",
+      "rights_note": "Footnote 1 says the facts are based on an unofficial translation of the 2 March 2021 judgment, Ref. no. II K 296/20, and the 12 January 2022 judgment, Ref. No. V Ka 418/21, of the District Court in Płock, Fifth Criminal Appeals Division. V Ka 418/21 is recorded only as that ARTICLE 19 citation. It has not been verified against the judgment. II K 296/20 remains the trial number. The brief is captioned Case no. V KK 430/22 before the Supreme Court. That caption is not verified against a judgment and is not part of the January 2022 approval. Not redistributed.",
       "is_synthetic": false
     }
   ],
@@ -398,15 +424,15 @@
       "case_id": "case_poland",
       "participant_id": "pl_podlesna",
       "event_type": "Appeal decided",
-      "description": "HFHR reported that on 12 January 2022 the Regional Court in Płock upheld the acquittal of Elżbieta Podleśna, together with the other two defendants in II K 296/20, and said the appeals were unfounded. This row is this defendant's result of that shared decision. It is an identified organization's account, not a finding read from the appeal judgment. rp.pl draws on the HFHR account. Quotation from HFHR, 13 January 2022: “12 stycznia 2022 r. Sąd Okręgowy w Płocku utrzymał w mocy wyrok uniewinniający trzy aktywistki oskarżone o obrazę uczuć religijnych za to, że w 2019 r. rozpowszechniały naklejki z wizerunkiem Matki Bożej Częstochowskiej z tęczową aureolą. Wyrok jest prawomocny.” Quotation from HFHR: “Sąd drugiej instancji 12 stycznia 2022 utrzymał w mocy zaskarżony wyrok i uniewinnił aktywistki. Sąd Okręgowy w Płocku zaznaczył w uzasadnieniu, że wniesione apelacje były bezzasadne.” Quotation from HFHR: “Helsińska Fundacja Praw Człowieka złożyła w sprawie opinię przyjaciela sądu.” Translation: On 12 January 2022 the Regional Court in Płock upheld the acquitting judgment. The second-instance court said the appeals were unfounded. HFHR said it filed an amicus opinion. Quotation from rp.pl, publication line 13.01.2022, read again on 10 October 2026: “Sąd Okręgowy w Płocku utrzymał w mocy wyrok uniewinniający trzy aktywistki oskarżone o obrazę uczuć religijnych.” Quotation from rp.pl: “informuje Helsińska Fundacja Praw Człowieka, która złożyła w sprawie opinię przyjaciela sądu.” Translation: The Regional Court in Płock upheld the acquitting judgment of three activists accused of offending religious feelings. rp.pl says HFHR, which filed an amicus opinion, is the source of that account.",
-      "evidence_label": "Unverified",
+      "description": "HFHR reported that the Regional Court in Płock upheld the three defendants' acquittal on 12 January 2022.",
+      "evidence_label": "Single-source report",
       "event_date": "2022-01-12",
       "event_date_precision": "day",
       "procedural_stage": "appeal",
-      "finality": "HFHR described the result as final; the judgment was not read",
+      "finality": "HFHR described the result as final; the appeal judgment was not read. A later development is a separate research lead and is not part of this record.",
       "is_synthetic": false,
       "decision_id": "pl_decision_appeal_2022-01-12",
-      "public_limitation": "HFHR reported this result. The appeal judgment was not retrieved, including from a check of the official Polish judgment portal. rp.pl draws on the HFHR account and is not an independent origin. Zero independent origins is not zero evidence. This is not a documented response to the fairness report.",
+      "public_limitation": "HFHR reported this result. The appeal judgment itself was not retrieved. This is an organization account, not a finding read from the judgment. HFHR is an amicus participant; the brief was not retrieved. rp.pl draws on the HFHR account and is not an independent origin. OKO.press is a separate same-day courtroom report that names the three defendants and supports that identity match; it is not the judgment. This outcome does not establish acceptance or rejection of Lisa Davis's arguments. It is not a statement that 12 January 2022 is the latest known development. An incomplete list is not a finding that no other development occurred.",
       "evidence_basis": "organization_account"
     },
     {
@@ -414,15 +440,15 @@
       "case_id": "case_poland",
       "participant_id": "pl_prus",
       "event_type": "Appeal decided",
-      "description": "HFHR reported that on 12 January 2022 the Regional Court in Płock upheld the acquittal of Anna Prus, together with the other two defendants in II K 296/20, and said the appeals were unfounded. This row is this defendant's result of that shared decision. It is an identified organization's account, not a finding read from the appeal judgment. rp.pl draws on the HFHR account. Quotation from HFHR, 13 January 2022: “12 stycznia 2022 r. Sąd Okręgowy w Płocku utrzymał w mocy wyrok uniewinniający trzy aktywistki oskarżone o obrazę uczuć religijnych za to, że w 2019 r. rozpowszechniały naklejki z wizerunkiem Matki Bożej Częstochowskiej z tęczową aureolą. Wyrok jest prawomocny.” Quotation from HFHR: “Sąd drugiej instancji 12 stycznia 2022 utrzymał w mocy zaskarżony wyrok i uniewinnił aktywistki. Sąd Okręgowy w Płocku zaznaczył w uzasadnieniu, że wniesione apelacje były bezzasadne.” Quotation from HFHR: “Helsińska Fundacja Praw Człowieka złożyła w sprawie opinię przyjaciela sądu.” Translation: On 12 January 2022 the Regional Court in Płock upheld the acquitting judgment. The second-instance court said the appeals were unfounded. HFHR said it filed an amicus opinion. Quotation from rp.pl, publication line 13.01.2022, read again on 10 October 2026: “Sąd Okręgowy w Płocku utrzymał w mocy wyrok uniewinniający trzy aktywistki oskarżone o obrazę uczuć religijnych.” Quotation from rp.pl: “informuje Helsińska Fundacja Praw Człowieka, która złożyła w sprawie opinię przyjaciela sądu.” Translation: The Regional Court in Płock upheld the acquitting judgment of three activists accused of offending religious feelings. rp.pl says HFHR, which filed an amicus opinion, is the source of that account.",
-      "evidence_label": "Unverified",
+      "description": "HFHR reported that the Regional Court in Płock upheld the three defendants' acquittal on 12 January 2022.",
+      "evidence_label": "Single-source report",
       "event_date": "2022-01-12",
       "event_date_precision": "day",
       "procedural_stage": "appeal",
-      "finality": "HFHR described the result as final; the judgment was not read",
+      "finality": "HFHR described the result as final; the appeal judgment was not read. A later development is a separate research lead and is not part of this record.",
       "is_synthetic": false,
       "decision_id": "pl_decision_appeal_2022-01-12",
-      "public_limitation": "HFHR reported this result. The appeal judgment was not retrieved, including from a check of the official Polish judgment portal. rp.pl draws on the HFHR account and is not an independent origin. Zero independent origins is not zero evidence. This is not a documented response to the fairness report.",
+      "public_limitation": "HFHR reported this result. The appeal judgment itself was not retrieved. This is an organization account, not a finding read from the judgment. HFHR is an amicus participant; the brief was not retrieved. rp.pl draws on the HFHR account and is not an independent origin. OKO.press is a separate same-day courtroom report that names the three defendants and supports that identity match; it is not the judgment. This outcome does not establish acceptance or rejection of Lisa Davis's arguments. It is not a statement that 12 January 2022 is the latest known development. An incomplete list is not a finding that no other development occurred.",
       "evidence_basis": "organization_account"
     },
     {
@@ -430,15 +456,15 @@
       "case_id": "case_poland",
       "participant_id": "pl_gzyra",
       "event_type": "Appeal decided",
-      "description": "HFHR reported that on 12 January 2022 the Regional Court in Płock upheld the acquittal of Joanna Gzyra-Iskandar, together with the other two defendants in II K 296/20, and said the appeals were unfounded. This row is this defendant's result of that shared decision. It is an identified organization's account, not a finding read from the appeal judgment. rp.pl draws on the HFHR account. Quotation from HFHR, 13 January 2022: “12 stycznia 2022 r. Sąd Okręgowy w Płocku utrzymał w mocy wyrok uniewinniający trzy aktywistki oskarżone o obrazę uczuć religijnych za to, że w 2019 r. rozpowszechniały naklejki z wizerunkiem Matki Bożej Częstochowskiej z tęczową aureolą. Wyrok jest prawomocny.” Quotation from HFHR: “Sąd drugiej instancji 12 stycznia 2022 utrzymał w mocy zaskarżony wyrok i uniewinnił aktywistki. Sąd Okręgowy w Płocku zaznaczył w uzasadnieniu, że wniesione apelacje były bezzasadne.” Quotation from HFHR: “Helsińska Fundacja Praw Człowieka złożyła w sprawie opinię przyjaciela sądu.” Translation: On 12 January 2022 the Regional Court in Płock upheld the acquitting judgment. The second-instance court said the appeals were unfounded. HFHR said it filed an amicus opinion. Quotation from rp.pl, publication line 13.01.2022, read again on 10 October 2026: “Sąd Okręgowy w Płocku utrzymał w mocy wyrok uniewinniający trzy aktywistki oskarżone o obrazę uczuć religijnych.” Quotation from rp.pl: “informuje Helsińska Fundacja Praw Człowieka, która złożyła w sprawie opinię przyjaciela sądu.” Translation: The Regional Court in Płock upheld the acquitting judgment of three activists accused of offending religious feelings. rp.pl says HFHR, which filed an amicus opinion, is the source of that account.",
-      "evidence_label": "Unverified",
+      "description": "HFHR reported that the Regional Court in Płock upheld the three defendants' acquittal on 12 January 2022.",
+      "evidence_label": "Single-source report",
       "event_date": "2022-01-12",
       "event_date_precision": "day",
       "procedural_stage": "appeal",
-      "finality": "HFHR described the result as final; the judgment was not read",
+      "finality": "HFHR described the result as final; the appeal judgment was not read. A later development is a separate research lead and is not part of this record.",
       "is_synthetic": false,
       "decision_id": "pl_decision_appeal_2022-01-12",
-      "public_limitation": "HFHR reported this result. The appeal judgment was not retrieved, including from a check of the official Polish judgment portal. rp.pl draws on the HFHR account and is not an independent origin. Zero independent origins is not zero evidence. This is not a documented response to the fairness report.",
+      "public_limitation": "HFHR reported this result. The appeal judgment itself was not retrieved. This is an organization account, not a finding read from the judgment. HFHR is an amicus participant; the brief was not retrieved. rp.pl draws on the HFHR account and is not an independent origin. OKO.press is a separate same-day courtroom report that names the three defendants and supports that identity match; it is not the judgment. This outcome does not establish acceptance or rejection of Lisa Davis's arguments. It is not a statement that 12 January 2022 is the latest known development. An incomplete list is not a finding that no other development occurred.",
       "evidence_basis": "organization_account"
     },
     {
@@ -743,6 +769,54 @@
       "target_id": "out_tam_sentence",
       "relationship": "supports",
       "provenance": "unknown"
+    },
+    {
+      "id": "pl_link_oko_podlesna",
+      "source_id": "pl_src_oko",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_appeal_podlesna",
+      "relationship": "supports",
+      "provenance": "independent"
+    },
+    {
+      "id": "pl_link_article19_podlesna",
+      "source_id": "pl_src_article19",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_appeal_podlesna",
+      "relationship": "supports",
+      "provenance": "unknown"
+    },
+    {
+      "id": "pl_link_oko_prus",
+      "source_id": "pl_src_oko",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_appeal_prus",
+      "relationship": "supports",
+      "provenance": "independent"
+    },
+    {
+      "id": "pl_link_article19_prus",
+      "source_id": "pl_src_article19",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_appeal_prus",
+      "relationship": "supports",
+      "provenance": "unknown"
+    },
+    {
+      "id": "pl_link_oko_gzyra",
+      "source_id": "pl_src_oko",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_appeal_gzyra",
+      "relationship": "supports",
+      "provenance": "independent"
+    },
+    {
+      "id": "pl_link_article19_gzyra",
+      "source_id": "pl_src_article19",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_appeal_gzyra",
+      "relationship": "supports",
+      "provenance": "unknown"
     }
   ],
   "research_attempts": [
@@ -853,6 +927,15 @@
       "place": "legalref.judiciary.hk press summary",
       "result": "retrieved_document",
       "note": "Official press summary. Header: “This summary is not part of the Judgment.” Date of sentence 20 April 2022. Total 40 months and a HK$5,000 fine. The page itemizes counts. That itemization is not imported into the fairness-report argument. Counsel listed for sentence is Edwin Choy SC leading Jeffrey Tam and others, not Philip Dykes SC and not Elizabeth Wilmshurst. Full Chinese reasons not opened."
+    },
+    {
+      "id": "pl_search_amnesty_2024",
+      "case_id": "case_poland",
+      "searched_on": "2026-10-10",
+      "query": "https://www.amnesty.sk/elzbieta-podlesna-sa-dockala-spravodlivosti/",
+      "place": "Amnesty Slovakia",
+      "result": "lead",
+      "note": "Proposed research lead. Not approved and not an outcome record. Amnesty Slovakia, dated 28 March 2024, reports that the Supreme Court on Thursday 28 March 2024 rejected the state authorities' appeal against the January 2022 acquittal. It names Elżbieta Podleśna, Joanna Gzyra-Iskandar, and Anna Prus. The judgment was not retrieved. This does not make 12 January 2022 the latest known development, and it does not complete the timeline. ARTICLE 19's brief is captioned Case no. V KK 430/22. That caption is not verified against a judgment."
     }
   ]
 }
