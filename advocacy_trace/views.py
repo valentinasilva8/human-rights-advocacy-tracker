@@ -308,7 +308,8 @@ def public_preview(store: EvidenceStore, argument_id: str) -> dict:
         "receptions": approved_receptions,
         "reception_note": RECEPTION_NOT_ESTABLISHED if not approved_receptions else "",
         "timeline_note": (
-            "An incomplete list is not a finding that no other development occurred. "
+            "Latest approved event in this dataset. "
+            "This is not a claim that the timeline is current. "
             "Proposed outcome records are not shown in this preview."
         ),
         "omitted": [
@@ -359,7 +360,9 @@ IDENTIFICATION_NOTE = (
     "12 January 2022, a charge of offending religious feelings, and 2019 stickers of Our Lady of "
     "Częstochowa with a rainbow halo. OKO.press, a same-day courtroom report, names Elżbieta Podleśna, "
     "Anna Prus, and Joanna Gzyra-Iskandar and says the appellate court on 12 January 2022 upheld the "
-    "acquittal. That report supports the identity match. The November 2021 fairness report cites "
+    "acquittal. That report supports both the identity and the reported result. "
+    "It does not corroborate that HFHR reported the result, or every other sentence on the outcome record. "
+    "The November 2021 fairness report cites "
     "II K 296/20 as the District Court of Płock trial number for the justification dated 2 March 2021. "
     "II K 296/20 remains the trial number. ARTICLE 19 footnote 1 cites V Ka 418/21 for the 12 January 2022 "
     "judgment from an unofficial translation. That number is recorded only with ARTICLE 19's attribution. "
@@ -429,6 +432,7 @@ def appeal_outcome_preview(store: EvidenceStore) -> dict:
                     "publication_date": source.get("publication_date"),
                     "relationship": link["relationship"],
                     "provenance": link.get("provenance"),
+                    "support_scope": link.get("support_scope") or "whole_claim",
                 }
             )
         rows.append(

@@ -69,7 +69,7 @@ Zero or more labels per argument. Allowed values are `Vagueness`, `Broadness`, `
 
 A dated event for one defendant. Adding an appeal does not delete the earlier event. `supersedes_event_id` is a link, not an erasure.
 
-`event_type` is one of: Charges filed, Charges amended, Charges withdrawn, Charges dismissed, Conviction, Acquittal, Appeal filed, Appeal decided, Release, Continued detention, Sentence imposed, Sentence modification, Retrial ordered, Compensation ordered, Compensation received, Continuing restrictions, New proceeding, No verified recent update.
+`event_type` is one of: Charges filed, Charges amended, Charges withdrawn, Charges dismissed, Conviction, Acquittal, Appeal filed, Appeal decided, Appeal withdrawn, Release, Continued detention, Sentence imposed, Sentence modification, Retrial ordered, Compensation ordered, Compensation received, Continuing restrictions, New proceeding, No verified recent update. `Appeal withdrawn` is a withdrawal of a challenge. It is not a dismissal and not a withdrawal of the charges.
 
 `Sentence imposed` is the original sentence. `Sentence modification` is a later change to a sentence already imposed. An original sentence is not stored as a modification because the list used to lack the first type.
 
@@ -103,7 +103,7 @@ How an authority dealt with one argument, if a source supports that observation.
 
 Connects a source to an argument, outcome event, or reception. `relationship` is `supports`, `quotes`, `duplicates`, or `conflicts`.
 
-`provenance` is `unknown`, `duplicate_copy`, `derived_from_shared_original`, `same_organization_distinct`, or `independent`. The support count uses only `independent` origins for that claim. A selected independent flag does not raise the count. Unknown provenance stays unknown. Two documents from one organization can both be kept; they are not two independent origins. A duplicate copy counts once, with the original.
+`provenance` is `unknown`, `duplicate_copy`, `derived_from_shared_original`, `same_organization_distinct`, or `independent`. `support_scope` is `whole_claim`, `identity`, `reported_result`, or `identity_and_reported_result`. The support count uses only `independent` origins whose scope is `whole_claim`. Support for identity, for the reported result, or for both, does not corroborate every assertion on the record and does not raise the count. A selected independent flag does not raise the count. Unknown provenance stays unknown. Two documents from one organization can both be kept; they are not two independent origins. A duplicate copy counts once, with the original.
 
 ## review_actions
 

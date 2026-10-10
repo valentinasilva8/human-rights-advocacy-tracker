@@ -17,6 +17,7 @@ from advocacy_trace.constants import (
     DATED_OUTCOME_STATEMENT,
     DOCUMENT_TYPES,
     EVIDENCE_BASIS,
+    EVIDENCE_BASIS_PUBLIC,
     EVIDENCE_LABELS,
     EVENT_TYPES,
     EXPLICIT_RECEPTION,
@@ -27,6 +28,9 @@ from advocacy_trace.constants import (
     NOT_STATED,
     PROVENANCE_VALUES,
     PUBLIC_ARGUMENT_ROLES,
+    PUBLIC_EXPORT_SCHEMA_VERSION,
+    SUPPORT_SCOPE_VALUES,
+    TIMELINE_CAPTION,
     RECEPTION_NEEDS_SOURCE,
     RECEPTION_STATUSES,
     REVIEW_STATUSES,
@@ -178,7 +182,8 @@ CREATE TABLE IF NOT EXISTS evidence_links (
     target_id TEXT NOT NULL,
     relationship TEXT NOT NULL,
     independent INTEGER NOT NULL DEFAULT 0 CHECK (independent IN (0, 1)),
-    provenance TEXT NOT NULL DEFAULT 'unknown'
+    provenance TEXT NOT NULL DEFAULT 'unknown',
+    support_scope TEXT NOT NULL DEFAULT 'whole_claim'
 );
 
 CREATE TABLE IF NOT EXISTS review_actions (
@@ -703,6 +708,7 @@ class EvidenceStore:
         relationship: str,
         independent: bool | None = None,
         provenance: str | None = None,
+        support_scope: str | None = None,
         id: str | None = None,
     ) -> str:
         link_id = id or _new_id("link")
@@ -719,12 +725,16 @@ class EvidenceStore:
         # A selected "independent" flag does not establish provenance.
         if independent is None:
             independent = False
+        if support_scope is None:
+            support_scope = "whole_claim"
+        self._one_of(support_scope, SUPPORT_SCOPE_VALUES, "Support scope")
         self._invalidate_approval(target_type, target_id)
         self.conn.execute(
             """
             INSERT INTO evidence_links (
-                id, source_id, target_type, target_id, relationship, independent, provenance
-            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                id, source_id, target_type, target_id, relationship, independent,
+                provenance, support_scope
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 link_id,
@@ -734,6 +744,7 @@ class EvidenceStore:
                 relationship,
                 int(bool(independent)),
                 provenance,
+                support_scope,
             ),
         )
         self.conn.commit()
@@ -1066,16 +1077,20 @@ class EvidenceStore:
         return [_row(row) for row in rows]
 
     def independent_support_count(self, event_id: str, target_type: str = "outcome_event") -> int:
-        """Count distinct origins whose provenance for this claim is independent.
+        """Count distinct origins that independently support the whole stored claim.
 
         Unknown provenance, a duplicate, shared underlying reporting, and another
         document from the same organization do not add to the count. A stored
         independent flag without that provenance does not add to the count.
+        Support for identity, for the reported result, or for both, does not
+        corroborate every assertion on the record and does not add to the count.
         """
 
         origins: set[str] = set()
         for link in self.evidence_links_for(target_type, event_id):
             if link["relationship"] != "supports" or link.get("provenance") != "independent":
+                continue
+            if (link.get("support_scope") or "whole_claim") != "whole_claim":
                 continue
             source = self._must("sources", link["source_id"], "Source")
             origins.add(source["duplicate_of_source_id"] or source["id"])
@@ -1268,11 +1283,22 @@ class EvidenceStore:
             and item["attribution_role"] != "ai_suggested"
         ]
         argument_ids = {item["id"] for item in arguments}
-        outcomes = [
-            _public_outcome(item)
-            for item in self._all("outcome_events")
-            if item["case_id"] in eligible and item["review_status"] == "approved"
-        ]
+        outcomes = []
+        for item in self._all("outcome_events"):
+            if item["case_id"] not in eligible or item["review_status"] != "approved":
+                continue
+            public = _public_outcome(item)
+            public["evidence_basis_caption"] = EVIDENCE_BASIS_PUBLIC.get(
+                public.get("evidence_basis") or "not_yet_established",
+                "",
+            )
+            public["source_links"] = _public_source_links(
+                self,
+                "outcome_event",
+                item["id"],
+                include_synthetic=include_synthetic,
+            )
+            outcomes.append(public)
         receptions = [
             _public_reception(item)
             for item in self._all("reception_observations")
@@ -1308,6 +1334,21 @@ class EvidenceStore:
             and (include_synthetic or not eligible[item["case_id"]]["is_synthetic"])
         ]
         payload = {
+            "schema_version": PUBLIC_EXPORT_SCHEMA_VERSION,
+            "export_generated_at": _now(),
+            "timeline_caption": TIMELINE_CAPTION,
+            "time_fields": {
+                "export_generated_at": (
+                    "When this export was generated. "
+                    "It is not an event date and not an approval time."
+                ),
+                "event_date": "The date of a court event on an outcome row, when that date is known.",
+                "publication_date": "The publication date of a source. It is not the event date.",
+                "approval_time": (
+                    "Stored on the review action. "
+                    "It is not copied into this export as the generation time."
+                ),
+            },
             "cases": cases,
             "arguments": arguments,
             "outcome_events": outcomes,
@@ -1741,6 +1782,35 @@ class EvidenceStore:
             raise ValidationError(
                 f"{label} must be one of: {', '.join(allowed)}. Got {value!r}."
             )
+
+
+def _public_source_links(
+    store: EvidenceStore,
+    target_type: str,
+    target_id: str,
+    *,
+    include_synthetic: bool,
+) -> list[dict]:
+    """Links for one approved record. Proposed targets are not passed in."""
+
+    published = []
+    for link in store.evidence_links_for(target_type, target_id):
+        source = store.get_source(link["source_id"])
+        if source["is_synthetic"] and not include_synthetic:
+            continue
+        published.append(
+            {
+                "id": link["id"],
+                "source_id": source["id"],
+                "title": source["title"],
+                "url": source.get("url"),
+                "publication_date": source.get("publication_date"),
+                "relationship": link["relationship"],
+                "provenance": link.get("provenance"),
+                "support_scope": link.get("support_scope") or "whole_claim",
+            }
+        )
+    return published
 
 
 def _public_case(case: dict) -> dict:

@@ -191,7 +191,7 @@
       "publication_date_precision": "day",
       "retrieval_date": "2026-10-10",
       "retrieval_date_precision": "day",
-      "rights_note": "Same-day courtroom report. OKO.press says it transmitted the hearing. The article does not cite HFHR. It is a separate newsroom, so its provenance for the identity match is independent. It is not the judgment. Not redistributed. Quotation: “Elżbieta Podleśna, Anna Prus i Joanna Gzyra-Iskandar są niewinne obrazy uczuć religijnych.” Quotation: “Sąd odwoławczy w środę 12 stycznia 2022 utrzymał uniewinniający wyrok sądu rejonowego w Płocku.” English translation: Elżbieta Podleśna, Anna Prus, and Joanna Gzyra-Iskandar are not guilty of offending religious feelings. On Wednesday 12 January 2022 the appellate court upheld the acquitting judgment of the district court in Płock.",
+      "rights_note": "Same-day courtroom report. OKO.press says it transmitted the hearing. The article does not cite HFHR. It is a separate newsroom. It supports two facts: the defendants' identity, and the reported result that the appellate court on 12 January 2022 upheld the district-court acquittal. It does not corroborate that HFHR reported the result, that HFHR filed an amicus brief, or every other sentence on the outcome record. That partial support is not counted as independent corroboration of the whole claim. It is not the judgment. Not redistributed. Quotation: “Elżbieta Podleśna, Anna Prus i Joanna Gzyra-Iskandar są niewinne obrazy uczuć religijnych.” Quotation: “Sąd odwoławczy w środę 12 stycznia 2022 utrzymał uniewinniający wyrok sądu rejonowego w Płocku.” English translation: Elżbieta Podleśna, Anna Prus, and Joanna Gzyra-Iskandar are not guilty of offending religious feelings. On Wednesday 12 January 2022 the appellate court upheld the acquitting judgment of the district court in Płock.",
       "is_synthetic": false
     },
     {
@@ -205,6 +205,32 @@
       "retrieval_date": "2026-10-10",
       "retrieval_date_precision": "day",
       "rights_note": "Footnote 1 says the facts are based on an unofficial translation of the 2 March 2021 judgment, Ref. no. II K 296/20, and the 12 January 2022 judgment, Ref. No. V Ka 418/21, of the District Court in Płock, Fifth Criminal Appeals Division. V Ka 418/21 is recorded only as that ARTICLE 19 citation. It has not been verified against the judgment. II K 296/20 remains the trial number. The brief is captioned Case no. V KK 430/22 before the Supreme Court. That caption is not verified against a judgment and is not part of the January 2022 approval. Not redistributed.",
+      "is_synthetic": false
+    },
+    {
+      "id": "pl_src_kph",
+      "title": "KPH: Tęcza nie obraża – końcowy wyrok Sądu Najwyższego",
+      "document_type": "news",
+      "author_actor": "Kampania Przeciw Homofobii",
+      "url": "https://kph.org.pl/tecza-nie-obraza-koncowy-wyrok-sadu-najwyzszego-ws-aktywistek-oskarzonych-o-obraze-uczuc-religijnych/",
+      "publication_date": "2024-03-28",
+      "publication_date_precision": "day",
+      "retrieval_date": "2026-10-10",
+      "retrieval_date_precision": "day",
+      "rights_note": "Page dated 28 marca 2024. Read 10 October 2026. KPH says it takes part as a social party, represented by adw. Marcin Pawelec-Jakowiecki. Not the Supreme Court order. Not redistributed. Quotation: “Dzisiaj (28 marca) w Sądzie Najwyższym odbyła się rozprawa kasacyjna ws. trzech aktywistek oskarżonych o obrazę uczuć religijnych poprzez rozwieszanie naklejek z wizerunkiem matki boskiej częstochowskiej z tęczową aureolą. Sąd oddalił kasacje złożone przez pełnomocników ubocznych oskarżycieli posiłkowych, a kasacja Prokuratora Rejonowego w Płocku została skutecznie cofnięta. Sąd Najwyższy uznał, iż kasacje wniesione przez pełnomocników Kai Godek i Tadeusza Łebkowskiego są bezzasadne w stopniu oczywistym (postanowienie Sądu Najwyższego z dnia 28 marca 2024 r., sygn. akt V KK 430/22).” Quotation: “Elżbieta Podleśna, Joanna Gzyra-Iskandar i Anna Prus rozwiesiły w okolicy kościoła naklejki z wizerunkiem matki boskiej częstochowskiej z tęczową aureolą.” Quotation: “Sądy dwóch instancji (wyrok Sądu Rejonowego w Płocku z 2.03.2021 r. oraz Sądu Okręgowego w Płocku z 12.01.2022 r.) uniewinniły aktywistki w całości od zarzucanego im czynu.” Quotation: “W dzisiejszym wyroku Sąd Najwyższy oddalił kasacje pełnomocników ubocznych oskarżycieli posiłkowych (Kai Godek i Tadeusza Łebkowskiego), złożone od wyroku sądu II instancji.” English translation: Today (28 March) a cassation hearing was held in the Supreme Court in the case of three activists accused of offending religious feelings by putting up stickers of Our Lady of Częstochowa with a rainbow halo. The court dismissed the cassations filed by counsel for the auxiliary prosecutors, and the cassation of the District Prosecutor in Płock was effectively withdrawn. The Supreme Court found that the cassations brought by counsel for Kaja Godek and Tadeusz Łebkowski were obviously groundless (Supreme Court order of 28 March 2024, case V KK 430/22). Elżbieta Podleśna, Joanna Gzyra-Iskandar, and Anna Prus put up the stickers near the church. Courts of two instances, the District Court in Płock on 2 March 2021 and the Regional Court in Płock on 12 January 2022, acquitted them in full. A later sentence on the same page calls that dismissal today's judgment. The page uses both postanowienie and wyrok. The form of the decision is not resolved. The withdrawal and the dismissal are different actions.",
+      "is_synthetic": false
+    },
+    {
+      "id": "pl_src_rp_2024",
+      "title": "Rzeczpospolita: Jest decyzja SN. Bez kary za Matkę Boską z tęczową aureolą",
+      "document_type": "news",
+      "author_actor": "Mateusz Mikowski",
+      "url": "https://www.rp.pl/prawo-karne/art40078891-jest-decyzja-sn-bez-kary-za-matke-boska-z-teczowa-aureola",
+      "publication_date": "2024-03-28",
+      "publication_date_precision": "day",
+      "retrieval_date": "2026-10-10",
+      "retrieval_date_precision": "day",
+      "rights_note": "Different article from the 13 January 2022 rp.pl piece that draws on HFHR. Publication line 28.03.2024 14:43. Does not cite KPH. Not the Supreme Court order. Not redistributed. Quotation: “To konsekwencja decyzji Sądu Najwyższego, który oddalił w czwartek jako oczywiście bezzasadne kasacje w tej sprawie Kai Godek i płockiego księdza.” Quotation: “Zareagowały na to trzy aktywistki: Elżbieta Podleśna, Joanna Gzyra-Iskandar i Anna Prus.” Quotation: “W marcu 2021 r. Sąd Rejonowy w Płocku uniewinnił kobiety.” Quotation: “Wyrok uniewinniający utrzymał w styczniu 2022 r. płocki sąd okręgowy.” Quotation: “W ostatnich dniach płocka prokuratura wycofała jednak swoją kasację.” Quotation: “Sąd Najwyższy ostatecznie oddalił w czwartek pozostałe kasacje jako oczywiście bezzasadne.” Quotation: “Sygnatura akt: V KK 430/22.” English translation: This follows the Supreme Court's decision, which on Thursday dismissed as obviously groundless the cassations in this case of Kaja Godek and the Płock priest. Three activists reacted: Elżbieta Podleśna, Joanna Gzyra-Iskandar, and Anna Prus. In March 2021 the District Court in Płock acquitted the women. The acquitting judgment was upheld in January 2022 by the Płock regional court. In recent days the Płock prosecution withdrew its cassation. The Supreme Court ultimately dismissed the remaining cassations on Thursday as obviously groundless. Case signature V KK 430/22. The phrase in recent days is not a date. The publication timestamp is not the withdrawal date. This article names the Płock priest and does not spell Tadeusz Łebkowski.",
       "is_synthetic": false
     }
   ],
@@ -465,6 +491,102 @@
       "is_synthetic": false,
       "decision_id": "pl_decision_appeal_2022-01-12",
       "public_limitation": "HFHR reported this result. The appeal judgment itself was not retrieved. This is an organization account, not a finding read from the judgment. HFHR is an amicus participant; the brief was not retrieved. rp.pl draws on the HFHR account and is not an independent origin. OKO.press is a separate same-day courtroom report that names the three defendants and supports that identity match; it is not the judgment. This outcome does not establish acceptance or rejection of Lisa Davis's arguments. It is not a statement that 12 January 2022 is the latest known development. An incomplete list is not a finding that no other development occurred.",
+      "evidence_basis": "organization_account"
+    },
+    {
+      "id": "out_pl_sn_dismissal_podlesna",
+      "case_id": "case_poland",
+      "participant_id": "pl_podlesna",
+      "event_type": "Appeal decided",
+      "description": "KPH reported that on 28 March 2024 the Supreme Court dismissed, as obviously groundless, the cassations filed by counsel for auxiliary prosecutors Kaja Godek and Tadeusz Łebkowski.",
+      "evidence_label": "Unverified",
+      "event_date": "2024-03-28",
+      "event_date_precision": "day",
+      "procedural_stage": "Supreme Court cassation: dismissal of the auxiliary prosecutors' cassations",
+      "finality": "Proposed. The Supreme Court order was not retrieved. This is not an approved public outcome.",
+      "is_synthetic": false,
+      "decision_id": "pl_decision_sn_dismissal_2024-03-28",
+      "public_limitation": "KPH reported this dismissal. The Supreme Court order was not retrieved. This is an organization account, not a finding read from the order. KPH's page uses both postanowienie and wyrok; the form of the decision is not resolved. Kaja Godek and Tadeusz Łebkowski are two challengers in one reported order, not two decisions. The District Prosecutor in Płock's cassation is a separate withdrawal record. The 28 March 2024 rp.pl article is a different piece from the January 2022 article that draws on HFHR. It reports the same dismissal and does not corroborate that KPH reported it. V KK 430/22 is cited by KPH and by that rp.pl article. It has not been verified against the order. This does not establish acceptance or rejection of Lisa Davis's arguments. This row is proposed and is not a public outcome.",
+      "evidence_basis": "organization_account"
+    },
+    {
+      "id": "out_pl_sn_dismissal_prus",
+      "case_id": "case_poland",
+      "participant_id": "pl_prus",
+      "event_type": "Appeal decided",
+      "description": "KPH reported that on 28 March 2024 the Supreme Court dismissed, as obviously groundless, the cassations filed by counsel for auxiliary prosecutors Kaja Godek and Tadeusz Łebkowski.",
+      "evidence_label": "Unverified",
+      "event_date": "2024-03-28",
+      "event_date_precision": "day",
+      "procedural_stage": "Supreme Court cassation: dismissal of the auxiliary prosecutors' cassations",
+      "finality": "Proposed. The Supreme Court order was not retrieved. This is not an approved public outcome.",
+      "is_synthetic": false,
+      "decision_id": "pl_decision_sn_dismissal_2024-03-28",
+      "public_limitation": "KPH reported this dismissal. The Supreme Court order was not retrieved. This is an organization account, not a finding read from the order. KPH's page uses both postanowienie and wyrok; the form of the decision is not resolved. Kaja Godek and Tadeusz Łebkowski are two challengers in one reported order, not two decisions. The District Prosecutor in Płock's cassation is a separate withdrawal record. The 28 March 2024 rp.pl article is a different piece from the January 2022 article that draws on HFHR. It reports the same dismissal and does not corroborate that KPH reported it. V KK 430/22 is cited by KPH and by that rp.pl article. It has not been verified against the order. This does not establish acceptance or rejection of Lisa Davis's arguments. This row is proposed and is not a public outcome.",
+      "evidence_basis": "organization_account"
+    },
+    {
+      "id": "out_pl_sn_dismissal_gzyra",
+      "case_id": "case_poland",
+      "participant_id": "pl_gzyra",
+      "event_type": "Appeal decided",
+      "description": "KPH reported that on 28 March 2024 the Supreme Court dismissed, as obviously groundless, the cassations filed by counsel for auxiliary prosecutors Kaja Godek and Tadeusz Łebkowski.",
+      "evidence_label": "Unverified",
+      "event_date": "2024-03-28",
+      "event_date_precision": "day",
+      "procedural_stage": "Supreme Court cassation: dismissal of the auxiliary prosecutors' cassations",
+      "finality": "Proposed. The Supreme Court order was not retrieved. This is not an approved public outcome.",
+      "is_synthetic": false,
+      "decision_id": "pl_decision_sn_dismissal_2024-03-28",
+      "public_limitation": "KPH reported this dismissal. The Supreme Court order was not retrieved. This is an organization account, not a finding read from the order. KPH's page uses both postanowienie and wyrok; the form of the decision is not resolved. Kaja Godek and Tadeusz Łebkowski are two challengers in one reported order, not two decisions. The District Prosecutor in Płock's cassation is a separate withdrawal record. The 28 March 2024 rp.pl article is a different piece from the January 2022 article that draws on HFHR. It reports the same dismissal and does not corroborate that KPH reported it. V KK 430/22 is cited by KPH and by that rp.pl article. It has not been verified against the order. This does not establish acceptance or rejection of Lisa Davis's arguments. This row is proposed and is not a public outcome.",
+      "evidence_basis": "organization_account"
+    },
+    {
+      "id": "out_pl_sn_withdrawal_podlesna",
+      "case_id": "case_poland",
+      "participant_id": "pl_podlesna",
+      "event_type": "Appeal withdrawn",
+      "description": "KPH reported that the cassation of the District Prosecutor in Płock was effectively withdrawn. The day of that withdrawal was not stated.",
+      "evidence_label": "Unverified",
+      "event_date": null,
+      "event_date_precision": "unknown",
+      "procedural_stage": "Supreme Court cassation: withdrawal of the District Prosecutor in Płock's cassation",
+      "finality": "Proposed. Withdrawal is not a dismissal. The day was not stated. This is not an approved public outcome.",
+      "is_synthetic": false,
+      "decision_id": "pl_decision_sn_prosecutor_withdrawal",
+      "public_limitation": "KPH reported that the prosecutor's cassation was effectively withdrawn. The day was not stated. The 28 March 2024 rp.pl article says the Płock prosecution withdrew its cassation in recent days before the Thursday hearing. That phrase is not a date, and the publication date is not the event date. Withdrawal is not a dismissal. The auxiliary prosecutors' cassations are a separate dismissal record. The Supreme Court order was not retrieved. Amnesty Slovakia's account that the Supreme Court rejected the state authorities' appeal collapses these actions and is not the basis of this claim. This row is proposed and is not a public outcome.",
+      "evidence_basis": "organization_account"
+    },
+    {
+      "id": "out_pl_sn_withdrawal_prus",
+      "case_id": "case_poland",
+      "participant_id": "pl_prus",
+      "event_type": "Appeal withdrawn",
+      "description": "KPH reported that the cassation of the District Prosecutor in Płock was effectively withdrawn. The day of that withdrawal was not stated.",
+      "evidence_label": "Unverified",
+      "event_date": null,
+      "event_date_precision": "unknown",
+      "procedural_stage": "Supreme Court cassation: withdrawal of the District Prosecutor in Płock's cassation",
+      "finality": "Proposed. Withdrawal is not a dismissal. The day was not stated. This is not an approved public outcome.",
+      "is_synthetic": false,
+      "decision_id": "pl_decision_sn_prosecutor_withdrawal",
+      "public_limitation": "KPH reported that the prosecutor's cassation was effectively withdrawn. The day was not stated. The 28 March 2024 rp.pl article says the Płock prosecution withdrew its cassation in recent days before the Thursday hearing. That phrase is not a date, and the publication date is not the event date. Withdrawal is not a dismissal. The auxiliary prosecutors' cassations are a separate dismissal record. The Supreme Court order was not retrieved. Amnesty Slovakia's account that the Supreme Court rejected the state authorities' appeal collapses these actions and is not the basis of this claim. This row is proposed and is not a public outcome.",
+      "evidence_basis": "organization_account"
+    },
+    {
+      "id": "out_pl_sn_withdrawal_gzyra",
+      "case_id": "case_poland",
+      "participant_id": "pl_gzyra",
+      "event_type": "Appeal withdrawn",
+      "description": "KPH reported that the cassation of the District Prosecutor in Płock was effectively withdrawn. The day of that withdrawal was not stated.",
+      "evidence_label": "Unverified",
+      "event_date": null,
+      "event_date_precision": "unknown",
+      "procedural_stage": "Supreme Court cassation: withdrawal of the District Prosecutor in Płock's cassation",
+      "finality": "Proposed. Withdrawal is not a dismissal. The day was not stated. This is not an approved public outcome.",
+      "is_synthetic": false,
+      "decision_id": "pl_decision_sn_prosecutor_withdrawal",
+      "public_limitation": "KPH reported that the prosecutor's cassation was effectively withdrawn. The day was not stated. The 28 March 2024 rp.pl article says the Płock prosecution withdrew its cassation in recent days before the Thursday hearing. That phrase is not a date, and the publication date is not the event date. Withdrawal is not a dismissal. The auxiliary prosecutors' cassations are a separate dismissal record. The Supreme Court order was not retrieved. Amnesty Slovakia's account that the Supreme Court rejected the state authorities' appeal collapses these actions and is not the basis of this claim. This row is proposed and is not a public outcome.",
       "evidence_basis": "organization_account"
     },
     {
@@ -776,7 +898,8 @@
       "target_type": "outcome_event",
       "target_id": "out_pl_appeal_podlesna",
       "relationship": "supports",
-      "provenance": "independent"
+      "provenance": "independent",
+      "support_scope": "identity_and_reported_result"
     },
     {
       "id": "pl_link_article19_podlesna",
@@ -784,7 +907,8 @@
       "target_type": "outcome_event",
       "target_id": "out_pl_appeal_podlesna",
       "relationship": "supports",
-      "provenance": "unknown"
+      "provenance": "unknown",
+      "support_scope": "identity"
     },
     {
       "id": "pl_link_oko_prus",
@@ -792,7 +916,8 @@
       "target_type": "outcome_event",
       "target_id": "out_pl_appeal_prus",
       "relationship": "supports",
-      "provenance": "independent"
+      "provenance": "independent",
+      "support_scope": "identity_and_reported_result"
     },
     {
       "id": "pl_link_article19_prus",
@@ -800,7 +925,8 @@
       "target_type": "outcome_event",
       "target_id": "out_pl_appeal_prus",
       "relationship": "supports",
-      "provenance": "unknown"
+      "provenance": "unknown",
+      "support_scope": "identity"
     },
     {
       "id": "pl_link_oko_gzyra",
@@ -808,7 +934,8 @@
       "target_type": "outcome_event",
       "target_id": "out_pl_appeal_gzyra",
       "relationship": "supports",
-      "provenance": "independent"
+      "provenance": "independent",
+      "support_scope": "identity_and_reported_result"
     },
     {
       "id": "pl_link_article19_gzyra",
@@ -816,7 +943,116 @@
       "target_type": "outcome_event",
       "target_id": "out_pl_appeal_gzyra",
       "relationship": "supports",
-      "provenance": "unknown"
+      "provenance": "unknown",
+      "support_scope": "identity"
+    },
+    {
+      "id": "pl_link_kph_dismissal_podlesna",
+      "source_id": "pl_src_kph",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_sn_dismissal_podlesna",
+      "relationship": "supports",
+      "provenance": "unknown",
+      "support_scope": "whole_claim"
+    },
+    {
+      "id": "pl_link_kph_dismissal_prus",
+      "source_id": "pl_src_kph",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_sn_dismissal_prus",
+      "relationship": "supports",
+      "provenance": "unknown",
+      "support_scope": "whole_claim"
+    },
+    {
+      "id": "pl_link_kph_dismissal_gzyra",
+      "source_id": "pl_src_kph",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_sn_dismissal_gzyra",
+      "relationship": "supports",
+      "provenance": "unknown",
+      "support_scope": "whole_claim"
+    },
+    {
+      "id": "pl_link_rp2024_dismissal_podlesna",
+      "source_id": "pl_src_rp_2024",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_sn_dismissal_podlesna",
+      "relationship": "supports",
+      "provenance": "independent",
+      "support_scope": "identity_and_reported_result"
+    },
+    {
+      "id": "pl_link_rp2024_dismissal_prus",
+      "source_id": "pl_src_rp_2024",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_sn_dismissal_prus",
+      "relationship": "supports",
+      "provenance": "independent",
+      "support_scope": "identity_and_reported_result"
+    },
+    {
+      "id": "pl_link_rp2024_dismissal_gzyra",
+      "source_id": "pl_src_rp_2024",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_sn_dismissal_gzyra",
+      "relationship": "supports",
+      "provenance": "independent",
+      "support_scope": "identity_and_reported_result"
+    },
+    {
+      "id": "pl_link_kph_withdrawal_podlesna",
+      "source_id": "pl_src_kph",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_sn_withdrawal_podlesna",
+      "relationship": "supports",
+      "provenance": "unknown",
+      "support_scope": "whole_claim"
+    },
+    {
+      "id": "pl_link_kph_withdrawal_prus",
+      "source_id": "pl_src_kph",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_sn_withdrawal_prus",
+      "relationship": "supports",
+      "provenance": "unknown",
+      "support_scope": "whole_claim"
+    },
+    {
+      "id": "pl_link_kph_withdrawal_gzyra",
+      "source_id": "pl_src_kph",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_sn_withdrawal_gzyra",
+      "relationship": "supports",
+      "provenance": "unknown",
+      "support_scope": "whole_claim"
+    },
+    {
+      "id": "pl_link_rp2024_withdrawal_podlesna",
+      "source_id": "pl_src_rp_2024",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_sn_withdrawal_podlesna",
+      "relationship": "supports",
+      "provenance": "independent",
+      "support_scope": "identity_and_reported_result"
+    },
+    {
+      "id": "pl_link_rp2024_withdrawal_prus",
+      "source_id": "pl_src_rp_2024",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_sn_withdrawal_prus",
+      "relationship": "supports",
+      "provenance": "independent",
+      "support_scope": "identity_and_reported_result"
+    },
+    {
+      "id": "pl_link_rp2024_withdrawal_gzyra",
+      "source_id": "pl_src_rp_2024",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_sn_withdrawal_gzyra",
+      "relationship": "supports",
+      "provenance": "independent",
+      "support_scope": "identity_and_reported_result"
     }
   ],
   "research_attempts": [
@@ -935,7 +1171,25 @@
       "query": "https://www.amnesty.sk/elzbieta-podlesna-sa-dockala-spravodlivosti/",
       "place": "Amnesty Slovakia",
       "result": "lead",
-      "note": "Proposed research lead. Not approved and not an outcome record. Amnesty Slovakia, dated 28 March 2024, reports that the Supreme Court on Thursday 28 March 2024 rejected the state authorities' appeal against the January 2022 acquittal. It names Elżbieta Podleśna, Joanna Gzyra-Iskandar, and Anna Prus. The judgment was not retrieved. This does not make 12 January 2022 the latest known development, and it does not complete the timeline. ARTICLE 19's brief is captioned Case no. V KK 430/22. That caption is not verified against a judgment."
+      "note": "Proposed research lead. Not the basis of the proposed 2024 claims. Amnesty Slovakia, dated 28 March 2024, says the Supreme Court rejected the state authorities' appeal against the January 2022 acquittal and names the three defendants. That wording collapses the prosecutor's withdrawal and the dismissal of the auxiliary prosecutors' cassations. It is not an approved outcome. The focused packet uses the KPH page and the separate 28 March 2024 rp.pl article."
+    },
+    {
+      "id": "pl_search_kph_2024",
+      "case_id": "case_poland",
+      "searched_on": "2026-10-10",
+      "query": "https://kph.org.pl/tecza-nie-obraza-koncowy-wyrok-sadu-najwyzszego-ws-aktywistek-oskarzonych-o-obraze-uczuc-religijnych/",
+      "place": "KPH website",
+      "result": "retrieved_secondary",
+      "note": "Page dated 28 March 2024. Same proceeding: Elżbieta Podleśna, Joanna Gzyra-Iskandar, and Anna Prus; Article 196; District Court in Płock 2 March 2021 and Regional Court in Płock 12 January 2022 acquittals. Two actions: the District Prosecutor in Płock's cassation was effectively withdrawn, and one order dismissed the cassations of counsel for Kaja Godek and Tadeusz Łebkowski as obviously groundless. Cited as postanowienie of 28 March 2024, V KK 430/22, and later called wyrok. The order was not retrieved. KPH is a social party. Proposed rows only."
+    },
+    {
+      "id": "pl_search_rp_2024",
+      "case_id": "case_poland",
+      "searched_on": "2026-10-10",
+      "query": "https://www.rp.pl/prawo-karne/art40078891-jest-decyzja-sn-bez-kary-za-matke-boska-z-teczowa-aureola",
+      "place": "rp.pl",
+      "result": "retrieved_secondary",
+      "note": "Publication 28.03.2024 14:43. A different article from the 13 January 2022 piece. Names the three defendants, the March 2021 district-court acquittal, and the January 2022 regional-court affirmance. Says the Płock prosecution withdrew its cassation in recent days, and that on Thursday the Supreme Court dismissed the remaining cassations of Kaja Godek and the Płock priest as obviously groundless. Does not spell Tadeusz Łebkowski. Signature V KK 430/22. Does not cite KPH. The publication time is not the withdrawal date."
     }
   ]
 }

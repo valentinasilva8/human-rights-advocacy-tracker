@@ -84,6 +84,7 @@
     }
   ],
   "count_note": "real_case_count is the number of non-synthetic cases with at least one approved, non-sensitive argument or outcome in this export. It is not a count of verified cases. approved_argument_count is approved non-synthetic arguments in this export, excluding AI suggestions. Approval does not authorize redistribution of the source PDF or other copyrighted text.",
+  "export_generated_at": "2026-10-10T01:06:38+00:00",
   "includes_full_documents": false,
   "interventions": [
     {
@@ -108,6 +109,7 @@
       "event_date_precision": "day",
       "event_type": "Appeal decided",
       "evidence_basis": "organization_account",
+      "evidence_basis_caption": "An identified organization reported this event. That is not a finding read from the judgment.",
       "evidence_label": "Single-source report",
       "finality": "HFHR described the result as final; the appeal judgment was not read. A later development is a separate research lead and is not part of this record.",
       "id": "out_pl_appeal_gzyra",
@@ -116,6 +118,48 @@
       "procedural_stage": "appeal",
       "public_limitation": "HFHR reported this result. The appeal judgment itself was not retrieved. This is an organization account, not a finding read from the judgment. HFHR is an amicus participant; the brief was not retrieved. rp.pl draws on the HFHR account and is not an independent origin. OKO.press is a separate same-day courtroom report that names the three defendants and supports that identity match; it is not the judgment. This outcome does not establish acceptance or rejection of Lisa Davis's arguments. It is not a statement that 12 January 2022 is the latest known development. An incomplete list is not a finding that no other development occurred.",
       "review_status": "approved",
+      "source_links": [
+        {
+          "id": "pl_link_article19_gzyra",
+          "provenance": "unknown",
+          "publication_date": "2024-03",
+          "relationship": "supports",
+          "source_id": "pl_src_article19",
+          "support_scope": "identity",
+          "title": "ARTICLE 19 expert opinion, Rainbow Holy Mary",
+          "url": "https://www.article19.org/wp-content/uploads/2024/03/Amicus_Poland-Rainbow-Holy-Mary_EN.pdf"
+        },
+        {
+          "id": "pl_link_hfhr_gzyra",
+          "provenance": "unknown",
+          "publication_date": "2022-01-13",
+          "relationship": "supports",
+          "source_id": "pl_src_hfhr",
+          "support_scope": "whole_claim",
+          "title": "HFHR: Tęcza nie obraża. Wyrok uniewinniający utrzymany",
+          "url": "https://hfhr.pl/aktualnosci/tecza-nie-obraza-wyrok-uniewinnienie"
+        },
+        {
+          "id": "pl_link_oko_gzyra",
+          "provenance": "independent",
+          "publication_date": "2022-01-12",
+          "relationship": "supports",
+          "source_id": "pl_src_oko",
+          "support_scope": "identity_and_reported_result",
+          "title": "OKO.press: Matka Boska w tęczowej aureoli nie obraża, aktywistki niewinne",
+          "url": "https://oko.press/tecza-nie-obraza-prawomocny-wyrok-sadu-apelacyjnego-w-plocku"
+        },
+        {
+          "id": "pl_link_rp_gzyra",
+          "provenance": "derived_from_shared_original",
+          "publication_date": "2022-01-13",
+          "relationship": "supports",
+          "source_id": "pl_src_rp",
+          "support_scope": "whole_claim",
+          "title": "Rzeczpospolita: Zapadł prawomocny wyrok ws. Matki Bożej z tęczową aureolą",
+          "url": "https://www.rp.pl/prawo-karne/art19284511-zapadl-prawomocny-wyrok-ws-matki-bozej-z-teczowa-aureola"
+        }
+      ],
       "supersedes_event_id": null
     },
     {
@@ -126,6 +170,7 @@
       "event_date_precision": "day",
       "event_type": "Appeal decided",
       "evidence_basis": "organization_account",
+      "evidence_basis_caption": "An identified organization reported this event. That is not a finding read from the judgment.",
       "evidence_label": "Single-source report",
       "finality": "HFHR described the result as final; the appeal judgment was not read. A later development is a separate research lead and is not part of this record.",
       "id": "out_pl_appeal_podlesna",
@@ -134,6 +179,48 @@
       "procedural_stage": "appeal",
       "public_limitation": "HFHR reported this result. The appeal judgment itself was not retrieved. This is an organization account, not a finding read from the judgment. HFHR is an amicus participant; the brief was not retrieved. rp.pl draws on the HFHR account and is not an independent origin. OKO.press is a separate same-day courtroom report that names the three defendants and supports that identity match; it is not the judgment. This outcome does not establish acceptance or rejection of Lisa Davis's arguments. It is not a statement that 12 January 2022 is the latest known development. An incomplete list is not a finding that no other development occurred.",
       "review_status": "approved",
+      "source_links": [
+        {
+          "id": "pl_link_article19_podlesna",
+          "provenance": "unknown",
+          "publication_date": "2024-03",
+          "relationship": "supports",
+          "source_id": "pl_src_article19",
+          "support_scope": "identity",
+          "title": "ARTICLE 19 expert opinion, Rainbow Holy Mary",
+          "url": "https://www.article19.org/wp-content/uploads/2024/03/Amicus_Poland-Rainbow-Holy-Mary_EN.pdf"
+        },
+        {
+          "id": "pl_link_hfhr_podlesna",
+          "provenance": "unknown",
+          "publication_date": "2022-01-13",
+          "relationship": "supports",
+          "source_id": "pl_src_hfhr",
+          "support_scope": "whole_claim",
+          "title": "HFHR: Tęcza nie obraża. Wyrok uniewinniający utrzymany",
+          "url": "https://hfhr.pl/aktualnosci/tecza-nie-obraza-wyrok-uniewinnienie"
+        },
+        {
+          "id": "pl_link_oko_podlesna",
+          "provenance": "independent",
+          "publication_date": "2022-01-12",
+          "relationship": "supports",
+          "source_id": "pl_src_oko",
+          "support_scope": "identity_and_reported_result",
+          "title": "OKO.press: Matka Boska w tęczowej aureoli nie obraża, aktywistki niewinne",
+          "url": "https://oko.press/tecza-nie-obraza-prawomocny-wyrok-sadu-apelacyjnego-w-plocku"
+        },
+        {
+          "id": "pl_link_rp_podlesna",
+          "provenance": "derived_from_shared_original",
+          "publication_date": "2022-01-13",
+          "relationship": "supports",
+          "source_id": "pl_src_rp",
+          "support_scope": "whole_claim",
+          "title": "Rzeczpospolita: Zapadł prawomocny wyrok ws. Matki Bożej z tęczową aureolą",
+          "url": "https://www.rp.pl/prawo-karne/art19284511-zapadl-prawomocny-wyrok-ws-matki-bozej-z-teczowa-aureola"
+        }
+      ],
       "supersedes_event_id": null
     },
     {
@@ -144,6 +231,7 @@
       "event_date_precision": "day",
       "event_type": "Appeal decided",
       "evidence_basis": "organization_account",
+      "evidence_basis_caption": "An identified organization reported this event. That is not a finding read from the judgment.",
       "evidence_label": "Single-source report",
       "finality": "HFHR described the result as final; the appeal judgment was not read. A later development is a separate research lead and is not part of this record.",
       "id": "out_pl_appeal_prus",
@@ -152,11 +240,54 @@
       "procedural_stage": "appeal",
       "public_limitation": "HFHR reported this result. The appeal judgment itself was not retrieved. This is an organization account, not a finding read from the judgment. HFHR is an amicus participant; the brief was not retrieved. rp.pl draws on the HFHR account and is not an independent origin. OKO.press is a separate same-day courtroom report that names the three defendants and supports that identity match; it is not the judgment. This outcome does not establish acceptance or rejection of Lisa Davis's arguments. It is not a statement that 12 January 2022 is the latest known development. An incomplete list is not a finding that no other development occurred.",
       "review_status": "approved",
+      "source_links": [
+        {
+          "id": "pl_link_article19_prus",
+          "provenance": "unknown",
+          "publication_date": "2024-03",
+          "relationship": "supports",
+          "source_id": "pl_src_article19",
+          "support_scope": "identity",
+          "title": "ARTICLE 19 expert opinion, Rainbow Holy Mary",
+          "url": "https://www.article19.org/wp-content/uploads/2024/03/Amicus_Poland-Rainbow-Holy-Mary_EN.pdf"
+        },
+        {
+          "id": "pl_link_hfhr_prus",
+          "provenance": "unknown",
+          "publication_date": "2022-01-13",
+          "relationship": "supports",
+          "source_id": "pl_src_hfhr",
+          "support_scope": "whole_claim",
+          "title": "HFHR: Tęcza nie obraża. Wyrok uniewinniający utrzymany",
+          "url": "https://hfhr.pl/aktualnosci/tecza-nie-obraza-wyrok-uniewinnienie"
+        },
+        {
+          "id": "pl_link_oko_prus",
+          "provenance": "independent",
+          "publication_date": "2022-01-12",
+          "relationship": "supports",
+          "source_id": "pl_src_oko",
+          "support_scope": "identity_and_reported_result",
+          "title": "OKO.press: Matka Boska w tęczowej aureoli nie obraża, aktywistki niewinne",
+          "url": "https://oko.press/tecza-nie-obraza-prawomocny-wyrok-sadu-apelacyjnego-w-plocku"
+        },
+        {
+          "id": "pl_link_rp_prus",
+          "provenance": "derived_from_shared_original",
+          "publication_date": "2022-01-13",
+          "relationship": "supports",
+          "source_id": "pl_src_rp",
+          "support_scope": "whole_claim",
+          "title": "Rzeczpospolita: Zapadł prawomocny wyrok ws. Matki Bożej z tęczową aureolą",
+          "url": "https://www.rp.pl/prawo-karne/art19284511-zapadl-prawomocny-wyrok-ws-matki-bozej-z-teczowa-aureola"
+        }
+      ],
       "supersedes_event_id": null
     }
   ],
   "real_case_count": 1,
   "receptions": [],
+  "schema_version": "1",
   "sources": [
     {
       "author_actor": "ARTICLE 19",
@@ -205,7 +336,7 @@
       "publication_date_precision": "day",
       "retrieval_date": "2026-10-10",
       "retrieval_date_precision": "day",
-      "rights_note": "Same-day courtroom report. OKO.press says it transmitted the hearing. The article does not cite HFHR. It is a separate newsroom, so its provenance for the identity match is independent. It is not the judgment. Not redistributed. Quotation: “Elżbieta Podleśna, Anna Prus i Joanna Gzyra-Iskandar są niewinne obrazy uczuć religijnych.” Quotation: “Sąd odwoławczy w środę 12 stycznia 2022 utrzymał uniewinniający wyrok sądu rejonowego w Płocku.” English translation: Elżbieta Podleśna, Anna Prus, and Joanna Gzyra-Iskandar are not guilty of offending religious feelings. On Wednesday 12 January 2022 the appellate court upheld the acquitting judgment of the district court in Płock.",
+      "rights_note": "Same-day courtroom report. OKO.press says it transmitted the hearing. The article does not cite HFHR. It is a separate newsroom. It supports two facts: the defendants' identity, and the reported result that the appellate court on 12 January 2022 upheld the district-court acquittal. It does not corroborate that HFHR reported the result, that HFHR filed an amicus brief, or every other sentence on the outcome record. That partial support is not counted as independent corroboration of the whole claim. It is not the judgment. Not redistributed. Quotation: “Elżbieta Podleśna, Anna Prus i Joanna Gzyra-Iskandar są niewinne obrazy uczuć religijnych.” Quotation: “Sąd odwoławczy w środę 12 stycznia 2022 utrzymał uniewinniający wyrok sądu rejonowego w Płocku.” English translation: Elżbieta Podleśna, Anna Prus, and Joanna Gzyra-Iskandar are not guilty of offending religious feelings. On Wednesday 12 January 2022 the appellate court upheld the acquitting judgment of the district court in Płock.",
       "title": "OKO.press: Matka Boska w tęczowej aureoli nie obraża, aktywistki niewinne",
       "url": "https://oko.press/tecza-nie-obraza-prawomocny-wyrok-sadu-apelacyjnego-w-plocku"
     },
@@ -243,5 +374,12 @@
       "title": "Rzeczpospolita: Zapadł prawomocny wyrok ws. Matki Bożej z tęczową aureolą",
       "url": "https://www.rp.pl/prawo-karne/art19284511-zapadl-prawomocny-wyrok-ws-matki-bozej-z-teczowa-aureola"
     }
-  ]
+  ],
+  "time_fields": {
+    "approval_time": "Stored on the review action. It is not copied into this export as the generation time.",
+    "event_date": "The date of a court event on an outcome row, when that date is known.",
+    "export_generated_at": "When this export was generated. It is not an event date and not an approval time.",
+    "publication_date": "The publication date of a source. It is not the event date."
+  },
+  "timeline_caption": "Latest approved event in this dataset."
 }
