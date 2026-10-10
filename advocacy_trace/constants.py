@@ -53,6 +53,7 @@ EVENT_TYPES = (
     "Acquittal",
     "Appeal filed",
     "Appeal decided",
+    "Appeal withdrawn",
     "Release",
     "Continued detention",
     "Sentence imposed",
@@ -66,6 +67,9 @@ EVENT_TYPES = (
 )
 
 NO_UPDATE_EVENT = "No verified recent update"
+
+# A withdrawal of a challenge is something a party did. It is not a court disposition.
+PROCEDURAL_ACTION_EVENT_TYPES = frozenset({"Appeal withdrawn"})
 
 EVIDENCE_LABELS = (
     "Primary-source supported",
@@ -120,6 +124,19 @@ PROVENANCE_VALUES = (
     "independent",
 )
 
+# How much of the stored claim a link supports. Identity or the reported
+# result, alone or together, is not support for every assertion on the record.
+SUPPORT_SCOPE_VALUES = (
+    "whole_claim",
+    "identity",
+    "reported_result",
+    "identity_and_reported_result",
+)
+
+PUBLIC_EXPORT_SCHEMA_VERSION = "1"
+
+TIMELINE_CAPTION = "Latest approved event in this dataset."
+
 ACCOUNT_TYPES = ("not_yet_established", "authority_document", "secondary_account")
 
 EVIDENCE_BASIS = (
@@ -170,9 +187,10 @@ UNKNOWN_OUTCOME_STATEMENT = (
 )
 
 DATED_OUTCOME_STATEMENT = (
-    "Dated events are on record. They are not a success or failure score, "
+    "Latest approved event in this dataset. "
+    "Dated events on record are not a success or failure score, "
     "and they do not show that an argument caused the event. "
-    "An incomplete list is not a finding that no other development occurred."
+    "This is not a claim that the timeline is current."
 )
 
 RECEPTION_NOT_ESTABLISHED = (

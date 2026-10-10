@@ -851,6 +851,15 @@ def test_proposed_research_stays_out_of_public_outputs(demo):
     assert poland["author_actor"] == "Lisa Davis"
     assert poland["attribution_role"] == "partner_argument"
     assert demo.independent_support_count("out_pl_appeal_podlesna") == 0
+    oko_link = demo.conn.execute(
+        "SELECT provenance, support_scope FROM evidence_links WHERE id = 'pl_link_oko_podlesna'"
+    ).fetchone()
+    assert oko_link[0] == "independent"
+    assert oko_link[1] == "identity_and_reported_result"
+    rp_link = demo.conn.execute(
+        "SELECT provenance FROM evidence_links WHERE id = 'pl_link_rp_podlesna'"
+    ).fetchone()[0]
+    assert rp_link == "derived_from_shared_original"
     exported = str(demo.public_export())
     assert "case_poland" not in exported
     assert "case_tam" not in exported
@@ -882,16 +891,41 @@ def test_proposed_research_stays_out_of_public_outputs(demo):
     rivera = demo.get_outcome("out_sentence")
     assert rivera["event_type"] == "Sentence modification"
     appeal = demo.get_outcome("out_pl_appeal_podlesna")
-    assert appeal["evidence_label"] == "Unverified"
+    assert appeal["evidence_label"] == "Single-source report"
     assert appeal["evidence_basis"] == "organization_account"
-    assert "HFHR reported" in appeal["description"]
-    assert demo.independent_support_count("out_pl_appeal_podlesna") == 0
-    assert "not zero evidence" in appeal["public_limitation"]
+    assert appeal["review_status"] == "proposed"
+    assert appeal["description"] == (
+        "HFHR reported that the Regional Court in Płock upheld the three defendants' "
+        "acquittal on 12 January 2022."
+    )
+    assert "appeal judgment itself was not retrieved" in appeal["public_limitation"]
+    assert demo.get_case("case_poland")["case_number"] == "II K 296/20"
+    assert "V Ka 418/21" in demo.get_case("case_poland")["proceeding_note"]
+    assert "ARTICLE 19" in demo.get_case("case_poland")["proceeding_note"]
     counts = demo.decision_counts("case_poland")
     assert counts["defendants"] == 3
     assert counts["proceedings"] == 1
-    assert counts["decisions"] == 2
-    assert counts["outcome_rows"] == 6
+    assert counts["decisions"] == 3
+    assert counts["procedural_actions"] == 1
+    assert counts["procedural_action_ids"] == ["pl_action_sn_prosecutor_withdrawal"]
+    assert "pl_action_sn_prosecutor_withdrawal" not in counts["decision_ids"]
+    assert "pl_decision_sn_dismissal_2024-03-28" in counts["decision_ids"]
+    assert counts["outcome_rows"] == 12
+    dismissal = demo.get_outcome("out_pl_sn_dismissal_podlesna")
+    withdrawal = demo.get_outcome("out_pl_sn_withdrawal_podlesna")
+    assert dismissal["review_status"] == "proposed"
+    assert dismissal["evidence_label"] == "Unverified"
+    assert dismissal["event_date"] == "2024-03-28"
+    assert dismissal["decision_id"] == "pl_decision_sn_dismissal_2024-03-28"
+    assert withdrawal["review_status"] == "proposed"
+    assert withdrawal["event_type"] == "Appeal withdrawn"
+    assert withdrawal["event_date"] is None
+    assert withdrawal["decision_id"] == "pl_action_sn_prosecutor_withdrawal"
+    assert "procedural action" in withdrawal["public_limitation"]
+    assert "event date stays unknown" in withdrawal["public_limitation"]
+    assert "decision" in dismissal["public_limitation"]
+    assert "postanowienie and wyrok" in dismissal["finality"]
+    assert demo.independent_support_count("out_pl_sn_dismissal_podlesna") == 0
     assert counts["interventions"] == 1
     tam_counts = demo.decision_counts("case_tam")
     assert tam_counts["defendants"] == 1
@@ -920,10 +954,18 @@ def test_proposed_research_stays_out_of_public_outputs(demo):
         if person["role_in_case"] == "amicus"
     ]
     assert amicus[0]["name"] == "Helsinki Foundation for Human Rights"
+    demo.add_outcome_event(
+        case_id="case_poland",
+        participant_id="pl_podlesna",
+        event_type="Appeal decided",
+        description="A placeholder that has not been reviewed.",
+        evidence_label="Unverified",
+        id="out_unverified_gate",
+    )
     with pytest.raises(ValidationError, match="unverified outcome cannot be approved"):
         demo.review(
             "outcome_event",
-            "out_pl_appeal_podlesna",
+            "out_unverified_gate",
             "approve",
             reviewer="ada",
             claim_supported=True,
@@ -965,24 +1007,40 @@ def test_recorded_approval_keeps_the_quotations_and_leaves_the_rest_proposed(tmp
     assert exported_arguments["pl_arg_legality"]["passage"] == legality["passage"]
     assert exported_arguments["pl_arg_proportionality"]["passage"] == proportionality["passage"]
     assert "should likewise be rejected" in exported_arguments["pl_arg_legality"]["remedy_requested"]
-    assert exported["outcome_events"] == []
+    assert {item["id"] for item in exported["outcome_events"]} == {
+        "out_pl_appeal_podlesna",
+        "out_pl_appeal_prus",
+        "out_pl_appeal_gzyra",
+    }
+    assert {item["decision_id"] for item in exported["outcome_events"]} == {
+        "pl_decision_appeal_2022-01-12"
+    }
+    assert exported["receptions"] == []
     assert {item["id"] for item in exported["cases"]} == {"case_poland"}
     blob = json.dumps(exported)
     assert "case_tam" not in blob
     assert "unresolved_questions" not in blob
+    assert "amnesty.sk" not in blob
+    assert "out_pl_acquit_podlesna" not in blob
+    assert "II Ko 28/21" not in blob
     public_case = case_view(store, "case_poland", audience="public")
     assert public_case["omitted"] is False
     shown = {item["argument"]["id"] for item in public_case["arguments"]}
     assert shown == {"pl_arg_legality", "pl_arg_proportionality"}
-    assert public_case["outcomes"] == []
+    assert {item["id"] for item in public_case["outcomes"]} == {
+        "out_pl_appeal_podlesna",
+        "out_pl_appeal_prus",
+        "out_pl_appeal_gzyra",
+    }
     assert "not a finding that the court ignored the argument" in " ".join(public_case["gaps"])
     assert store.get_argument("tam_arg_breadth")["review_status"] == "proposed"
-    assert store.get_outcome("out_pl_appeal_podlesna")["review_status"] == "proposed"
-    hfhr = store.get_outcome("out_pl_appeal_podlesna")["description"]
-    assert "HFHR reported" in hfhr
-    assert "utrzymał w mocy" in hfhr
-    assert "informuje Helsińska Fundacja Praw Człowieka" in hfhr
-    assert store.get_outcome("out_pl_appeal_podlesna")["review_status"] == "proposed"
+    appeal = store.get_outcome("out_pl_appeal_podlesna")
+    assert appeal["review_status"] == "approved"
+    assert appeal["evidence_label"] == "Single-source report"
+    assert appeal["evidence_basis"] == "organization_account"
+    assert "utrzymał w mocy" in store.get_source("pl_src_hfhr")["rights_note"]
+    assert "informuje Helsińska Fundacja Praw Człowieka" in store.get_source("pl_src_rp")["rights_note"]
+    assert store.receptions_for_argument("pl_arg_legality")[0]["review_status"] == "proposed"
     store.close()
     reopened = open_store(tmp_path / "approved.sqlite")
     again = apply_recorded_approvals(reopened)
@@ -1195,8 +1253,9 @@ def test_review_readiness_migration_keeps_links_and_does_not_relabel(tmp_path):
     assert store.evidence_links_for("outcome_event", "out_tam_sentence")[0]["id"] == "tam_link_ca_sentence"
     assert store.get_outcome("out_sentence")["event_type"] == "Sentence modification"
     appeal = store.get_outcome("out_pl_appeal_podlesna")
-    assert appeal["evidence_label"] == "Unverified"
-    assert "HFHR reported" in appeal["description"]
+    assert appeal["evidence_label"] == "Single-source report"
+    assert appeal["review_status"] == "proposed"
+    assert appeal["description"].startswith("HFHR reported")
     reception = store.receptions_for_argument("tam_arg_breadth")[0]
     assert "dismiss the appeal" not in reception["passage"]
     assert "Wilmshurst" in reception["observer_note"]
@@ -1217,6 +1276,234 @@ def test_review_readiness_migration_keeps_links_and_does_not_relabel(tmp_path):
     )
     assert reopened.get_outcome("out_tam_sentence")["event_type"] == "Sentence imposed"
     reopened.close()
+
+
+def test_appeal_preview_does_not_approve_and_explorer_counts_one_case(tmp_path):
+    import json
+
+    from advocacy_trace.seed import open_store
+    from advocacy_trace.views import appeal_outcome_preview, explorer_view
+
+    store = open_store(tmp_path / "appeal-preview.sqlite")
+    before = {
+        outcome_id: store.get_outcome(outcome_id)["review_status"]
+        for outcome_id in (
+            "out_pl_appeal_podlesna",
+            "out_pl_appeal_prus",
+            "out_pl_appeal_gzyra",
+        )
+    }
+    preview = appeal_outcome_preview(store)
+    assert preview["preview_only"] is True
+    assert preview["this_call_approved_nothing"] is True
+    assert before == {
+        "out_pl_appeal_podlesna": "approved",
+        "out_pl_appeal_prus": "approved",
+        "out_pl_appeal_gzyra": "approved",
+    }
+    for outcome_id in before:
+        event = store.get_outcome(outcome_id)
+        assert event["review_status"] == "approved"
+        assert event["evidence_label"] == "Single-source report"
+        assert event["evidence_basis"] == "organization_account"
+        assert event["description"] == (
+            "HFHR reported that the Regional Court in Płock upheld the three defendants' "
+            "acquittal on 12 January 2022."
+        )
+    assert store.get_argument("pl_arg_legality")["review_status"] == "approved"
+    assert store.get_argument("pl_arg_proportionality")["review_status"] == "approved"
+    assert store.get_argument("tam_arg_breadth")["review_status"] == "proposed"
+    for argument_id in ("pl_arg_legality", "pl_arg_proportionality"):
+        reception = store.receptions_for_argument(argument_id)[0]
+        assert reception["review_status"] == "proposed"
+        assert reception["status"] == "Decision not yet retrieved"
+        assert reception["evidence_basis"] == "response_not_established"
+    both = explorer_view(
+        store,
+        label=None,
+        country="Poland",
+        intervention_type=None,
+        date_from=None,
+        date_to=None,
+        review_status="approved",
+        include_synthetic=False,
+    )
+    assert both["argument_count"] == 2
+    assert both["unique_cases"] == 1
+    assert both["real_cases_with_approved_argument"] == 1
+    assert {row["argument"]["id"] for row in both["rows"]} == {
+        "pl_arg_legality",
+        "pl_arg_proportionality",
+    }
+    assert both["rows"][0]["outcome"]["status"] == "dated_events"
+    assert "Latest approved event in this dataset." in both["rows"][0]["outcome"]["statement"]
+    assert "timeline is current" in both["rows"][0]["outcome"]["statement"]
+    only_proportionality = explorer_view(
+        store,
+        label="Proportionality",
+        country="Poland",
+        intervention_type=None,
+        date_from=None,
+        date_to=None,
+        review_status="approved",
+        include_synthetic=False,
+    )
+    assert only_proportionality["argument_count"] == 1
+    assert only_proportionality["real_cases_with_approved_argument"] == 1
+    current = preview["current_public_explorer"]
+    assert current["argument_count"] == 2
+    assert current["unique_cases"] == 1
+    assert current["real_cases_with_approved_argument"] == 1
+    display = preview["if_approved_display"]
+    assert display["shared_decision_id"] == "pl_decision_appeal_2022-01-12"
+    assert display["appeal_outcome_rows"] == 3
+    assert display["appeal_decisions"] == 1
+    assert display["case_counts"]["decisions"] == 3
+    assert display["case_counts"]["procedural_actions"] == 1
+    assert display["case_counts"]["outcome_rows"] == 12
+    assert {row["id"] for row in display["defendant_rows"]} == set(before)
+    assert {row["decision_id"] for row in display["defendant_rows"]} == {
+        "pl_decision_appeal_2022-01-12"
+    }
+    assert display["event_date"] == "2022-01-12"
+    assert display["hfhr_publication_date"] == "2022-01-13"
+    assert display["hfhr_source"]["url"] == (
+        "https://hfhr.pl/aktualnosci/tecza-nie-obraza-wyrok-uniewinnienie"
+    )
+    assert display["english_translation_label"] == "English translation"
+    assert "does not name" in display["identification"]
+    assert "II K 296/20" in display["identification"]
+    assert "not three decisions" in display["decision_count_note"]
+    assert display["amicus"]["role_in_case"] == "amicus"
+    assert display["amicus"]["brief_retrieved"] is False
+    assert display["evidence_basis"] == "organization_account"
+    assert "not a finding read from the judgment" in display["evidence_basis_caption"]
+    assert display["rp_pl"]["provenance"] == "derived_from_shared_original"
+    assert "not an independent confirmation" in display["rp_pl"]["role"]
+    assert "does not establish that the court accepted" in display["reception"]
+    for row in display["defendant_rows"]:
+        assert row["stored_review_status"] == "approved"
+        assert row["independent_support_count"] == 0
+        oko = next(item for item in row["sources"] if item["source_id"] == "pl_src_oko")
+        assert oko["support_scope"] == "identity_and_reported_result"
+        january_rp = next(item for item in row["sources"] if item["source_id"] == "pl_src_rp")
+        assert january_rp["provenance"] == "derived_from_shared_original"
+        assert row["proposed_public_claim"] == (
+            "HFHR reported that the Regional Court in Płock upheld the three defendants' "
+            "acquittal on 12 January 2022."
+        )
+        provenances = {item["provenance"] for item in row["sources"]}
+        assert "derived_from_shared_original" in provenances
+        assert "independent" in provenances
+    encoded = json.dumps(preview, ensure_ascii=False)
+    retained = store.get_source("pl_src_hfhr")["rights_note"]
+    for passage in display["polish_passage"]:
+        assert passage in retained
+        assert passage in encoded
+    assert "case_tam" not in encoded
+    assert "out_pl_acquit_podlesna" not in encoded
+    assert "II Ko 28/21" not in encoded
+    public_blob = json.dumps(store.public_export())
+    assert "amnesty.sk" not in public_blob
+    assert "kph.org.pl" not in public_blob
+    assert "art40078891" not in public_blob
+    assert "out_pl_sn_dismissal_podlesna" not in public_blob
+    assert "out_pl_sn_withdrawal_podlesna" not in public_blob
+    exported_outcomes = {item["id"] for item in store.public_export()["outcome_events"]}
+    assert exported_outcomes == set(before)
+    action = store.conn.execute(
+        """
+        SELECT reviewer, note, claim_text, claim_supported, is_simulated, created_at
+        FROM review_actions
+        WHERE action = 'approve' AND target_id = 'out_pl_appeal_podlesna'
+        """
+    ).fetchone()
+    assert action[0] == "Valentina Silva"
+    assert "AI-assisted" in action[1]
+    assert "did not personally inspect" in action[1]
+    assert "did not directly retrieve the HFHR page" in action[1]
+    assert action[2] == (
+        "HFHR reported that the Regional Court in Płock upheld the three defendants' "
+        "acquittal on 12 January 2022."
+    )
+    assert action[3] == 1
+    assert action[4] == 0
+    assert action[5] == "2026-10-10T00:48:39+00:00"
+    store.add_outcome_event(
+        case_id="case_poland",
+        participant_id="pl_podlesna",
+        event_type="Appeal decided",
+        description="A placeholder that has not been reviewed.",
+        evidence_label="Unverified",
+        decision_id="not_the_shared_decision",
+        id="out_unverified_gate",
+    )
+    with pytest.raises(ValidationError, match="unverified outcome cannot be approved"):
+        store.review(
+            "outcome_event",
+            "out_unverified_gate",
+            "approve",
+            reviewer="ada",
+            claim_supported=True,
+        )
+    assert store.get_outcome("out_pl_appeal_podlesna")["review_status"] == "approved"
+    store.close()
+
+
+def test_approved_only_sample_export_matches_the_public_contract(tmp_path):
+    import json
+    from pathlib import Path
+
+    from advocacy_trace.seed import open_store
+
+    sample_path = Path(__file__).resolve().parents[1] / "docs" / "public-export.sample.json"
+    sample = json.loads(sample_path.read_text(encoding="utf-8"))
+    store = open_store(tmp_path / "contract.sqlite")
+    live = store.public_export()
+    for case in live["cases"]:
+        case["created_at"] = ""
+    for case in sample["cases"]:
+        case["created_at"] = ""
+    assert live["export_generated_at"]
+    assert live["export_generated_at"] != "2026-10-10T00:48:39+00:00"
+    assert sample["export_generated_at"]
+    assert sample["export_generated_at"] != sample["outcome_events"][0]["event_date"]
+    live["export_generated_at"] = ""
+    sample["export_generated_at"] = ""
+    assert live == sample
+    assert sample["real_case_count"] == 1
+    assert sample["approved_argument_count"] == 2
+    assert {item["id"] for item in sample["outcome_events"]} == {
+        "out_pl_appeal_podlesna",
+        "out_pl_appeal_prus",
+        "out_pl_appeal_gzyra",
+    }
+    assert {item["decision_id"] for item in sample["outcome_events"]} == {
+        "pl_decision_appeal_2022-01-12"
+    }
+    assert sample["schema_version"] == "1"
+    assert sample["timeline_caption"] == "Latest approved event in this dataset."
+    assert "approval time" in sample["time_fields"]["export_generated_at"]
+    assert sample["receptions"] == []
+    encoded_sample = json.dumps(sample)
+    assert "amnesty.sk" not in encoded_sample
+    assert "kph.org.pl" not in encoded_sample
+    assert "art40078891" not in encoded_sample
+    for event in sample["outcome_events"]:
+        assert event["evidence_basis"] == "organization_account"
+        assert "appeal judgment itself was not retrieved" in event["public_limitation"]
+        assert event["source_links"]
+        assert any(link.get("url") for link in event["source_links"])
+        scopes = {link["support_scope"] for link in event["source_links"]}
+        assert "identity_and_reported_result" in scopes
+        assert "derived_from_shared_original" in {link["provenance"] for link in event["source_links"]}
+    assert sample["includes_full_documents"] is False
+    assert {item["id"] for item in sample["arguments"]} == {
+        "pl_arg_legality",
+        "pl_arg_proportionality",
+    }
+    assert {item["id"] for item in sample["cases"]} == {"case_poland"}
+    store.close()
 
 
 def test_public_preview_keeps_uncertainty_and_hides_private_material(store):
@@ -1274,7 +1561,7 @@ def test_public_preview_keeps_uncertainty_and_hides_private_material(store):
     encoded = json.dumps(preview)
     assert "The copy's authenticity has not been established." in encoded
     assert "not a finding that the court ignored the argument" in encoded
-    assert "no other development occurred" in encoded
+    assert "Latest approved event in this dataset." in encoded
     assert "PROPOSED SIBLING OUTCOME" not in encoded
     assert "PRIVATE REVIEWER NOTE" not in encoded
     assert "PRIVATE UNRESOLVED" not in encoded
