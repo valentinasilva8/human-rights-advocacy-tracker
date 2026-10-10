@@ -470,8 +470,26 @@ def _write_links(links: list[dict] | None, fallback: str | None = None) -> None:
     if links:
         for link in links:
             st.markdown(f"[{link['label']}]({link['url']})")
+            title = str(link.get("title") or "").strip()
+            if title and title not in link["label"]:
+                st.write(f"Source title: {title}")
+            when = link.get("publication_when") or ""
+            if when and when != "date unknown":
+                st.write(
+                    f"Source publication date: {when}. "
+                    "This is when the source was published. It is not the event date."
+                )
             if link.get("note"):
                 st.write(link["note"])
+            for passage in link.get("passages") or []:
+                kind = passage.get("kind")
+                if kind == "translation":
+                    st.caption("English translation of the source passage")
+                elif kind == "citation":
+                    st.caption("Source passage")
+                else:
+                    st.caption("Source quotation")
+                st.write(passage.get("text") or "")
         return
     if fallback is None and not links:
         return

@@ -9,16 +9,18 @@ and the evidence fixtures. Public rendering lives here so the two sides do
 not both edit app.py.
 
 Fields still absent from the public case projection, left for the evidence
-agent. The argument-only preview does not wait on them:
+agent. The screens do not wait on them:
 
 - Follow-up search coverage is stored on research attempts, and the public
   case projection omits those attempts. Public screens say the coverage is
   not in the public record.
 - No public field states implementation status. A missing update is not
   shown as failed implementation.
-- An approved outcome does not carry a source URL on the public case
-  projection. The direct link is shown only when an argument source already
-  includes one. Outcome source links are not invented.
+
+Approved outcome links, publication dates, and support scope come from
+public_export source_links. A source publication date is not an event date.
+Source passages are the quotations and translations stored on an approved
+source. Review-process sentences are not shown.
 """
 
 from __future__ import annotations
@@ -81,6 +83,23 @@ LATEST_IN_DATASET = (
     "Latest approved event in this dataset. "
     "This is not a claim that it is the latest development in the case."
 )
+_SCOPE_NOTE = {
+    "identity": "Support scope is identity only. This link does not corroborate the whole claim.",
+    "reported_result": (
+        "Support scope is the reported result only. This link does not corroborate the whole claim."
+    ),
+    "identity_and_reported_result": (
+        "Support scope is identity and the reported result. "
+        "This link does not corroborate the whole claim."
+    ),
+}
+_PRIVATE_PASSAGE = re.compile(
+    r"approval|did not retrieve|not redistributed|retained account|earlier source review|"
+    r"V KK 430/22|Supreme Court|personally inspect|AI-assisted|Amnesty|\bKPH\b|"
+    r"28 March 2024|2024-03-28|unresolved_questions|observer_note",
+    re.IGNORECASE,
+)
+_QUOTATION_RE = re.compile(r"(?:Quotation(?: retained)?):\s*[“\"](.+?)[”\"]")
 CHRONOLOGY_INCOMPLETE = (
     "The public chronology is incomplete. "
     "It shows approved records only. "
@@ -191,7 +210,8 @@ def public_explorer(
         date_from = None
         date_to = None
     export = store.public_export(include_synthetic=include_synthetic)
-    outcome_links = _outcome_links(store, export)
+    outcome_links = _outcome_links(export)
+    dataset_note = _dataset_note(export)
     found = explorer_view(
         store,
         label=None,
@@ -204,7 +224,7 @@ def public_explorer(
     )
     cases = _public_cases(store, {row["case"]["id"] for row in found["rows"]})
     prepared = [
-        _prepare_row(row, cases.get(row["case"]["id"]), outcome_links)
+        _prepare_row(row, cases.get(row["case"]["id"]), outcome_links, dataset_note)
         for row in found["rows"]
     ]
     matched, date_unknown, unrecorded, outside = _partition(
@@ -239,7 +259,11 @@ def public_explorer(
         "unrecorded_rows": unrecorded,
         "outside_selection_count": outside,
         "counts": counts,
+        "dataset_note": dataset_note,
         "export_counts": {
+            "schema_version": export.get("schema_version"),
+            "export_generated_at": export.get("export_generated_at"),
+            "timeline_caption": export.get("timeline_caption"),
             "real_case_count": export.get("real_case_count", 0),
             "approved_argument_count": export.get("approved_argument_count", 0),
             "outcome_event_ids": [item["id"] for item in export.get("outcome_events") or []],
@@ -271,13 +295,14 @@ def public_case(
     interventions = list(view.get("interventions") or [])
     reference = _reference(interventions, reference_intervention_id)
     export = store.public_export(include_synthetic=bool(case.get("is_synthetic")))
+    dataset_note = _dataset_note(export)
     items = _chronology_items(
         view,
         reference,
-        _outcome_links(store, export),
+        _outcome_links(export),
         case.get("title") or "",
     )
-    coverage = _coverage(case, items)
+    coverage = _coverage(case, items, dataset_note)
     receptions = _case_receptions(view)
     return {
         "audience": "public",
@@ -370,7 +395,12 @@ def _public_cases(store: EvidenceStore, case_ids: set[str]) -> dict[str, dict]:
     return found
 
 
-def _prepare_row(row: dict, case_payload: dict | None, outcome_links: dict[str, list[dict]] | None = None) -> dict:
+def _prepare_row(
+    row: dict,
+    case_payload: dict | None,
+    outcome_links: dict[str, list[dict]] | None = None,
+    dataset_note: str = LATEST_IN_DATASET,
+) -> dict:
     argument = _pick(row["argument"], _ARGUMENT_KEYS)
     case = row["case"]
     interventions = {
@@ -401,7 +431,7 @@ def _prepare_row(row: dict, case_payload: dict | None, outcome_links: dict[str, 
         "intervention": _intervention_public(intervention) if intervention else None,
         "source": source,
         "reception": _reception_summary(receptions),
-        "developments": _development_summary(events),
+        "developments": _development_summary(events, dataset_note),
         "public_limitation": argument.get("public_limitation") or "",
         "evidence_basis": argument.get("evidence_basis") or "not_yet_established",
         "evidence_basis_caption": _basis(argument.get("evidence_basis")),
@@ -654,7 +684,7 @@ def _reference(interventions: list[dict], requested: str | None) -> dict | None:
     return sorted(dated, key=lambda item: (item["intervention_date"], item["id"]))[0]
 
 
-def _coverage(case: dict, items: list[dict]) -> dict:
+def _coverage(case: dict, items: list[dict], dataset_note: str = LATEST_IN_DATASET) -> dict:
     review = _format_date(case.get("last_verified_on"), case.get("last_verified_on_precision"))
     candidates = []
     for item in items:
@@ -685,7 +715,7 @@ def _coverage(case: dict, items: list[dict]) -> dict:
         ),
         "latest_documented_event": latest["when"] if latest else "not recorded",
         "latest_documented_event_label": latest["label"] if latest else "",
-        "latest_documented_event_note": LATEST_IN_DATASET if latest else note,
+        "latest_documented_event_note": dataset_note if latest else note,
         "follow_up_search_coverage": FOLLOW_UP_COVERAGE,
     }
 
@@ -799,7 +829,11 @@ def _developments(rows: list[dict]) -> list[dict]:
                     "links": event.get("links") or [],
                     "limitation": event.get("public_limitation") or "",
                     "evidence_basis_caption": _basis(event.get("evidence_basis")),
-                    "dataset_note": LATEST_IN_DATASET,
+                    "dataset_note": (
+                        row["developments"]["latest_note"]
+                        if row["developments"].get("latest")
+                        else LATEST_IN_DATASET
+                    ),
                     "reception_note": (
                         "This development is not a reception finding. "
                         "Court reception of the report is not established. "
@@ -844,7 +878,7 @@ def _suggestions(unknown: list[dict], gaps: list[str]) -> list[str]:
     return suggestions
 
 
-def _development_summary(events: list[dict]) -> dict:
+def _development_summary(events: list[dict], dataset_note: str = LATEST_IN_DATASET) -> dict:
     dated = []
     undated = []
     for event in events:
@@ -868,7 +902,7 @@ def _development_summary(events: list[dict]) -> dict:
         "events": events,
         "latest": latest["event"] if latest else None,
         "latest_when": latest["when"] if latest else "",
-        "latest_note": LATEST_IN_DATASET if latest else note,
+        "latest_note": dataset_note if latest else note,
         "undated": undated,
         "statement": (
             "Dated approved events in this dataset are listed with the precision that was stored. "
@@ -1077,30 +1111,109 @@ def _defendants_note(event: dict, case_title: str) -> str:
     )
 
 
-def _outcome_links(store: EvidenceStore, export: dict) -> dict[str, list[dict]]:
-    """Source links for outcome ids that the approved export already includes."""
+def _dataset_note(export: dict) -> str:
+    caption = str(export.get("timeline_caption") or "").strip().rstrip(".")
+    if not caption:
+        caption = "Latest approved event in this dataset"
+    return (
+        f"{caption}. "
+        "This is not a claim that it is the latest development in the case."
+    )
+
+
+def _outcome_links(export: dict) -> dict[str, list[dict]]:
+    """Source links nested on approved outcomes. Proposed rows are not in the export."""
 
     sources = {item["id"]: item for item in export.get("sources") or []}
-    allowed = {item["id"] for item in export.get("outcome_events") or []}
     found: dict[str, list[dict]] = {}
-    for outcome_id in allowed:
-        links = []
-        seen: set[str] = set()
-        for link in store.evidence_links_for("outcome_event", outcome_id):
-            source = sources.get(link["source_id"])
-            url = str((source or {}).get("url") or "").strip()
-            if not url or url in seen:
-                continue
-            seen.add(url)
-            links.append(
-                {
-                    "url": url,
-                    "label": _outcome_source_label(source, link),
-                    "note": _provenance_note(link.get("provenance")),
-                }
-            )
-        found[outcome_id] = links
+    for outcome in export.get("outcome_events") or []:
+        found[outcome["id"]] = _public_outcome_links(outcome.get("source_links") or [], sources)
     return found
+
+
+def _public_outcome_links(raw_links: list[dict], sources: dict[str, dict]) -> list[dict]:
+    links = []
+    seen: set[str] = set()
+    for link in raw_links:
+        source = sources.get(link.get("source_id") or "") or {}
+        url = str(link.get("url") or source.get("url") or "").strip()
+        if not url or url in seen:
+            continue
+        seen.add(url)
+        provenance = link.get("provenance")
+        scope = link.get("support_scope") or "whole_claim"
+        publication = link.get("publication_date") or source.get("publication_date")
+        links.append(
+            {
+                "url": url,
+                "label": _outcome_source_label(source, link),
+                "title": link.get("title") or source.get("title") or "",
+                "note": _provenance_note(provenance, scope),
+                "publication_date": publication,
+                "publication_when": _format_date(
+                    publication,
+                    source.get("publication_date_precision") or _stored_precision(publication),
+                ),
+                "provenance": provenance,
+                "support_scope": scope,
+                "source_id": link.get("source_id"),
+                "passages": _source_passages(str(source.get("rights_note") or "")),
+            }
+        )
+    return links
+
+
+def _source_passages(note: str) -> list[dict]:
+    """Quotations and translations. Review-process sentences stay out."""
+
+    if not note.strip():
+        return []
+    passages: list[dict] = []
+    for match in _QUOTATION_RE.finditer(note):
+        text = match.group(1).strip()
+        if text and not _PRIVATE_PASSAGE.search(text):
+            passages.append({"kind": "quotation", "text": text})
+    translation = re.search(r"English translation:\s*(.+)$", note)
+    if translation:
+        kept = _public_sentences(translation.group(1))
+        if kept:
+            passages.append({"kind": "translation", "text": " ".join(kept)})
+    if passages:
+        return passages
+    kept = []
+    for sentence in _public_sentences(note):
+        lowered = sentence.lower()
+        if lowered.startswith("report page:") or lowered.startswith("pdf:"):
+            continue
+        if "does not store the pdf" in lowered or "short excerpts only" in lowered:
+            continue
+        if "these passages were read from" in lowered:
+            continue
+        kept.append(sentence)
+    if kept:
+        return [{"kind": "citation", "text": " ".join(kept)}]
+    return []
+
+
+def _public_sentences(text: str) -> list[str]:
+    kept = []
+    for sentence in re.split(r"(?<=[.!?])\s+", text.strip()):
+        sentence = sentence.strip()
+        if sentence and not _PRIVATE_PASSAGE.search(sentence):
+            kept.append(sentence)
+    return kept
+
+
+def _stored_precision(value: str | None) -> str | None:
+    if not value:
+        return None
+    if len(value) == 10:
+        return "day"
+    if len(value) == 7:
+        return "month"
+    if len(value) == 4:
+        return "year"
+    return "unknown"
 
 
 def _links_for_rows(outcome_links: dict[str, list[dict]] | None, row_ids: list[str]) -> list[dict]:
@@ -1124,12 +1237,23 @@ def _outcome_source_label(source: dict, link: dict) -> str:
     return author
 
 
-def _provenance_note(provenance: str | None) -> str:
+def _provenance_note(provenance: str | None, support_scope: str | None = None) -> str:
+    parts = []
     if provenance == "derived_from_shared_original":
-        return "Draws on the same account. Not an independent origin."
-    if provenance == "independent":
-        return "Separate report in this export. Not the judgment."
-    return ""
+        parts.append("Draws on the same account. Not an independent origin.")
+    elif provenance == "independent":
+        parts.append("Separate report in this export. Not the judgment.")
+    elif provenance == "unknown":
+        parts.append("Provenance is not established as an independent origin.")
+    scope = support_scope or ""
+    if scope == "whole_claim" and provenance == "unknown":
+        parts.append(
+            "This link is part of the organization account. "
+            "It is not an independent corroboration of its own sentence."
+        )
+    elif scope in _SCOPE_NOTE:
+        parts.append(_SCOPE_NOTE[scope])
+    return " ".join(parts)
 
 
 def _pick(row: dict, keys: tuple[str, ...]) -> dict:
@@ -1140,5 +1264,4 @@ def _contract_gaps() -> list[str]:
     return [
         FOLLOW_UP_COVERAGE,
         IMPLEMENTATION_STATUS,
-        "Approved outcomes do not include a direct source link on the public case projection.",
     ]

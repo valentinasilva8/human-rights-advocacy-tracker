@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import ast
 import inspect
+import json
 from pathlib import Path
 
 import advocacy_trace.demo_screens as demo_screens
@@ -227,6 +228,10 @@ def test_recorded_poland_approvals_are_the_only_real_public_rows(tmp_path):
     assert explorer["counts"]["demonstration_cases"] == 0
     assert explorer["counts"]["matched_arguments"] == 2
     assert explorer["counts"]["unknown_outcome_cases"] == 0
+    assert explorer["export_counts"]["schema_version"] == "1"
+    assert explorer["export_counts"]["timeline_caption"] == "Latest approved event in this dataset."
+    generated = explorer["export_counts"]["export_generated_at"]
+    assert generated and "2022-01-12" not in generated
     assert explorer["export_counts"]["real_case_count"] == 1
     assert explorer["export_counts"]["approved_argument_count"] == 2
     assert explorer["export_counts"]["reception_count"] == 0
@@ -280,10 +285,54 @@ def test_recorded_poland_approvals_are_the_only_real_public_rows(tmp_path):
     assert "does not establish acceptance or rejection" in appeal["detail"]["limitation"]
     labels = {link["label"] for link in appeal["detail"]["links"]}
     urls = {link["url"] for link in appeal["detail"]["links"]}
+    by_url = {link["url"]: link for link in appeal["detail"]["links"]}
     assert "Helsinki Foundation for Human Rights (organization account)" in labels
-    assert "https://hfhr.pl/aktualnosci/tecza-nie-obraza-wyrok-uniewinnienie" in urls
-    assert "https://www.rp.pl/prawo-karne/art19284511-zapadl-prawomocny-wyrok-ws-matki-bozej-z-teczowa-aureola" in urls
-    assert "https://oko.press/tecza-nie-obraza-prawomocny-wyrok-sadu-apelacyjnego-w-plocku" in urls
+    hfhr_url = "https://hfhr.pl/aktualnosci/tecza-nie-obraza-wyrok-uniewinnienie"
+    rp_url = "https://www.rp.pl/prawo-karne/art19284511-zapadl-prawomocny-wyrok-ws-matki-bozej-z-teczowa-aureola"
+    oko_url = "https://oko.press/tecza-nie-obraza-prawomocny-wyrok-sadu-apelacyjnego-w-plocku"
+    article_url = "https://www.article19.org/wp-content/uploads/2024/03/Amicus_Poland-Rainbow-Holy-Mary_EN.pdf"
+    assert hfhr_url in urls
+    assert rp_url in urls
+    assert oko_url in urls
+    assert article_url in urls
+    hfhr = by_url[hfhr_url]
+    assert hfhr["support_scope"] == "whole_claim"
+    assert hfhr["publication_when"] == "2022-01-13 (day)"
+    assert any(
+        "On 12 January 2022 the Regional Court in Płock upheld the acquitting judgment" in passage["text"]
+        for passage in hfhr["passages"]
+        if passage["kind"] == "translation"
+    )
+    assert any(passage["kind"] == "quotation" for passage in hfhr["passages"])
+    oko = by_url[oko_url]
+    assert oko["support_scope"] == "identity_and_reported_result"
+    assert oko["provenance"] == "independent"
+    assert oko["publication_when"] == "2022-01-12 (day)"
+    assert "does not corroborate the whole claim" in oko["note"]
+    rp = by_url[rp_url]
+    assert rp["support_scope"] == "whole_claim"
+    assert rp["provenance"] == "derived_from_shared_original"
+    assert "Not an independent origin" in rp["note"]
+    article = by_url[article_url]
+    assert article["support_scope"] == "identity"
+    assert article["publication_when"] == "2024-03 (month)"
+    article_text = " ".join(passage["text"] for passage in article["passages"])
+    assert "V Ka 418/21" in article_text
+    assert all("2024" not in item["when"] for item in case["items"])
+    january = public_explorer(store, include_synthetic=False, date_from="2022-01-01", date_to="2022-01-31")
+    assert january["counts"]["matched_arguments"] == 0
+    november = public_explorer(store, include_synthetic=False, date_from="2021-11-01", date_to="2021-11-30")
+    assert {row["argument"]["id"] for row in november["matched_rows"]} == {
+        "pl_arg_legality",
+        "pl_arg_proportionality",
+    }
+    proportionality = public_explorer(store, include_synthetic=False, label="Proportionality")
+    assert {row["argument"]["id"] for row in proportionality["matched_rows"]} == {"pl_arg_proportionality"}
+    assert proportionality["counts"]["real_cases"] == 1
+    sample = json.loads((Path(__file__).resolve().parents[1] / "docs" / "public-export.sample.json").read_text())
+    assert sample["schema_version"] == "1"
+    assert sample["export_generated_at"] == "2026-10-10T01:06:38+00:00"
+    assert sample["timeline_caption"] == "Latest approved event in this dataset."
     assert case["coverage"]["latest_documented_event"] == "2022-01-12 (day)"
     assert case["coverage"]["latest_documented_event_note"] == (
         "Latest approved event in this dataset. "
@@ -307,20 +356,27 @@ def test_recorded_poland_approvals_are_the_only_real_public_rows(tmp_path):
     for marker in (
         "Wilmshurst",
         "Private comparison",
-        "Tęcza nie obraża",
         "orzeczenia.ms.gov.pl",
-        "Helsińska Fundacja",
         "tam_arg_breadth",
         "TVN24",
         "PRIVATE-SEARCH-NOTE",
         "Amnesty",
         "28 March 2024",
+        "2024-03-28",
         "Historical analysis",
         "did not personally inspect",
+        "did not retrieve",
+        "V KK 430/22",
+        "Supreme Court",
+        "not part of the January 2022 approval",
         "pl_search_amnesty",
         "out_pl_acquit",
+        "KPH",
+        "rights_note",
+        "observer_note",
+        "unresolved_questions",
     ):
-        assert marker not in blob
+        assert marker not in blob, marker
 
 
 def test_public_entry_cannot_reach_internal_review():
@@ -376,9 +432,16 @@ def test_public_app_screens_exclude_internal_controls(tmp_path, monkeypatch):
     assert "2021-11 (month)" in text
     assert "trial-observation-report-poland-lgbt.pdf" in text
     assert "cfj.org/reports/poland-vs-elzbieta-podlesna" in text
+    assert "On 12 January 2022 the Regional Court in Płock upheld the acquitting judgment" in text
+    assert "Source publication date: 2022-01-13 (day)" in text
+    assert "It is not the event date." in text
+    assert "Support scope is identity and the reported result." in text
+    assert "V Ka 418/21" in text
     assert "Wilmshurst" not in text
     assert "Private comparison" not in text
-    assert "Tęcza nie obraża" not in text
+    assert "did not retrieve" not in text
+    assert "V KK 430/22" not in text
+    assert "Amnesty" not in text
     assert "Approve" not in text
     assert [radio.options for radio in app.sidebar.radio if radio.label == "Screen"] == [
         ["Argument Explorer", "Case Evidence", "Advocacy Learning Brief"]
@@ -397,9 +460,31 @@ def test_public_app_screens_exclude_internal_controls(tmp_path, monkeypatch):
     assert "not a claim that it is the latest development" in text
     assert "II K 296/20 is the trial case number" in text
     assert "No approved public record in this band." in text
+    appeal = next(box for box in app.selectbox if box.label == "Chronology item")
+    appeal.set_value("pl_decision_appeal_2022-01-12").run()
+    text = _app_text(app)
+    assert "Source quotation" in text
+    assert "English translation of the source passage" in text
+    assert "judgment itself was not retrieved" in text
+    assert "https://hfhr.pl/aktualnosci/tecza-nie-obraza-wyrok-uniewinnienie" in text
+    assert "Source publication date: 2024-03 (month)" in text
+    assert "It is not the event date." in text
+    assert "V KK 430/22" not in text
+    assert "Supreme Court" not in text
+    assert "did not retrieve" not in text
+    assert "Amnesty" not in text
     assert "Wilmshurst" not in text
-    assert "Tęcza nie obraża" not in text
     assert not any(button.label == "Approve" for button in app.button)
+
+    app.sidebar.radio[1].set_value("Argument Explorer").run()
+    argument = next(box for box in app.sidebar.selectbox if box.label == "Argument")
+    argument.set_value("Proportionality").run()
+    text = _app_text(app)
+    assert "Matched approved arguments: 1" in text
+    assert "Real cases with an approved argument in this selection: 1" in text
+    assert "necessity and proportionality requirements" in text
+    assert "Article 196 is not precise" not in text
+    argument.set_value("Any").run()
 
     app.sidebar.radio[1].set_value("Advocacy Learning Brief").run()
     text = _app_text(app)
