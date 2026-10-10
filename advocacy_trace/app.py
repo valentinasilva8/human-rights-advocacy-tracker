@@ -10,7 +10,7 @@ from advocacy_trace.constants import ARGUMENT_LABELS, INTERVENTION_TYPES
 from advocacy_trace.errors import MissingCredentialError, UnreadablePdfError, ValidationError
 from advocacy_trace.importing import read_pdf_excerpt, require_search_provider
 from advocacy_trace.seed import open_store
-from advocacy_trace.views import case_view, explorer_view
+from advocacy_trace.views import case_view, evidence_basis_caption, explorer_view
 
 HEADLINE_LABELS = [label for label in ARGUMENT_LABELS if label != "unmapped—review required"]
 
@@ -114,6 +114,7 @@ def _explorer(store) -> None:
             )
             if disclaimer:
                 st.caption(disclaimer)
+            _show_basis(argument)
             st.write(argument["reasons"])
             if argument["legal_authorities"]:
                 st.caption(argument["legal_authorities"])
@@ -123,6 +124,7 @@ def _explorer(store) -> None:
             for reception in row["receptions"]:
                 account = reception.get("account_type") or "not_yet_established"
                 st.text(f"{reception['status']} · {account}")
+                _show_basis(reception)
                 if reception["is_recital"]:
                     st.warning("This passage recites the argument. Recital is not acceptance.")
                 if reception["passage"]:
@@ -132,6 +134,7 @@ def _explorer(store) -> None:
             for event in row["outcome"]["events"]:
                 when = event["event_date"] or "date unknown"
                 st.text(f"{event['event_type']} · {when} · {event['evidence_label']}")
+                _show_basis(event)
                 st.text(event["description"])
 
 
@@ -208,6 +211,7 @@ def _case(store) -> None:
             f"{argument['location_ref'] or 'location missing'} · "
             f"{', '.join(argument['labels']) or 'no label'} · {argument['review_status']}"
         )
+        _show_basis(argument)
         if item["source"]:
             source = item["source"]
             st.caption(
@@ -219,6 +223,7 @@ def _case(store) -> None:
             st.text(f"Reception: {prefix}{reception['status']} · {account}")
             if reception["passage"]:
                 st.text(reception["passage"])
+            _show_basis(reception)
     st.subheader("Outcome events")
     st.text(view["outcome_summary"]["statement"])
     if not view["outcomes"]:
@@ -228,6 +233,7 @@ def _case(store) -> None:
             f"{event['event_type']} · event {_dated(event['event_date'], event['event_date_precision'])} · "
             f"{event['evidence_label']} · {event['review_status']}"
         )
+        _show_basis(event)
         st.write(event["description"])
         if event["supersedes_event_id"]:
             st.caption(
@@ -383,6 +389,15 @@ def _act(
         st.error(str(exc))
         return
     st.rerun()
+
+
+def _show_basis(record: dict) -> None:
+    caption = evidence_basis_caption(record.get("evidence_basis"))
+    if caption:
+        st.caption(caption)
+    limitation = (record.get("public_limitation") or "").strip()
+    if limitation:
+        st.warning(limitation)
 
 
 def _disclaimer_line(argument: dict) -> str:

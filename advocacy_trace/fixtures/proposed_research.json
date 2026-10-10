@@ -19,6 +19,11 @@
       "id": "tam_tak_chi",
       "name": "Tam Tak-chi",
       "description": "Defendant in HKSAR v. Tam Tak-chi, District Court case numbers DCCC 927, 928 and 930 of 2020."
+    },
+    {
+      "id": "pl_hfhr",
+      "name": "Helsinki Foundation for Human Rights",
+      "description": "HFHR reported that it filed an amicus opinion in the Płock Article 196 appeal. The brief was not retrieved. This records reported participation, not the text of a submission."
     }
   ],
   "cases": [
@@ -37,7 +42,7 @@
       "opened_on_precision": "unknown",
       "last_verified_on": "2026-10-09",
       "last_verified_on_precision": "day",
-      "unresolved_questions": "Search date 9 October 2026, not an approval. The appeal judgment was not retrieved. The report cover is November 2021 and says the appeal hearing is scheduled for November 10, without repeating the year. Whether that hearing was held or adjourned was not established. rp.pl attributes its account of the court's reasons to the Helsinki Foundation for Human Rights, so those two pages are not independent origins. A follow-up fetch of the TVN24 URL timed out. HFHR's amicus was not retrieved. The March 2021 acquittal predates the report and is historical context."
+      "unresolved_questions": "Search date 9 October 2026, not an approval. The appeal judgment was not retrieved. A search of orzeczenia.ms.gov.pl did not return the Article 196 appeal. Nearby Płock files II Ko 28/21 and II Ko 37/21 are different cases. The report cover is November 2021 and says the appeal hearing is scheduled for November 10, without repeating the year. rp.pl attributes its account of the court's reasons to HFHR, so those two pages are not independent origins. A follow-up fetch of the TVN24 URL timed out. HFHR reported filing an amicus; the brief was not retrieved. The March 2021 acquittal predates the report."
     },
     {
       "id": "case_tam",
@@ -54,14 +59,35 @@
       "opened_on_precision": "unknown",
       "last_verified_on": "2026-10-09",
       "last_verified_on_precision": "day",
-      "unresolved_questions": "Search date 9 October 2026, not an approval. The conviction recited as 2 March 2022 and the sentence of 20 April 2022 predate the May 2022 report. That part is historical analysis. Court of Appeal and Court of Final Appeal texts were read from third-party copies. A text search found no Wilmshurst, TrialWatch, or Clooney. That does not establish that the courts omitted the report's substance. The National Security Law case against 47 people is a different proceeding. An RTHK story URL returned 404."
+      "unresolved_questions": "Search date 9 October 2026, not an approval. The conviction recited as 2 March 2022 and the sentence of 20 April 2022 predate the May 2022 report. Court of Appeal and Court of Final Appeal texts were read from third-party copies. A legalref search did not retrieve CACC 62/2022. An official press summary of [2022] HKDC 343 was opened; the page says it is not part of the judgment, and the full Chinese reasons were not opened. A text search of the appeal copies found no Wilmshurst, TrialWatch, or Clooney. That does not establish that the courts omitted the report's substance. The National Security Law case against 47 people is a different proceeding. An RTHK story URL returned 404."
     }
   ],
   "links": [
-    {"case_id": "case_poland", "participant_id": "pl_podlesna", "role_in_case": "defendant"},
-    {"case_id": "case_poland", "participant_id": "pl_prus", "role_in_case": "defendant"},
-    {"case_id": "case_poland", "participant_id": "pl_gzyra", "role_in_case": "defendant"},
-    {"case_id": "case_tam", "participant_id": "tam_tak_chi", "role_in_case": "defendant"}
+    {
+      "case_id": "case_poland",
+      "participant_id": "pl_podlesna",
+      "role_in_case": "defendant"
+    },
+    {
+      "case_id": "case_poland",
+      "participant_id": "pl_prus",
+      "role_in_case": "defendant"
+    },
+    {
+      "case_id": "case_poland",
+      "participant_id": "pl_gzyra",
+      "role_in_case": "defendant"
+    },
+    {
+      "case_id": "case_tam",
+      "participant_id": "tam_tak_chi",
+      "role_in_case": "defendant"
+    },
+    {
+      "case_id": "case_poland",
+      "participant_id": "pl_hfhr",
+      "role_in_case": "amicus"
+    }
   ],
   "sources": [
     {
@@ -140,6 +166,19 @@
       "retrieval_date_precision": "day",
       "rights_note": "Text read from a BabelCite copy. Official host not confirmed in this search. Full text not stored here.",
       "is_synthetic": false
+    },
+    {
+      "id": "tam_src_sentence_summary",
+      "title": "Press Summary of Reasons for Sentence, HKSAR v TAM TAK CHI, [2022] HKDC 343",
+      "document_type": "announcement",
+      "author_actor": "District Court of the Hong Kong Special Administrative Region",
+      "url": "https://legalref.judiciary.hk/doc/judg/html/vetted/other/ch/2020/DCCC000927E_2020_files/DCCC000927E_2020ES.htm",
+      "publication_date": "2022-04-20",
+      "publication_date_precision": "day",
+      "retrieval_date": "2026-10-09",
+      "retrieval_date_precision": "day",
+      "rights_note": "Official judiciary press summary, opened 9 October 2026. The page states: “This summary is not part of the Judgment.” The full reasons were not opened. Short quotation only. Not redistributed.",
+      "is_synthetic": false
     }
   ],
   "interventions": [
@@ -181,14 +220,19 @@
       "reasons": "The executive summary says the offense turns on offending religious feelings, which it calls a subjective concept.",
       "principle": "A restriction on expression must be precise, clear, and accessible.",
       "application": "Article 196 criminalizes offending religious feelings by public insult, and the report says that standard gives charging discretion.",
-      "remedy_requested": "The report says the legislature should repeal Article 196, and that the prosecution's appeal should be rejected.",
-      "passage": "Article 196 is not precise, clear, or accessible. In criminalizing acts that offend the religious feelings of other persons through public insult, by nature a subjective concept, Article 196 is so broad as to afford the authorities unfettered discretion in its application.",
-      "location_ref": "Fairness report, printed p. 3",
+      "remedy_requested": "Not in the legality passage. Printed p. 4, PDF page 5: the legislature should repeal Article 196, and the prosecution's appeal scheduled for November 10 should be rejected. Printed p. 31, PDF page 32: on November 10 the appellate court in Plock should dismiss the prosecution's appeal against the acquittal.",
+      "passage": "Article 196 is not precise, clear, or accessible. In criminalizing acts that “offend the religious feelings of other persons” through public insult, by nature a subjective concept, Article 196 is so broad as to afford the authorities unfettered discretion in its application, making it ripe for abuse.",
+      "location_ref": "Fairness report, printed p. 3, PDF page 4",
       "legal_authorities": "Article 196 of the Polish Criminal Code; ICCPR; ECHR, as cited in the report.",
-      "labels": ["Legality", "Broadness"],
+      "labels": [
+        "Legality",
+        "Broadness"
+      ],
       "argument_date": "2021-11",
       "argument_date_precision": "month",
-      "is_synthetic": false
+      "is_synthetic": false,
+      "public_limitation": "This is what the named author wrote. It is not a court finding. No reviewed record establishes how a court received the argument. That absence is not a finding that the court ignored it.",
+      "evidence_basis": "author_document"
     },
     {
       "id": "pl_arg_proportionality",
@@ -204,14 +248,19 @@
       "reasons": "The executive summary reserves criminal speech prosecutions for exceptionally grave acts such as incitement to genocide and terrorism, and says the posters did not reach that gravity.",
       "principle": "Criminal prosecutions for speech offenses should be reserved for exceptionally grave acts.",
       "application": "Posting stickers and posters of a rainbow halo did not, in the report's account, reach that level of gravity.",
-      "remedy_requested": "The report says the prosecution's appeal, which it describes as scheduled for November 10, should be rejected.",
-      "passage": "The case against the accused failed to meet necessity and proportionality requirements. With respect to this requirement, international and regional bodies have made clear that criminal prosecutions for speech offenses should be reserved for exceptionally grave acts, such as incitement to genocide and terrorism. The accused's posting of stickers and posters featuring a rainbow halo clearly did not rise to this level of gravity.",
-      "location_ref": "Fairness report, printed p. 4",
+      "remedy_requested": "Not in the necessity paragraph. The same printed p. 4, PDF page 5, says the prosecution's appeal, scheduled for November 10, should be rejected, and that the legislature should repeal Article 196. Printed p. 31, PDF page 32, says the appellate court in Plock should dismiss the prosecution's appeal against the acquittal. The November 10 sentence does not restate the year.",
+      "passage": "Third, the case against the accused failed to meet necessity and proportionality requirements. With respect to this requirement, international and regional bodies have made clear that criminal prosecutions for speech offenses should be reserved for exceptionally grave acts, such as incitement to genocide and terrorism. The accused’s posting of stickers and posters featuring a rainbow halo clearly did not rise to this level of gravity.",
+      "location_ref": "Fairness report, printed p. 4, PDF page 5",
       "legal_authorities": "ICCPR and ECHR standards, as cited in the report.",
-      "labels": ["Necessity", "Proportionality"],
+      "labels": [
+        "Necessity",
+        "Proportionality"
+      ],
       "argument_date": "2021-11",
       "argument_date_precision": "month",
-      "is_synthetic": false
+      "is_synthetic": false,
+      "public_limitation": "This is what the named author wrote. It is not a court finding. No reviewed record establishes how a court received the argument. That absence is not a finding that the court ignored it.",
+      "evidence_basis": "author_document"
     },
     {
       "id": "tam_arg_breadth",
@@ -227,14 +276,19 @@
       "reasons": "The executive summary describes the colonial-era ordinance as overbroad and as criminalizing political speech.",
       "principle": "A criminal statute used against speech must not be vague or overbroad.",
       "application": "The report applies that criticism to the sedition charges for political statements, including slogans and criticism of the National Security Law and the police.",
-      "remedy_requested": "not stated",
-      "passage": "In the proceedings against him, Tam Tak-chi was denied his procedural rights to a fair trial, in particular the right to an impartial tribunal, and was charged and convicted under a vague and overbroad statute for making political statements.",
-      "location_ref": "Fairness report, printed p. 3",
+      "remedy_requested": "Not stated in this passage. The conclusion on printed p. 51, PDF page 52, grades the trial D and says the conviction and sentence infringed expression and assembly rights. It does not state a requested court order. That is a limit of the pages read, not a finding that no other page requests a remedy.",
+      "passage": "In the proceedings against him, Tam Tak-chi was denied his procedural rights to a fair trial—in particular, the right to an impartial tribunal—and was charged and convicted under a vague and overbroad statute for making political statements.",
+      "location_ref": "Fairness report, printed p. 3, PDF page 4",
       "legal_authorities": "Crimes Ordinance sedition provisions, as discussed in the report.",
-      "labels": ["Vagueness", "Broadness"],
+      "labels": [
+        "Vagueness",
+        "Broadness"
+      ],
       "argument_date": "2022-05",
       "argument_date_precision": "month",
-      "is_synthetic": false
+      "is_synthetic": false,
+      "public_limitation": "This is the author's criticism of the conviction under the sedition statute. The conviction predates the report. No passage was identified in the later appeal judgments that shows the court responding to this report. That is not a finding that the court ignored the argument. The appeal copies have not been authenticated against an official host.",
+      "evidence_basis": "author_document"
     },
     {
       "id": "tam_arg_sentence",
@@ -246,18 +300,22 @@
       "institutional_affiliation": "TrialWatch Expert Panel",
       "disclaimer_status": "stated",
       "disclaimer_text": "The legal assessment and conclusions expressed in this report are those of the author and not necessarily those of the Clooney Foundation for Justice or any of the author's affiliated organizations.",
-      "summary": "The report argues that the sentence of three years and four months plus a fine is a disproportionate sanction for the speech and the unauthorized assembly.",
+      "summary": "The report argues that the sentence of three years and four months plus a fine is a disproportionate sanction for political speech and organising an unauthorised assembly.",
       "reasons": "The executive summary states the sanction after describing the conviction and the 20 April 2022 sentence. The report is later than that sentence.",
       "principle": "Sanctions on expression and assembly must be proportionate.",
-      "application": "A sentence of three years and four months, plus a fine, for political speech and organizing an unauthorized assembly.",
-      "remedy_requested": "not stated",
+      "application": "A sentence of three years and four months, plus a fine, for political speech and organising an unauthorised assembly. The quotation does not divide that punishment between expression and assembly.",
+      "remedy_requested": "Not stated in this passage. The conclusion on printed p. 51, PDF page 52, says the conviction and sentence infringed expression and assembly rights and assigns a grade of D. It does not state a requested court order. That is a limit of the pages read.",
       "passage": "Further, the sentence in this case—three years and four months in prison in addition to a fine—for political speech and organising an unauthorised assembly—are disproportionate sanctions on the exercise of the rights to freedom of expression and assembly.",
-      "location_ref": "Fairness report, printed p. 2",
+      "location_ref": "Fairness report, printed p. 2, PDF page 3",
       "legal_authorities": "Rights to freedom of expression and assembly, as invoked in the report.",
-      "labels": ["Proportionality"],
+      "labels": [
+        "Proportionality"
+      ],
       "argument_date": "2022-05",
       "argument_date_precision": "month",
-      "is_synthetic": false
+      "is_synthetic": false,
+      "public_limitation": "The quoted punishment covers political speech and organising an unauthorised assembly together. It does not say that every part of the sentence was solely for expression, and this record does not allocate the sentence by count. A later passage in the report, and an official press summary, itemize counts. That itemization is not this claim. The sentence predates the report, so the report is not a response to a later court.",
+      "evidence_basis": "author_document"
     },
     {
       "id": "tam_arg_dykes",
@@ -267,18 +325,22 @@
       "attribution_role": "defense_counsel_described",
       "institutional_affiliation": "Counsel for Tam Tak-chi in the Court of Appeal",
       "disclaimer_status": "not_stated_in_source",
-      "summary": "Counsel argued that sections 9 and 10 of the Crimes Ordinance fail legal certainty and proportionality unless an intention to incite violence is read in.",
-      "reasons": "The Court of Appeal judgment summarizes counsel's constitutional argument. This is counsel's argument in the appeal, not Elizabeth Wilmshurst's May 2022 report.",
-      "principle": "Sections 9 and 10 must meet legal certainty and proportionality.",
-      "application": "Counsel asked the court to read an intention to incite violence into the sedition provisions.",
-      "remedy_requested": "Leave to appeal against conviction, as the judgment frames the application.",
-      "passage": "NSL, such an intention should be implicitly incorporated into sections 9 and 10; otherwise they will fall foul of the dual requirements of legal certainty and proportionality.",
-      "location_ref": "CACC 62/2022, discussion of counsel's argument before paragraph 132",
+      "summary": "Counsel argued that section 9 imposes a disproportionate restriction on freedom of expression because the prosecution does not need to prove an incitement to violence.",
+      "reasons": "Paragraph 139 summarizes this proportionality submission. Paragraphs 132 to 144 are the proportionality discussion. This is counsel's argument, not the May 2022 report.",
+      "principle": "A restriction on expression must be proportionate.",
+      "application": "Section 9, on counsel's submission, is a disproportionate restriction because the prosecution need not prove an incitement to violence.",
+      "remedy_requested": "Leave to appeal, cited separately at paragraph 3, not in paragraph 139: leave against conviction of the sedition charges only, and against the sentences for both the sedition charges and the public-order charges.",
+      "passage": "Mr Dykes argued that section 9 imposes a disproportionate restriction on the right to freedom of expression because the prosecution does not need to prove an incitement to violence.",
+      "location_ref": "CACC 62/2022, [2024] HKCA 231, paragraph 139",
       "legal_authorities": "Crimes Ordinance ss. 9 and 10; Bill of Rights.",
-      "labels": ["Legality", "Proportionality"],
+      "labels": [
+        "Proportionality"
+      ],
       "argument_date": "2023-07-04",
       "argument_date_precision": "day",
-      "is_synthetic": false
+      "is_synthetic": false,
+      "public_limitation": "This is counsel's proportionality limb only, as the judgment summarizes it at paragraph 139. Paragraph 145 holds that sections 9 and 10 satisfy the proportionality test. It does not establish rejection of the legal-certainty argument, which the same judgment addresses at paragraph 131, or the slogan argument from paragraph 146. Philip Dykes SC is counsel in the appeal, not the author of the May 2022 fairness report. The text was read from a Columbia-hosted copy. A check of the official legal reference site on 9 October 2026 did not retrieve CACC 62/2022, so authenticity is not established.",
+      "evidence_basis": "unauthenticated_judgment_copy"
     }
   ],
   "outcomes": [
@@ -293,7 +355,10 @@
       "event_date_precision": "day",
       "procedural_stage": "trial judgment",
       "finality": "later appeal reported; trial judgment text not retrieved",
-      "is_synthetic": false
+      "is_synthetic": false,
+      "decision_id": "pl_decision_trial_2021-03-02",
+      "public_limitation": "The fairness report cites a justification dated 2 March 2021 in II K 296/20. That judgment was not retrieved. This acquittal predates the report and is not a response to it. The three defendant rows share one trial decision.",
+      "evidence_basis": "author_document"
     },
     {
       "id": "out_pl_acquit_prus",
@@ -306,7 +371,10 @@
       "event_date_precision": "day",
       "procedural_stage": "trial judgment",
       "finality": "later appeal reported; trial judgment text not retrieved",
-      "is_synthetic": false
+      "is_synthetic": false,
+      "decision_id": "pl_decision_trial_2021-03-02",
+      "public_limitation": "The fairness report cites a justification dated 2 March 2021 in II K 296/20. That judgment was not retrieved. This acquittal predates the report and is not a response to it. The three defendant rows share one trial decision.",
+      "evidence_basis": "author_document"
     },
     {
       "id": "out_pl_acquit_gzyra",
@@ -319,46 +387,58 @@
       "event_date_precision": "day",
       "procedural_stage": "trial judgment",
       "finality": "later appeal reported; trial judgment text not retrieved",
-      "is_synthetic": false
+      "is_synthetic": false,
+      "decision_id": "pl_decision_trial_2021-03-02",
+      "public_limitation": "The fairness report cites a justification dated 2 March 2021 in II K 296/20. That judgment was not retrieved. This acquittal predates the report and is not a response to it. The three defendant rows share one trial decision.",
+      "evidence_basis": "author_document"
     },
     {
       "id": "out_pl_appeal_podlesna",
       "case_id": "case_poland",
       "participant_id": "pl_podlesna",
       "event_type": "Appeal decided",
-      "description": "Later development, reported by secondary accounts. HFHR wrote on 13 January 2022 that on 12 January 2022 the Regional Court in Płock upheld the acquittal and said the appeals were unfounded. Rzeczpospolita's lede states the same result and attributes the account of the reasons to HFHR. The appeal judgment was not retrieved. This is not a documented response to the fairness report.",
+      "description": "HFHR reported that on 12 January 2022 the Regional Court in Płock upheld the acquittal of Elżbieta Podleśna, together with the other two defendants in II K 296/20, and said the appeals were unfounded. This row is this defendant's result of that shared decision. It is an identified organization's account, not a finding read from the appeal judgment. rp.pl draws on the HFHR account.",
       "evidence_label": "Unverified",
       "event_date": "2022-01-12",
       "event_date_precision": "day",
       "procedural_stage": "appeal",
-      "finality": "described as final by HFHR and Rzeczpospolita; judgment not read",
-      "is_synthetic": false
+      "finality": "HFHR described the result as final; the judgment was not read",
+      "is_synthetic": false,
+      "decision_id": "pl_decision_appeal_2022-01-12",
+      "public_limitation": "HFHR reported this result. The appeal judgment was not retrieved, including from a check of the official Polish judgment portal. rp.pl draws on the HFHR account and is not an independent origin. Zero independent origins is not zero evidence. This is not a documented response to the fairness report.",
+      "evidence_basis": "organization_account"
     },
     {
       "id": "out_pl_appeal_prus",
       "case_id": "case_poland",
       "participant_id": "pl_prus",
       "event_type": "Appeal decided",
-      "description": "Later development for this defendant. Same secondary accounts as the Podleśna appeal record. Judgment not retrieved. Independence of the accounts is not established.",
+      "description": "HFHR reported that on 12 January 2022 the Regional Court in Płock upheld the acquittal of Anna Prus, together with the other two defendants in II K 296/20, and said the appeals were unfounded. This row is this defendant's result of that shared decision. It is an identified organization's account, not a finding read from the appeal judgment. rp.pl draws on the HFHR account.",
       "evidence_label": "Unverified",
       "event_date": "2022-01-12",
       "event_date_precision": "day",
       "procedural_stage": "appeal",
-      "finality": "described as final by secondary accounts; judgment not read",
-      "is_synthetic": false
+      "finality": "HFHR described the result as final; the judgment was not read",
+      "is_synthetic": false,
+      "decision_id": "pl_decision_appeal_2022-01-12",
+      "public_limitation": "HFHR reported this result. The appeal judgment was not retrieved, including from a check of the official Polish judgment portal. rp.pl draws on the HFHR account and is not an independent origin. Zero independent origins is not zero evidence. This is not a documented response to the fairness report.",
+      "evidence_basis": "organization_account"
     },
     {
       "id": "out_pl_appeal_gzyra",
       "case_id": "case_poland",
       "participant_id": "pl_gzyra",
       "event_type": "Appeal decided",
-      "description": "Later development for this defendant. Same secondary accounts as the Podleśna appeal record. Judgment not retrieved. Independence of the accounts is not established.",
+      "description": "HFHR reported that on 12 January 2022 the Regional Court in Płock upheld the acquittal of Joanna Gzyra-Iskandar, together with the other two defendants in II K 296/20, and said the appeals were unfounded. This row is this defendant's result of that shared decision. It is an identified organization's account, not a finding read from the appeal judgment. rp.pl draws on the HFHR account.",
       "evidence_label": "Unverified",
       "event_date": "2022-01-12",
       "event_date_precision": "day",
       "procedural_stage": "appeal",
-      "finality": "described as final by secondary accounts; judgment not read",
-      "is_synthetic": false
+      "finality": "HFHR described the result as final; the judgment was not read",
+      "is_synthetic": false,
+      "decision_id": "pl_decision_appeal_2022-01-12",
+      "public_limitation": "HFHR reported this result. The appeal judgment was not retrieved, including from a check of the official Polish judgment portal. rp.pl draws on the HFHR account and is not an independent origin. Zero independent origins is not zero evidence. This is not a documented response to the fairness report.",
+      "evidence_basis": "organization_account"
     },
     {
       "id": "out_tam_conviction",
@@ -371,47 +451,59 @@
       "event_date_precision": "day",
       "procedural_stage": "trial verdict",
       "finality": "appeal later dismissed, on the texts read",
-      "is_synthetic": false
+      "is_synthetic": false,
+      "decision_id": "tam_decision_verdict_2022-03-02",
+      "public_limitation": "The date is recited in the Court of Appeal copy as Reasons for Verdict dated 2 March 2022, [2022] HKDC 208. Those trial reasons were not opened separately. The Court of Appeal copy is hosted by Columbia and has not been authenticated against an official host. The conviction predates the May 2022 report and is not a response to it.",
+      "evidence_basis": "unauthenticated_judgment_copy"
     },
     {
       "id": "out_tam_sentence",
       "case_id": "case_tam",
       "participant_id": "tam_tak_chi",
-      "event_type": "Sentence modification",
-      "description": "Historical analysis. The fairness report says a sentence of 40 months and a HK$5,000 fine was delivered on 20 April 2022. The Court of Appeal judgment recites Reasons for Sentence dated 20 April 2022, [2022] HKDC 343. This is the sentence, not a later modification. The May 2022 report does not explain it. Event type is the closest existing label; the description is controlling.",
+      "event_type": "Sentence imposed",
+      "description": "Sentence imposed on 20 April 2022. The official press summary of [2022] HKDC 343 states that it is not part of the judgment and that the total sentence is 40 months together with a HK$5,000 fine. The May 2022 fairness report states the same aggregate for political speech and organising an unauthorised assembly. This is the original sentence, not a later modification. The charge-by-charge breakdown in the press summary is not stored as the report's claim.",
       "evidence_label": "Single-source report",
       "event_date": "2022-04-20",
       "event_date_precision": "day",
       "procedural_stage": "sentence",
       "finality": "appeal later dismissed, on the texts read",
-      "is_synthetic": false
+      "is_synthetic": false,
+      "decision_id": "tam_decision_sentence_2022-04-20",
+      "public_limitation": "This is the sentence imposed on 20 April 2022, not a later modification. An official District Court press summary of [2022] HKDC 343 states that the summary is not part of the judgment and confirms an aggregate of 40 months and a HK$5,000 fine. That summary itemizes counts. This record does not use the itemization as the fairness report's claim, which covers speech and unauthorized assembly together. The Court of Appeal text that recites the sentence was read from a Columbia-hosted copy whose authenticity against an official host is not established.",
+      "evidence_basis": "official_press_summary"
     },
     {
       "id": "out_tam_ca",
       "case_id": "case_tam",
       "participant_id": "tam_tak_chi",
       "event_type": "Appeal decided",
-      "description": "Later development in the same proceeding. The Court of Appeal judgment of 7 March 2024, read from a third-party copy, refuses leave to appeal against conviction and sentence and dismisses those appeals. A text search found no Wilmshurst, TrialWatch, or Clooney. Not established as a response to the May 2022 report.",
+      "description": "Later development in the same proceeding. The Court of Appeal judgment of 7 March 2024, read from a Columbia-hosted copy, says: “We accordingly refuse to grant leave to appeal against conviction and dismiss the appeal.” Paragraph 177 likewise refuses leave to appeal against sentence and dismisses that appeal. A text search of the copy found no Wilmshurst, TrialWatch, or Clooney. The dismissal is the outcome. It is not a documented response to the May 2022 report.",
       "evidence_label": "Single-source report",
       "event_date": "2024-03-07",
       "event_date_precision": "day",
       "procedural_stage": "Court of Appeal",
       "finality": "further appeal to the Court of Final Appeal followed",
-      "is_synthetic": false
+      "is_synthetic": false,
+      "decision_id": "tam_decision_ca_2024-03-07",
+      "public_limitation": "Read from a Columbia Global Freedom of Expression copy of CACC 62/2022. The Court of Appeal authored the judgment; Columbia hosts this copy. A check of the official legal reference site on 9 October 2026 did not retrieve this judgment, so authenticity is not established. The dismissal quotation supports this outcome. It does not establish that the court responded to the May 2022 fairness report.",
+      "evidence_basis": "unauthenticated_judgment_copy"
     },
     {
       "id": "out_tam_cfa",
       "case_id": "case_tam",
       "participant_id": "tam_tak_chi",
       "event_type": "Appeal decided",
-      "description": "Later development. The Court of Final Appeal judgment of 6 March 2025, read from a BabelCite copy of [2025] HKCFA 4, dismisses the appeal and holds that the prosecution need not prove an intention to incite violence. A text search found no Wilmshurst, TrialWatch, or Clooney. Not established as a response to the May 2022 report. Official host not confirmed.",
+      "description": "Later development. The Court of Final Appeal judgment of 6 March 2025, read from a BabelCite copy of [2025] HKCFA 4, says: “We accordingly dismiss this appeal.” A text search of the copy found no Wilmshurst, TrialWatch, or Clooney. The dismissal is the outcome. It is not a documented response to the May 2022 report. The official host was not confirmed.",
       "evidence_label": "Single-source report",
       "event_date": "2025-03-06",
       "event_date_precision": "day",
       "procedural_stage": "Court of Final Appeal",
       "finality": "appeal dismissed, on the copy that was read",
       "supersedes_event_id": "out_tam_ca",
-      "is_synthetic": false
+      "is_synthetic": false,
+      "decision_id": "tam_decision_cfa_2025-03-06",
+      "public_limitation": "Read from a BabelCite copy of [2025] HKCFA 4. The Court of Final Appeal authored the judgment; the website that hosted this copy is not that court. The official host was not confirmed. The dismissal quotation supports this outcome. It does not establish that the court responded to the May 2022 fairness report.",
+      "evidence_basis": "unauthenticated_judgment_copy"
     }
   ],
   "receptions": [
@@ -424,7 +516,9 @@
       "account_type": "not_yet_established",
       "reasoning_checked": false,
       "is_recital": false,
-      "is_synthetic": false
+      "is_synthetic": false,
+      "public_limitation": "The appeal judgment was not retrieved. HFHR's report of the affirmance is an outcome account, not a finding that the court responded to this argument. An absent reception is not a finding that the court ignored the argument.",
+      "evidence_basis": "response_not_established"
     },
     {
       "id": "pl_rec_proportionality",
@@ -435,7 +529,9 @@
       "account_type": "not_yet_established",
       "reasoning_checked": false,
       "is_recital": false,
-      "is_synthetic": false
+      "is_synthetic": false,
+      "public_limitation": "The appeal judgment was not retrieved. HFHR's report of the affirmance is an outcome account, not a finding that the court responded to this argument. An absent reception is not a finding that the court ignored the argument.",
+      "evidence_basis": "response_not_established"
     },
     {
       "id": "tam_rec_breadth",
@@ -443,13 +539,15 @@
       "case_id": "case_tam",
       "status": "Document obtained but reasoning insufficient",
       "source_id": "tam_src_ca",
-      "passage": "We accordingly refuse to grant leave to appeal against conviction and dismiss the appeal.",
-      "location_ref": "CACC 62/2022, paragraph 168",
+      "passage": "",
+      "location_ref": "No passage identified that links the court to the May 2022 report.",
       "observer_note": "The passage records the Court of Appeal's disposition. A search of the copy found no Wilmshurst, TrialWatch, or Clooney. The search is not a full check that the reasoning never takes up the report.",
-      "account_type": "authority_document",
+      "account_type": "not_yet_established",
       "reasoning_checked": false,
       "is_recital": false,
-      "is_synthetic": false
+      "is_synthetic": false,
+      "public_limitation": "No passage was identified that shows the court responding to Elizabeth Wilmshurst's May 2022 report. The dismissal quotation is stored on the appeal outcome, not as reception of the report. This is not a finding that the court ignored the report. The judgment copy's authenticity against an official host is not established.",
+      "evidence_basis": "response_not_established"
     },
     {
       "id": "tam_rec_sentence",
@@ -457,13 +555,15 @@
       "case_id": "case_tam",
       "status": "Document obtained but reasoning insufficient",
       "source_id": "tam_src_cfa",
-      "passage": "We accordingly dismiss this appeal.",
-      "location_ref": "[2025] HKCFA 4, paragraph 84",
+      "passage": "",
+      "location_ref": "No passage identified that links the court to the May 2022 report.",
       "observer_note": "The passage records dismissal. It does not show that the Court of Final Appeal was answering the May 2022 report. reasoning_checked stays false until a person reads the judgment for that purpose.",
-      "account_type": "authority_document",
+      "account_type": "not_yet_established",
       "reasoning_checked": false,
       "is_recital": false,
-      "is_synthetic": false
+      "is_synthetic": false,
+      "public_limitation": "No passage was identified that shows the court responding to Elizabeth Wilmshurst's May 2022 report. The dismissal quotation is stored on the appeal outcome, not as reception of the report. This is not a finding that the court ignored the report. The judgment copy's authenticity against an official host is not established.",
+      "evidence_basis": "response_not_established"
     },
     {
       "id": "tam_rec_dykes",
@@ -472,34 +572,177 @@
       "status": "Explicitly rejected",
       "source_id": "tam_src_ca",
       "passage": "In conclusion, we hold that sections 9 and 10 of the CO and accordingly the Sedition Charges satisfy the proportionality test.",
-      "location_ref": "CACC 62/2022, paragraph 145",
-      "observer_note": "Proposed only. If a reviewer agrees, this is the Court of Appeal's response to counsel's proportionality argument, not to the May 2022 fairness report. reasoning_checked is false until that person compares the passage with the claim.",
-      "account_type": "authority_document",
+      "location_ref": "CACC 62/2022, [2024] HKCA 231, paragraphs 132–145; holding at paragraph 145",
+      "observer_note": "Private comparison, 9 October 2026. Paragraphs 90–102 reject reading in an intention to incite violence and leave constitutionality open. Paragraph 131 rejects counsel's legal-certainty submissions. Paragraphs 132–145 are the proportionality limb; paragraph 139 is counsel's incitement point; paragraph 145 is only the proportionality holding. Paragraph 146 onward is a separate slogan argument. Do not treat paragraph 145 as disposing of legal certainty or the slogan. Counsel is not Wilmshurst. reasoning_checked stays false.",
+      "account_type": "not_yet_established",
       "reasoning_checked": false,
       "is_recital": false,
-      "is_synthetic": false
+      "is_synthetic": false,
+      "public_limitation": "This is counsel's proportionality limb only, as the judgment summarizes it at paragraph 139. Paragraph 145 holds that sections 9 and 10 satisfy the proportionality test. It does not establish rejection of the legal-certainty argument, which the same judgment addresses at paragraph 131, or the slogan argument from paragraph 146. Philip Dykes SC is counsel in the appeal, not the author of the May 2022 fairness report. The text was read from a Columbia-hosted copy. A check of the official legal reference site on 9 October 2026 did not retrieve CACC 62/2022, so authenticity is not established.",
+      "evidence_basis": "unauthenticated_judgment_copy"
     }
   ],
   "evidence_links": [
-    {"id": "pl_link_report_legality", "source_id": "pl_src_report", "target_type": "argument", "target_id": "pl_arg_legality", "relationship": "quotes", "provenance": "unknown"},
-    {"id": "pl_link_report_prop", "source_id": "pl_src_report", "target_type": "argument", "target_id": "pl_arg_proportionality", "relationship": "quotes", "provenance": "unknown"},
-    {"id": "pl_link_report_acquit_podlesna", "source_id": "pl_src_report", "target_type": "outcome_event", "target_id": "out_pl_acquit_podlesna", "relationship": "supports", "provenance": "unknown"},
-    {"id": "pl_link_report_acquit_prus", "source_id": "pl_src_report", "target_type": "outcome_event", "target_id": "out_pl_acquit_prus", "relationship": "supports", "provenance": "unknown"},
-    {"id": "pl_link_report_acquit_gzyra", "source_id": "pl_src_report", "target_type": "outcome_event", "target_id": "out_pl_acquit_gzyra", "relationship": "supports", "provenance": "unknown"},
-    {"id": "pl_link_hfhr_podlesna", "source_id": "pl_src_hfhr", "target_type": "outcome_event", "target_id": "out_pl_appeal_podlesna", "relationship": "supports", "provenance": "unknown"},
-    {"id": "pl_link_hfhr_prus", "source_id": "pl_src_hfhr", "target_type": "outcome_event", "target_id": "out_pl_appeal_prus", "relationship": "supports", "provenance": "unknown"},
-    {"id": "pl_link_hfhr_gzyra", "source_id": "pl_src_hfhr", "target_type": "outcome_event", "target_id": "out_pl_appeal_gzyra", "relationship": "supports", "provenance": "unknown"},
-    {"id": "pl_link_rp_podlesna", "source_id": "pl_src_rp", "target_type": "outcome_event", "target_id": "out_pl_appeal_podlesna", "relationship": "supports", "provenance": "derived_from_shared_original"},
-    {"id": "pl_link_rp_prus", "source_id": "pl_src_rp", "target_type": "outcome_event", "target_id": "out_pl_appeal_prus", "relationship": "supports", "provenance": "derived_from_shared_original"},
-    {"id": "pl_link_rp_gzyra", "source_id": "pl_src_rp", "target_type": "outcome_event", "target_id": "out_pl_appeal_gzyra", "relationship": "supports", "provenance": "derived_from_shared_original"},
-    {"id": "tam_link_report_breadth", "source_id": "tam_src_report", "target_type": "argument", "target_id": "tam_arg_breadth", "relationship": "quotes", "provenance": "unknown"},
-    {"id": "tam_link_report_sentence", "source_id": "tam_src_report", "target_type": "argument", "target_id": "tam_arg_sentence", "relationship": "quotes", "provenance": "unknown"},
-    {"id": "tam_link_ca_dykes", "source_id": "tam_src_ca", "target_type": "argument", "target_id": "tam_arg_dykes", "relationship": "quotes", "provenance": "unknown"},
-    {"id": "tam_link_ca_conviction", "source_id": "tam_src_ca", "target_type": "outcome_event", "target_id": "out_tam_conviction", "relationship": "supports", "provenance": "unknown"},
-    {"id": "tam_link_report_conviction", "source_id": "tam_src_report", "target_type": "outcome_event", "target_id": "out_tam_conviction", "relationship": "supports", "provenance": "same_organization_distinct"},
-    {"id": "tam_link_ca_sentence", "source_id": "tam_src_ca", "target_type": "outcome_event", "target_id": "out_tam_sentence", "relationship": "supports", "provenance": "unknown"},
-    {"id": "tam_link_ca_outcome", "source_id": "tam_src_ca", "target_type": "outcome_event", "target_id": "out_tam_ca", "relationship": "supports", "provenance": "unknown"},
-    {"id": "tam_link_cfa_outcome", "source_id": "tam_src_cfa", "target_type": "outcome_event", "target_id": "out_tam_cfa", "relationship": "supports", "provenance": "unknown"}
+    {
+      "id": "pl_link_report_legality",
+      "source_id": "pl_src_report",
+      "target_type": "argument",
+      "target_id": "pl_arg_legality",
+      "relationship": "quotes",
+      "provenance": "unknown"
+    },
+    {
+      "id": "pl_link_report_prop",
+      "source_id": "pl_src_report",
+      "target_type": "argument",
+      "target_id": "pl_arg_proportionality",
+      "relationship": "quotes",
+      "provenance": "unknown"
+    },
+    {
+      "id": "pl_link_report_acquit_podlesna",
+      "source_id": "pl_src_report",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_acquit_podlesna",
+      "relationship": "supports",
+      "provenance": "unknown"
+    },
+    {
+      "id": "pl_link_report_acquit_prus",
+      "source_id": "pl_src_report",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_acquit_prus",
+      "relationship": "supports",
+      "provenance": "unknown"
+    },
+    {
+      "id": "pl_link_report_acquit_gzyra",
+      "source_id": "pl_src_report",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_acquit_gzyra",
+      "relationship": "supports",
+      "provenance": "unknown"
+    },
+    {
+      "id": "pl_link_hfhr_podlesna",
+      "source_id": "pl_src_hfhr",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_appeal_podlesna",
+      "relationship": "supports",
+      "provenance": "unknown"
+    },
+    {
+      "id": "pl_link_hfhr_prus",
+      "source_id": "pl_src_hfhr",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_appeal_prus",
+      "relationship": "supports",
+      "provenance": "unknown"
+    },
+    {
+      "id": "pl_link_hfhr_gzyra",
+      "source_id": "pl_src_hfhr",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_appeal_gzyra",
+      "relationship": "supports",
+      "provenance": "unknown"
+    },
+    {
+      "id": "pl_link_rp_podlesna",
+      "source_id": "pl_src_rp",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_appeal_podlesna",
+      "relationship": "supports",
+      "provenance": "derived_from_shared_original"
+    },
+    {
+      "id": "pl_link_rp_prus",
+      "source_id": "pl_src_rp",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_appeal_prus",
+      "relationship": "supports",
+      "provenance": "derived_from_shared_original"
+    },
+    {
+      "id": "pl_link_rp_gzyra",
+      "source_id": "pl_src_rp",
+      "target_type": "outcome_event",
+      "target_id": "out_pl_appeal_gzyra",
+      "relationship": "supports",
+      "provenance": "derived_from_shared_original"
+    },
+    {
+      "id": "tam_link_report_breadth",
+      "source_id": "tam_src_report",
+      "target_type": "argument",
+      "target_id": "tam_arg_breadth",
+      "relationship": "quotes",
+      "provenance": "unknown"
+    },
+    {
+      "id": "tam_link_report_sentence",
+      "source_id": "tam_src_report",
+      "target_type": "argument",
+      "target_id": "tam_arg_sentence",
+      "relationship": "quotes",
+      "provenance": "unknown"
+    },
+    {
+      "id": "tam_link_ca_dykes",
+      "source_id": "tam_src_ca",
+      "target_type": "argument",
+      "target_id": "tam_arg_dykes",
+      "relationship": "quotes",
+      "provenance": "unknown"
+    },
+    {
+      "id": "tam_link_ca_conviction",
+      "source_id": "tam_src_ca",
+      "target_type": "outcome_event",
+      "target_id": "out_tam_conviction",
+      "relationship": "supports",
+      "provenance": "unknown"
+    },
+    {
+      "id": "tam_link_report_conviction",
+      "source_id": "tam_src_report",
+      "target_type": "outcome_event",
+      "target_id": "out_tam_conviction",
+      "relationship": "supports",
+      "provenance": "same_organization_distinct"
+    },
+    {
+      "id": "tam_link_ca_sentence",
+      "source_id": "tam_src_ca",
+      "target_type": "outcome_event",
+      "target_id": "out_tam_sentence",
+      "relationship": "supports",
+      "provenance": "unknown"
+    },
+    {
+      "id": "tam_link_ca_outcome",
+      "source_id": "tam_src_ca",
+      "target_type": "outcome_event",
+      "target_id": "out_tam_ca",
+      "relationship": "supports",
+      "provenance": "unknown"
+    },
+    {
+      "id": "tam_link_cfa_outcome",
+      "source_id": "tam_src_cfa",
+      "target_type": "outcome_event",
+      "target_id": "out_tam_cfa",
+      "relationship": "supports",
+      "provenance": "unknown"
+    },
+    {
+      "id": "tam_link_sentence_summary",
+      "source_id": "tam_src_sentence_summary",
+      "target_type": "outcome_event",
+      "target_id": "out_tam_sentence",
+      "relationship": "supports",
+      "provenance": "unknown"
+    }
   ],
   "research_attempts": [
     {
@@ -582,6 +825,33 @@
       "place": "RTHK",
       "result": "not_found_in_this_search",
       "note": "Fetch returned 404. No RTHK passage is stored. The judgment copy was used instead. A missing page is not a finding that RTHK never published a story."
+    },
+    {
+      "id": "pl_search_portal",
+      "case_id": "case_poland",
+      "searched_on": "2026-10-09",
+      "query": "Sąd Okręgowy w Płocku 12 stycznia 2022 Article 196 II K 296/20 site:orzeczenia.ms.gov.pl",
+      "place": "orzeczenia.ms.gov.pl",
+      "result": "not_found_in_this_search",
+      "note": "The Article 196 appeal judgment was not returned. Nearby Płock hits II Ko 28/21 (4 January 2022) and II Ko 37/21 (18 January 2022, Judge Mariusz Królikowski) are different cases. II Ko 37/21 cites the 1991 rehabilitation statute, not Article 196. Not found in this search is not a finding that the judgment does not exist. The HFHR account was not relabelled to make approval possible."
+    },
+    {
+      "id": "tam_search_legalref",
+      "case_id": "case_tam",
+      "searched_on": "2026-10-09",
+      "query": "CACC 62/2022 [2024] HKCA 231 Tam Tak-chi site:legalref.judiciary.hk",
+      "place": "legalref.judiciary.hk",
+      "result": "not_found_in_this_search",
+      "note": "The legalref search URL for CACC 62/2022 returned an internal server error, and the results that were opened did not include CACC 62/2022 or [2025] HKCFA 4. Unrelated hits included other 2022 appeal numbers and the National Security Law case against 47 people, which is a different proceeding. Not retrieved is not a finding that the judgment does not exist. Columbia remains a third-party host, not a secondary account of someone else's report, and not an authenticated official copy."
+    },
+    {
+      "id": "tam_search_sentence_summary",
+      "case_id": "case_tam",
+      "searched_on": "2026-10-09",
+      "query": "HKSAR v TAM TAK CHI [2022] HKDC 343 press summary",
+      "place": "legalref.judiciary.hk press summary",
+      "result": "retrieved_document",
+      "note": "Official press summary. Header: “This summary is not part of the Judgment.” Date of sentence 20 April 2022. Total 40 months and a HK$5,000 fine. The page itemizes counts. That itemization is not imported into the fairness-report argument. Counsel listed for sentence is Edwin Choy SC leading Jeffrey Tam and others, not Philip Dykes SC and not Elizabeth Wilmshurst. Full Chinese reasons not opened."
     }
   ]
 }

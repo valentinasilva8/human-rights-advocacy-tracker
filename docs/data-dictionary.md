@@ -56,6 +56,8 @@ One argument advanced or described in a source.
 
 `passage` and `location_ref` are required before approval. `review_status` is `proposed`, `approved`, or `rejected`.
 
+`public_limitation` is displayed beside an approved claim. `evidence_basis` says what kind of source supports it. Neither field is a private reviewer note.
+
 ## argument_labels
 
 Zero or more labels per argument. Allowed values are `Vagueness`, `Broadness`, `Legality`, `Necessity`, `Proportionality`, and `unmapped—review required`. Approval requires at least one.
@@ -64,7 +66,15 @@ Zero or more labels per argument. Allowed values are `Vagueness`, `Broadness`, `
 
 A dated event for one defendant. Adding an appeal does not delete the earlier event. `supersedes_event_id` is a link, not an erasure.
 
-`event_type` is one of: Charges filed, Charges amended, Charges withdrawn, Charges dismissed, Conviction, Acquittal, Appeal filed, Appeal decided, Release, Continued detention, Sentence modification, Retrial ordered, Compensation ordered, Compensation received, Continuing restrictions, New proceeding, No verified recent update.
+`event_type` is one of: Charges filed, Charges amended, Charges withdrawn, Charges dismissed, Conviction, Acquittal, Appeal filed, Appeal decided, Release, Continued detention, Sentence imposed, Sentence modification, Retrial ordered, Compensation ordered, Compensation received, Continuing restrictions, New proceeding, No verified recent update.
+
+`Sentence imposed` is the original sentence. `Sentence modification` is a later change to a sentence already imposed. An original sentence is not stored as a modification because the list used to lack the first type.
+
+`decision_id` groups defendant-specific rows that come from one decision. Counting defendants, proceedings, decisions, and interventions stays separate from the outcome-row count.
+
+`evidence_basis` is one of: `not_yet_established`, `author_document`, `authenticated_judgment`, `organization_account`, `official_press_summary`, `unauthenticated_judgment_copy`, `response_not_established`. It is shown with the claim. It does not replace `evidence_label`. An organization account can stay `Unverified`. Zero independent origins is not zero evidence.
+
+`public_limitation` is the evidence limit that stays beside the claim in a public view. It is not a reviewer note. `observer_note`, `unresolved_questions`, and `research_attempts` stay internal.
 
 `evidence_label` is one of: Primary-source supported, Corroborated by independent sources, Single-source report, Conflicting, Unverified.
 
@@ -81,6 +91,8 @@ How an authority dealt with one argument, if a source supports that observation.
 `account_type` is `not_yet_established`, `authority_document`, or `secondary_account`. An explicit response needs the authority's own document, or `secondary_account` when the record is someone else's report of it. A court judgment is the right document for court reception. Another authority can be documented by that authority's own document.
 
 `reasoning_checked` is a reviewer's check of the reasoning. It is required before approving “Not addressed in the available decision,” an explicit response, or “Document obtained but reasoning insufficient.” “Decision not yet retrieved” and “Decision sought but unavailable” mean the decision's reasoning is not in hand. They are not findings that nothing exists.
+
+`public_limitation` and `evidence_basis` on a reception use the same vocabularies as on an outcome. A dismissal quotation belongs on the outcome. It is not, by itself, reception of an argument. `response_not_established` is not a public statement that the court ignored the argument.
 
 `is_recital` marks a passage that only recounts the argument. A recital cannot be stored as Explicitly accepted or Partially accepted.
 

@@ -14,7 +14,9 @@ from advocacy_trace.constants import (
     ARGUMENT_LABELS,
     ATTRIBUTION_ROLES,
     DISCLAIMER_STATUSES,
+    DATED_OUTCOME_STATEMENT,
     DOCUMENT_TYPES,
+    EVIDENCE_BASIS,
     EVIDENCE_LABELS,
     EVENT_TYPES,
     EXPLICIT_RECEPTION,
@@ -116,6 +118,8 @@ CREATE TABLE IF NOT EXISTS arguments (
     principle TEXT NOT NULL DEFAULT '',
     application TEXT NOT NULL DEFAULT '',
     remedy_requested TEXT NOT NULL DEFAULT '',
+    public_limitation TEXT NOT NULL DEFAULT '',
+    evidence_basis TEXT NOT NULL DEFAULT 'not_yet_established',
     claim_supported INTEGER NOT NULL DEFAULT 0 CHECK (claim_supported IN (0, 1)),
     argument_date TEXT,
     argument_date_precision TEXT NOT NULL DEFAULT 'unknown',
@@ -140,6 +144,9 @@ CREATE TABLE IF NOT EXISTS outcome_events (
     procedural_stage TEXT,
     finality TEXT,
     evidence_label TEXT NOT NULL,
+    public_limitation TEXT NOT NULL DEFAULT '',
+    evidence_basis TEXT NOT NULL DEFAULT 'not_yet_established',
+    decision_id TEXT,
     review_status TEXT NOT NULL DEFAULT 'proposed',
     supersedes_event_id TEXT REFERENCES outcome_events(id),
     is_synthetic INTEGER NOT NULL DEFAULT 0 CHECK (is_synthetic IN (0, 1))
@@ -155,6 +162,8 @@ CREATE TABLE IF NOT EXISTS reception_observations (
     location_ref TEXT NOT NULL DEFAULT '',
     observer_note TEXT NOT NULL DEFAULT '',
     account_type TEXT NOT NULL DEFAULT 'not_yet_established',
+    public_limitation TEXT NOT NULL DEFAULT '',
+    evidence_basis TEXT NOT NULL DEFAULT 'not_yet_established',
     reasoning_checked INTEGER NOT NULL DEFAULT 0 CHECK (reasoning_checked IN (0, 1)),
     review_status TEXT NOT NULL DEFAULT 'proposed',
     is_recital INTEGER NOT NULL DEFAULT 0 CHECK (is_recital IN (0, 1)),
@@ -239,6 +248,8 @@ ARGUMENT_MATERIAL_FIELDS = (
     "principle",
     "application",
     "remedy_requested",
+    "public_limitation",
+    "evidence_basis",
     "source_id",
     "intervention_id",
 )
@@ -476,6 +487,8 @@ class EvidenceStore:
         principle: str = "",
         application: str = "",
         remedy_requested: str = "",
+        public_limitation: str = "",
+        evidence_basis: str = "not_yet_established",
         labels: list[str] | None = None,
         intervention_id: str | None = None,
         source_id: str | None = None,
@@ -488,6 +501,7 @@ class EvidenceStore:
         case = self._get_case(case_id)
         self._check_attribution(author_actor, attribution_role, institutional_affiliation)
         self._one_of(disclaimer_status, DISCLAIMER_STATUSES, "Disclaimer status")
+        self._one_of(evidence_basis, EVIDENCE_BASIS, "Evidence basis")
         if disclaimer_status == "stated":
             self._require_text(disclaimer_text, "Disclaimer text")
         if intervention_id:
@@ -503,9 +517,9 @@ class EvidenceStore:
                 id, case_id, intervention_id, source_id, author_actor, attribution_role,
                 summary, reasons, passage, location_ref, legal_authorities,
                 institutional_affiliation, disclaimer_status, disclaimer_text,
-                principle, application, remedy_requested, claim_supported,
-                argument_date, argument_date_precision, review_status, is_synthetic
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, 'proposed', ?)
+                principle, application, remedy_requested, public_limitation, evidence_basis,
+                claim_supported, argument_date, argument_date_precision, review_status, is_synthetic
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, 'proposed', ?)
             """,
             (
                 argument_id,
@@ -525,6 +539,8 @@ class EvidenceStore:
                 principle.strip(),
                 application.strip(),
                 remedy_requested.strip(),
+                public_limitation.strip(),
+                evidence_basis,
                 when,
                 argument_date_precision,
                 int(synthetic),
@@ -551,6 +567,9 @@ class EvidenceStore:
         procedural_stage: str | None = None,
         finality: str | None = None,
         supersedes_event_id: str | None = None,
+        public_limitation: str = "",
+        evidence_basis: str = "not_yet_established",
+        decision_id: str | None = None,
         is_synthetic: bool = False,
         date_is_publication_date: bool = False,
         id: str | None = None,
@@ -566,6 +585,7 @@ class EvidenceStore:
         self._require_text(description, "Outcome description")
         self._one_of(event_type, EVENT_TYPES, "Event type")
         self._one_of(evidence_label, EVIDENCE_LABELS, "Evidence label")
+        self._one_of(evidence_basis, EVIDENCE_BASIS, "Evidence basis")
         if supersedes_event_id:
             earlier = self._must("outcome_events", supersedes_event_id, "Earlier outcome")
             if earlier["case_id"] != case_id:
@@ -578,9 +598,9 @@ class EvidenceStore:
             """
             INSERT INTO outcome_events (
                 id, case_id, participant_id, event_type, event_date, event_date_precision,
-                description, procedural_stage, finality, evidence_label, review_status,
-                supersedes_event_id, is_synthetic
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'proposed', ?, ?)
+                description, procedural_stage, finality, evidence_label, public_limitation,
+                evidence_basis, decision_id, review_status, supersedes_event_id, is_synthetic
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'proposed', ?, ?)
             """,
             (
                 event_id,
@@ -593,6 +613,9 @@ class EvidenceStore:
                 _blank(procedural_stage),
                 _blank(finality),
                 evidence_label,
+                public_limitation.strip(),
+                evidence_basis,
+                _blank(decision_id),
                 supersedes_event_id,
                 int(synthetic),
             ),
@@ -611,6 +634,8 @@ class EvidenceStore:
         location_ref: str = "",
         observer_note: str = "",
         account_type: str = "not_yet_established",
+        public_limitation: str = "",
+        evidence_basis: str = "not_yet_established",
         reasoning_checked: bool = False,
         is_recital: bool = False,
         is_synthetic: bool = False,
@@ -636,14 +661,15 @@ class EvidenceStore:
         if source_id:
             self._must("sources", source_id, "Source")
         self._one_of(account_type, ACCOUNT_TYPES, "Account type")
+        self._one_of(evidence_basis, EVIDENCE_BASIS, "Evidence basis")
         synthetic = bool(is_synthetic or case["is_synthetic"])
         self.conn.execute(
             """
             INSERT INTO reception_observations (
                 id, argument_id, case_id, status, source_id, passage, location_ref,
-                observer_note, account_type, reasoning_checked, review_status,
-                is_recital, is_synthetic
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'proposed', ?, ?)
+                observer_note, account_type, public_limitation, evidence_basis,
+                reasoning_checked, review_status, is_recital, is_synthetic
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'proposed', ?, ?)
             """,
             (
                 reception_id,
@@ -655,6 +681,8 @@ class EvidenceStore:
                 location_ref.strip(),
                 observer_note.strip(),
                 account_type,
+                public_limitation.strip(),
+                evidence_basis,
                 int(bool(reasoning_checked)),
                 int(bool(is_recital)),
                 int(synthetic),
@@ -1045,6 +1073,45 @@ class EvidenceStore:
             origins.add(source["duplicate_of_source_id"] or source["id"])
         return len(origins)
 
+    def decision_counts(self, case_id: str) -> dict:
+        """Separate defendants, the proceeding, shared decisions, and interventions.
+
+        Several defendant-specific outcome rows can share one decision_id.
+        The row count is not the decision count.
+        """
+
+        self._get_case(case_id)
+        defendants = [
+            item
+            for item in self.participants_for_case(case_id)
+            if item["role_in_case"] == "defendant"
+        ]
+        events = [
+            event
+            for event in self.outcome_events(case_id)
+            if event["event_type"] != NO_UPDATE_EVENT
+        ]
+        decision_ids: list[str] = []
+        seen: set[str] = set()
+        for event in events:
+            key = (event.get("decision_id") or "").strip() or event["id"]
+            if key not in seen:
+                seen.add(key)
+                decision_ids.append(key)
+        return {
+            "defendants": len(defendants),
+            "proceedings": 1,
+            "decisions": len(decision_ids),
+            "decision_ids": decision_ids,
+            "interventions": len(self.interventions_for_case(case_id)),
+            "outcome_rows": len(events),
+            "note": (
+                "Defendants, proceedings, decisions, and interventions are counted separately. "
+                "Outcome rows can repeat one decision for each defendant. "
+                "These figures are not a success rate."
+            ),
+        }
+
     def outcome_summary(self, case_id: str, participant_id: str | None = None) -> dict:
         events = [
             event
@@ -1061,10 +1128,7 @@ class EvidenceStore:
             }
         return {
             "status": "dated_events",
-            "statement": (
-                "Dated events are on record. They are not a success or failure score, "
-                "and they do not show that an argument caused the event."
-            ),
+            "statement": DATED_OUTCOME_STATEMENT,
             "events": events,
         }
 
@@ -1445,6 +1509,9 @@ class EvidenceStore:
                 "evidence_label",
                 "procedural_stage",
                 "finality",
+                "public_limitation",
+                "evidence_basis",
+                "decision_id",
             },
             "reception": {
                 "status",
@@ -1454,6 +1521,8 @@ class EvidenceStore:
                 "source_id",
                 "account_type",
                 "reasoning_checked",
+                "public_limitation",
+                "evidence_basis",
             },
         }[target_type]
         unknown = set(edits) - allowed - {"labels"}
@@ -1502,6 +1571,8 @@ class EvidenceStore:
                 self._one_of(value, RECEPTION_STATUSES, "Reception status")
             if key == "account_type":
                 self._one_of(value, ACCOUNT_TYPES, "Account type")
+            if key == "evidence_basis":
+                self._one_of(value, EVIDENCE_BASIS, "Evidence basis")
             if key == "reasoning_checked":
                 stored = int(bool(value))
             elif isinstance(value, str):

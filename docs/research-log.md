@@ -38,4 +38,22 @@ Proposed rows from this log are in `advocacy_trace/fixtures/proposed_research.js
 - RTHK URL `https://news.rthk.hk/rthk/en/component/k2/1794531-20250306.htm` returned 404. No RTHK passage is stored. A missing page is not a finding that no story was published.
 - The trial reasons themselves, as a separate document. The dates above are recitals in the Court of Appeal judgment and in the fairness report.
 
-The name search does not establish that the courts never took up the report’s substance without naming it. Reception of the May 2022 report stays “document obtained but reasoning insufficient,” with the reviewer’s reasoning check still false.
+The name search does not establish that the courts never took up the report’s substance without naming it. The correction pass below moves the dismissal quotations onto the outcome rows. Reception of the May 2022 report stays unestablished.
+
+## Correction pass, 9 October 2026
+
+This pass did not add cases. It did not approve any row. The approval packet is `docs/review-packet.md`, which is a different document from this log.
+
+**Sentence type.** `out_tam_sentence` is now “Sentence imposed.” The evidence links, including the Court of Appeal copy and the official press summary, stay attached. The fictional Rivera reduction remains “Sentence modification.”
+
+**Reception separated from outcome.** The Court of Appeal dismissal at paragraph 168, and the sentence-appeal dismissal at paragraph 177, are on `out_tam_ca`. The Court of Final Appeal dismissal at paragraph 84 is on `out_tam_cfa`. `tam_rec_breadth` and `tam_rec_sentence` no longer quote those dismissals. No passage was identified that links either court to Elizabeth Wilmshurst’s report. That is `response_not_established`, not a finding that the court ignored the report.
+
+**Dykes.** Paragraph 139 is counsel’s proportionality submission: section 9 is a disproportionate restriction because the prosecution need not prove an incitement to violence. Paragraphs 132–145 answer that limb. Paragraph 145’s holding is the proportionality test. Paragraph 131 rejects the legal-certainty submissions. Paragraphs 90–102 reject reading an intention to incite violence into the offence and leave constitutionality open. Paragraph 146 onward is a separate slogan argument. The stored reception is the proportionality limb only. Counsel is not the fairness report.
+
+**Official-source checks.**
+
+- legalref search for CACC 62/2022: the search URL returned an internal server error, and the opened results did not include CACC 62/2022 or [2025] HKCFA 4. Other 2022 appeal numbers and the National Security Law case against 47 people are different proceedings. Not retrieved is not “the judgment does not exist.” Columbia hosts a copy. Columbia did not author the judgment. The copy remains unauthenticated.
+- Official press summary, not the judgment: [HKSAR v TAM TAK CHI, [2022] HKDC 343](https://legalref.judiciary.hk/doc/judg/html/vetted/other/ch/2020/DCCC000927E_2020_files/DCCC000927E_2020ES.htm). The page says “This summary is not part of the Judgment.” Date of sentence 20 April 2022. Total sentence 40 months and a HK$5,000 fine. The page itemizes counts. That itemization is not Wilmshurst’s claim. Counsel at sentence is Edwin Choy SC leading Jeffrey Tam and others, not Philip Dykes SC. The full reasons were not opened.
+- orzeczenia.ms.gov.pl: the Article 196 appeal was not returned. Nearby Płock files II Ko 28/21 (4 January 2022) and II Ko 37/21 (18 January 2022) are different cases. The Poland appeal rows stay `Unverified`. The proposed wording is “HFHR reported…”. HFHR is recorded as an amicus participant because it reported filing an amicus. The brief was not retrieved. rp.pl stays `derived_from_shared_original`. One organization’s account plus a derivative article is evidence. It is not zero evidence, and it is not an authenticated judgment.
+
+**What stays internal.** Search queries, the name-search note, and unresolved questions stay off public views. `public_limitation` is what a public user would see beside a claim.

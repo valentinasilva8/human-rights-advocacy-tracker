@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
-from advocacy_trace.constants import PUBLIC_ARGUMENT_ROLES
+from advocacy_trace.constants import (
+    EVIDENCE_BASIS_PUBLIC,
+    PUBLIC_ARGUMENT_ROLES,
+    RECEPTION_NOT_ESTABLISHED,
+)
 from advocacy_trace.dates import chronology
 from advocacy_trace.store import EvidenceStore
 
@@ -198,7 +202,7 @@ def _reception_gaps(store: EvidenceStore, argument: dict) -> list[str]:
     gaps: list[str] = []
     where = argument["location_ref"] or "location missing"
     if not reviewed:
-        gaps.append(f"No reviewed record of how an authority received this argument ({where}).")
+        gaps.append(f"{RECEPTION_NOT_ESTABLISHED} ({where}).")
         return gaps
     for item in reviewed:
         if item["status"] == "Decision unavailable / insufficient evidence":
@@ -248,6 +252,68 @@ def chronology_notes(interventions: list[dict], events: list[dict]) -> list[str]
                     "is unknown at the available date precision."
                 )
     return notes
+
+
+def public_preview(store: EvidenceStore, argument_id: str) -> dict:
+    """Public shape of one argument if it were approved. This does not approve it.
+
+    Proposed siblings, reviewer notes, unresolved questions, and research notes stay out.
+    An absent reception is not described as the court ignoring the argument.
+    """
+
+    argument = store.get_argument(argument_id)
+    case = store.get_case(argument["case_id"])
+    source = None
+    if argument.get("source_id"):
+        raw = store.get_source(argument["source_id"])
+        source = {
+            "id": raw["id"],
+            "title": raw["title"],
+            "url": raw.get("url"),
+            "author_actor": raw["author_actor"],
+            "document_type": raw["document_type"],
+        }
+    approved_receptions = _approved_receptions(store, argument_id)
+    return {
+        "preview_only": True,
+        "this_call_approved_nothing": True,
+        "stored_review_status": argument["review_status"],
+        "argument": {
+            "id": argument["id"],
+            "summary": argument["summary"],
+            "passage": argument["passage"],
+            "location_ref": argument["location_ref"],
+            "author_actor": argument["author_actor"],
+            "attribution_role": argument["attribution_role"],
+            "labels": argument["labels"],
+            "evidence_basis": argument.get("evidence_basis") or "not_yet_established",
+            "evidence_basis_caption": evidence_basis_caption(argument.get("evidence_basis")),
+            "public_limitation": argument.get("public_limitation") or "",
+        },
+        "case": {
+            "id": case["id"],
+            "title": case["title"],
+            "country": case.get("country"),
+            "case_number": case.get("case_number"),
+        },
+        "source": source,
+        "receptions": approved_receptions,
+        "reception_note": RECEPTION_NOT_ESTABLISHED if not approved_receptions else "",
+        "timeline_note": (
+            "An incomplete list is not a finding that no other development occurred. "
+            "Proposed outcome records are not shown in this preview."
+        ),
+        "omitted": [
+            "observer_note",
+            "unresolved_questions",
+            "research_attempts",
+            "proposed_siblings",
+        ],
+    }
+
+
+def evidence_basis_caption(value: str | None) -> str:
+    return EVIDENCE_BASIS_PUBLIC.get(value or "not_yet_established", "")
 
 
 def _approved_receptions(store: EvidenceStore, argument_id: str) -> list[dict]:

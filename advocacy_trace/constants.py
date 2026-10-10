@@ -55,6 +55,7 @@ EVENT_TYPES = (
     "Appeal decided",
     "Release",
     "Continued detention",
+    "Sentence imposed",
     "Sentence modification",
     "Retrial ordered",
     "Compensation ordered",
@@ -121,6 +122,41 @@ PROVENANCE_VALUES = (
 
 ACCOUNT_TYPES = ("not_yet_established", "authority_document", "secondary_account")
 
+EVIDENCE_BASIS = (
+    "not_yet_established",
+    "author_document",
+    "authenticated_judgment",
+    "organization_account",
+    "official_press_summary",
+    "unauthenticated_judgment_copy",
+    "response_not_established",
+)
+
+EVIDENCE_BASIS_PUBLIC = {
+    "not_yet_established": "The basis of this record has not yet been established.",
+    "author_document": (
+        "This records what the named author wrote in that author's document. "
+        "It is not itself a court finding."
+    ),
+    "authenticated_judgment": "This finding is supported by an authenticated judgment.",
+    "organization_account": (
+        "An identified organization reported this event. "
+        "That is not a finding read from the judgment."
+    ),
+    "official_press_summary": (
+        "An official press summary supports this event. "
+        "The summary states that it is not the judgment."
+    ),
+    "unauthenticated_judgment_copy": (
+        "This was read from a judgment copy whose authenticity against an official host "
+        "has not been established. The host of the copy is not the author of the judgment."
+    ),
+    "response_not_established": (
+        "A court response to this argument has not been established. "
+        "That is not a finding that the court ignored the argument."
+    ),
+}
+
 PUBLIC_ARGUMENT_ROLES = ("trialwatch_argument", "partner_argument")
 
 NOT_STATED = "not stated"
@@ -131,4 +167,15 @@ LINK_TARGETS = ("argument", "outcome_event", "reception")
 UNKNOWN_OUTCOME_STATEMENT = (
     "No verified subsequent outcome is on record. Unknown is not a finding that "
     "the person is still detained, that the case is ongoing, or that advocacy failed."
+)
+
+DATED_OUTCOME_STATEMENT = (
+    "Dated events are on record. They are not a success or failure score, "
+    "and they do not show that an argument caused the event. "
+    "An incomplete list is not a finding that no other development occurred."
+)
+
+RECEPTION_NOT_ESTABLISHED = (
+    "No reviewed record of how an authority received this argument. "
+    "That absence is not a finding that the court ignored the argument."
 )

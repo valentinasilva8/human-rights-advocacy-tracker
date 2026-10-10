@@ -860,6 +860,350 @@ def test_proposed_research_stays_out_of_public_outputs(demo):
     )
     assert view["rows"] == []
     assert view["real_cases_with_approved_argument"] == 0
+    sentence = demo.get_outcome("out_tam_sentence")
+    assert sentence["event_type"] == "Sentence imposed"
+    assert sentence["review_status"] == "proposed"
+    assert "closest" not in sentence["description"].lower()
+    links = demo.evidence_links_for("outcome_event", "out_tam_sentence")
+    assert {link["id"] for link in links} >= {"tam_link_ca_sentence", "tam_link_sentence_summary"}
+    rivera = demo.get_outcome("out_sentence")
+    assert rivera["event_type"] == "Sentence modification"
+    appeal = demo.get_outcome("out_pl_appeal_podlesna")
+    assert appeal["evidence_label"] == "Unverified"
+    assert appeal["evidence_basis"] == "organization_account"
+    assert "HFHR reported" in appeal["description"]
+    assert demo.independent_support_count("out_pl_appeal_podlesna") == 0
+    assert "not zero evidence" in appeal["public_limitation"]
+    counts = demo.decision_counts("case_poland")
+    assert counts["defendants"] == 3
+    assert counts["proceedings"] == 1
+    assert counts["decisions"] == 2
+    assert counts["outcome_rows"] == 6
+    assert counts["interventions"] == 1
+    tam_counts = demo.decision_counts("case_tam")
+    assert tam_counts["defendants"] == 1
+    assert tam_counts["decisions"] == 4
+    assert tam_counts["outcome_rows"] == 4
+    breadth = demo.receptions_for_argument("tam_arg_breadth")[0]
+    assert "dismiss the appeal" not in breadth["passage"]
+    assert breadth["evidence_basis"] == "response_not_established"
+    assert "dismiss the appeal" in demo.get_outcome("out_tam_ca")["description"]
+    sentence_reception = demo.receptions_for_argument("tam_arg_sentence")[0]
+    assert "dismiss this appeal" not in sentence_reception["passage"]
+    assert "dismiss this appeal" in demo.get_outcome("out_tam_cfa")["description"]
+    dykes = demo.get_argument("tam_arg_dykes")
+    assert dykes["labels"] == ["Proportionality"]
+    assert "incitement to violence" in dykes["passage"]
+    dykes_reception = demo.receptions_for_argument("tam_arg_dykes")[0]
+    assert "proportionality test" in dykes_reception["passage"]
+    assert "paragraph 131" in dykes_reception["public_limitation"]
+    assert dykes_reception["reasoning_checked"] is False
+    speech = demo.get_argument("tam_arg_sentence")
+    assert "unauthorised assembly" in speech["passage"]
+    assert "solely" not in speech["summary"].lower()
+    amicus = [
+        person
+        for person in demo.participants_for_case("case_poland")
+        if person["role_in_case"] == "amicus"
+    ]
+    assert amicus[0]["name"] == "Helsinki Foundation for Human Rights"
+    with pytest.raises(ValidationError, match="unverified outcome cannot be approved"):
+        demo.review(
+            "outcome_event",
+            "out_pl_appeal_podlesna",
+            "approve",
+            reviewer="ada",
+            claim_supported=True,
+        )
+
+
+def test_review_readiness_migration_keeps_links_and_does_not_relabel(tmp_path):
+    import sqlite3
+
+    path = tmp_path / "before.sqlite"
+    conn = sqlite3.connect(path)
+    conn.execute(
+        """
+        CREATE TABLE outcome_events (
+            id TEXT PRIMARY KEY,
+            case_id TEXT NOT NULL,
+            participant_id TEXT NOT NULL,
+            event_type TEXT NOT NULL,
+            event_date TEXT,
+            event_date_precision TEXT NOT NULL DEFAULT 'unknown',
+            description TEXT NOT NULL,
+            procedural_stage TEXT,
+            finality TEXT,
+            evidence_label TEXT NOT NULL,
+            review_status TEXT NOT NULL DEFAULT 'proposed',
+            supersedes_event_id TEXT,
+            is_synthetic INTEGER NOT NULL DEFAULT 0
+        )
+        """
+    )
+    conn.execute(
+        """
+        INSERT INTO outcome_events (
+            id, case_id, participant_id, event_type, description, evidence_label,
+            review_status, is_synthetic
+        ) VALUES (
+            'out_tam_sentence', 'case_tam', 'tam_tak_chi', 'Sentence modification',
+            'Closest existing label.', 'Single-source report', 'proposed', 0
+        )
+        """
+    )
+    conn.execute(
+        """
+        INSERT INTO outcome_events (
+            id, case_id, participant_id, event_type, description, evidence_label,
+            review_status, is_synthetic
+        ) VALUES (
+            'out_sentence', 'case_rivera', 'person_rivera', 'Sentence modification',
+            'Later fictional reduction.', 'Single-source report', 'approved', 1
+        )
+        """
+    )
+    conn.execute(
+        """
+        INSERT INTO outcome_events (
+            id, case_id, participant_id, event_type, description, evidence_label,
+            review_status, is_synthetic
+        ) VALUES (
+            'out_pl_appeal_podlesna', 'case_poland', 'pl_podlesna', 'Appeal decided',
+            'Old appeal wording.', 'Unverified', 'proposed', 0
+        )
+        """
+    )
+    conn.execute(
+        """
+        INSERT INTO outcome_events (
+            id, case_id, participant_id, event_type, description, evidence_label,
+            review_status, is_synthetic
+        ) VALUES (
+            'out_tam_ca', 'case_tam', 'tam_tak_chi', 'Appeal decided',
+            'Old appeal wording without the quotation.', 'Single-source report', 'proposed', 0
+        )
+        """
+    )
+    conn.execute(
+        """
+        CREATE TABLE evidence_links (
+            id TEXT PRIMARY KEY,
+            source_id TEXT NOT NULL,
+            target_type TEXT NOT NULL,
+            target_id TEXT NOT NULL,
+            relationship TEXT NOT NULL,
+            independent INTEGER NOT NULL DEFAULT 0,
+            provenance TEXT NOT NULL DEFAULT 'unknown'
+        )
+        """
+    )
+    conn.execute(
+        """
+        INSERT INTO evidence_links (
+            id, source_id, target_type, target_id, relationship, independent, provenance
+        ) VALUES (
+            'tam_link_ca_sentence', 'tam_src_ca', 'outcome_event', 'out_tam_sentence',
+            'supports', 0, 'unknown'
+        )
+        """
+    )
+    conn.execute(
+        """
+        CREATE TABLE reception_observations (
+            id TEXT PRIMARY KEY,
+            argument_id TEXT NOT NULL,
+            case_id TEXT NOT NULL,
+            status TEXT NOT NULL,
+            source_id TEXT,
+            passage TEXT NOT NULL DEFAULT '',
+            location_ref TEXT NOT NULL DEFAULT '',
+            observer_note TEXT NOT NULL DEFAULT '',
+            account_type TEXT NOT NULL DEFAULT 'not_yet_established',
+            reasoning_checked INTEGER NOT NULL DEFAULT 0,
+            review_status TEXT NOT NULL DEFAULT 'proposed',
+            is_recital INTEGER NOT NULL DEFAULT 0,
+            is_synthetic INTEGER NOT NULL DEFAULT 0
+        )
+        """
+    )
+    conn.execute(
+        """
+        INSERT INTO reception_observations (
+            id, argument_id, case_id, status, source_id, passage, location_ref,
+            observer_note, review_status, is_synthetic
+        ) VALUES (
+            'tam_rec_breadth', 'tam_arg_breadth', 'case_tam',
+            'Document obtained but reasoning insufficient', 'tam_src_ca',
+            'We accordingly refuse to grant leave to appeal against conviction and dismiss the appeal.',
+            'CACC 62/2022, paragraph 168',
+            'Private name-search note stays internal.',
+            'proposed', 0
+        )
+        """
+    )
+    conn.execute(
+        """
+        CREATE TABLE arguments (
+            id TEXT PRIMARY KEY,
+            case_id TEXT NOT NULL,
+            intervention_id TEXT,
+            source_id TEXT,
+            author_actor TEXT NOT NULL,
+            attribution_role TEXT NOT NULL,
+            summary TEXT NOT NULL DEFAULT '',
+            reasons TEXT NOT NULL DEFAULT '',
+            passage TEXT NOT NULL DEFAULT '',
+            location_ref TEXT NOT NULL DEFAULT '',
+            legal_authorities TEXT NOT NULL DEFAULT '',
+            argument_date TEXT,
+            argument_date_precision TEXT NOT NULL DEFAULT 'unknown',
+            review_status TEXT NOT NULL DEFAULT 'proposed',
+            is_synthetic INTEGER NOT NULL DEFAULT 0
+        )
+        """
+    )
+    conn.execute(
+        """
+        INSERT INTO arguments (
+            id, case_id, author_actor, attribution_role, summary, passage, review_status, is_synthetic
+        ) VALUES (
+            'tam_arg_dykes', 'case_tam', 'Philip Dykes SC', 'defense_counsel_described',
+            'Combined legal certainty and proportionality.',
+            'Combined claim that should be narrowed.',
+            'proposed', 0
+        )
+        """
+    )
+    conn.execute(
+        """
+        CREATE TABLE argument_labels (
+            argument_id TEXT NOT NULL,
+            label TEXT NOT NULL,
+            PRIMARY KEY (argument_id, label)
+        )
+        """
+    )
+    conn.execute(
+        "INSERT INTO argument_labels (argument_id, label) VALUES ('tam_arg_dykes', 'Legality')"
+    )
+    conn.execute(
+        "INSERT INTO argument_labels (argument_id, label) VALUES ('tam_arg_dykes', 'Proportionality')"
+    )
+    conn.commit()
+    conn.close()
+
+    store = EvidenceStore(path)
+    corrected = store.get_outcome("out_tam_sentence")
+    assert corrected["event_type"] == "Sentence imposed"
+    assert corrected["review_status"] == "proposed"
+    assert "closest" not in corrected["description"].lower()
+    assert store.evidence_links_for("outcome_event", "out_tam_sentence")[0]["id"] == "tam_link_ca_sentence"
+    assert store.get_outcome("out_sentence")["event_type"] == "Sentence modification"
+    appeal = store.get_outcome("out_pl_appeal_podlesna")
+    assert appeal["evidence_label"] == "Unverified"
+    assert "HFHR reported" in appeal["description"]
+    reception = store.receptions_for_argument("tam_arg_breadth")[0]
+    assert "dismiss the appeal" not in reception["passage"]
+    assert "Wilmshurst" in reception["observer_note"]
+    assert "dismiss the appeal" in store.get_outcome("out_tam_ca")["description"]
+    dykes = store.get_argument("tam_arg_dykes")
+    assert dykes["labels"] == ["Proportionality"]
+    assert "incitement to violence" in dykes["passage"]
+    store.conn.execute(
+        "UPDATE outcome_events SET description = ? WHERE id = ?",
+        ("A reviewer edit that must survive reopening.", "out_tam_sentence"),
+    )
+    store.conn.commit()
+    store.close()
+    reopened = EvidenceStore(path)
+    assert (
+        reopened.get_outcome("out_tam_sentence")["description"]
+        == "A reviewer edit that must survive reopening."
+    )
+    assert reopened.get_outcome("out_tam_sentence")["event_type"] == "Sentence imposed"
+    reopened.close()
+
+
+def test_public_preview_keeps_uncertainty_and_hides_private_material(store):
+    import json
+
+    from advocacy_trace.views import case_view, public_preview
+
+    store.add_case(
+        title="Fictional case",
+        id="case_1",
+        unresolved_questions="PRIVATE UNRESOLVED about a named witness",
+    )
+    store.add_source(
+        title="Fictional source",
+        document_type="fairness_report",
+        author_actor="TrialWatch",
+        url="https://example.invalid/report",
+        id="source_1",
+    )
+    store.add_participant(name="Fictional defendant", id="person_1")
+    store.link_participant("case_1", "person_1", "defendant")
+    argument_id = _approvable_argument(
+        store,
+        id="arg_preview",
+        public_limitation="The copy's authenticity has not been established.",
+        evidence_basis="unauthenticated_judgment_copy",
+    )
+    store.add_outcome_event(
+        case_id="case_1",
+        participant_id="person_1",
+        event_type="Acquittal",
+        description="PROPOSED SIBLING OUTCOME must stay out of the preview",
+        evidence_label="Unverified",
+        id="out_secret",
+    )
+    store.add_reception(
+        argument_id=argument_id,
+        case_id="case_1",
+        status="Decision not yet retrieved",
+        observer_note="PRIVATE REVIEWER NOTE about chambers",
+        id="rec_private",
+    )
+    store.add_research_attempt(
+        case_id="case_1",
+        query="PRIVATE SEARCH QUERY token",
+        place="internal log",
+        result="not_found_in_this_search",
+        searched_on="2026-10-09",
+        id="search_private",
+    )
+    preview = public_preview(store, argument_id)
+    assert preview["this_call_approved_nothing"] is True
+    assert preview["stored_review_status"] == "proposed"
+    assert store.get_argument(argument_id)["review_status"] == "proposed"
+    encoded = json.dumps(preview)
+    assert "The copy's authenticity has not been established." in encoded
+    assert "not a finding that the court ignored the argument" in encoded
+    assert "no other development occurred" in encoded
+    assert "PROPOSED SIBLING OUTCOME" not in encoded
+    assert "PRIVATE REVIEWER NOTE" not in encoded
+    assert "PRIVATE UNRESOLVED" not in encoded
+    assert "PRIVATE SEARCH QUERY" not in encoded
+    store.review("argument", argument_id, "approve", reviewer="ada", claim_supported=True)
+    exported = json.dumps(store.public_export())
+    assert "The copy's authenticity has not been established." in exported
+    assert "unauthenticated_judgment_copy" in exported
+    assert "PROPOSED SIBLING OUTCOME" not in exported
+    assert "PRIVATE REVIEWER NOTE" not in exported
+    assert "PRIVATE UNRESOLVED" not in exported
+    assert "PRIVATE SEARCH QUERY" not in exported
+    public_case = case_view(store, "case_1", audience="public")
+    public_blob = json.dumps(public_case)
+    assert "PRIVATE UNRESOLVED" not in public_blob
+    assert "PRIVATE REVIEWER NOTE" not in public_blob
+    assert any(
+        "not a finding that the court ignored the argument" in gap
+        for gap in public_case["gaps"]
+    )
+    internal = case_view(store, "case_1", audience="internal")
+    assert "PRIVATE UNRESOLVED" in internal["case"]["unresolved_questions"]
+    assert internal["research_attempts"]
 
 
 def _approvable_argument(store, **overrides):

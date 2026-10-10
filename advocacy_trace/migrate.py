@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 FIXTURE_PATH = Path(__file__).resolve().parent / "fixtures" / "synthetic_chain.json"
+RESEARCH_PATH = Path(__file__).resolve().parent / "fixtures" / "proposed_research.json"
 
 _COLUMN_ADDITIONS = {
     "arguments": {
@@ -17,10 +18,19 @@ _COLUMN_ADDITIONS = {
         "principle": "TEXT NOT NULL DEFAULT ''",
         "application": "TEXT NOT NULL DEFAULT ''",
         "remedy_requested": "TEXT NOT NULL DEFAULT ''",
+        "public_limitation": "TEXT NOT NULL DEFAULT ''",
+        "evidence_basis": "TEXT NOT NULL DEFAULT 'not_yet_established'",
         "claim_supported": "INTEGER NOT NULL DEFAULT 0",
+    },
+    "outcome_events": {
+        "public_limitation": "TEXT NOT NULL DEFAULT ''",
+        "evidence_basis": "TEXT NOT NULL DEFAULT 'not_yet_established'",
+        "decision_id": "TEXT",
     },
     "reception_observations": {
         "account_type": "TEXT NOT NULL DEFAULT 'not_yet_established'",
+        "public_limitation": "TEXT NOT NULL DEFAULT ''",
+        "evidence_basis": "TEXT NOT NULL DEFAULT 'not_yet_established'",
         "reasoning_checked": "INTEGER NOT NULL DEFAULT 0",
     },
     "evidence_links": {
@@ -72,6 +82,7 @@ def migrate(conn: sqlite3.Connection) -> None:
         conn,
         demote_legacy_real=("arguments", "claim_supported") in added,
     )
+    _apply_review_readiness(conn)
     conn.commit()
 
 
@@ -178,3 +189,146 @@ def _preserve_existing_records(conn: sqlite3.Connection, *, demote_legacy_real: 
                 "UPDATE evidence_links SET provenance = 'duplicate_copy' WHERE id = ?",
                 (link_id,),
             )
+
+
+def _apply_review_readiness(conn: sqlite3.Connection) -> None:
+    """Correct proposed research rows once. Do not approve them or touch synthetic rows.
+
+    Fresh databases have no research rows yet. The migration is still marked applied
+    so a later open does not overwrite a reviewer's edit. New ids are inserted by the
+    research loader, which skips ids that already exist.
+    """
+
+    if _migration_applied(conn, "review_readiness_v1"):
+        return
+    tables = {
+        row[0]
+        for row in conn.execute("SELECT name FROM sqlite_master WHERE type = 'table'")
+    }
+    if RESEARCH_PATH.exists():
+        payload = json.loads(RESEARCH_PATH.read_text(encoding="utf-8"))
+        _update_proposed_arguments(conn, tables, payload.get("arguments", []))
+        _update_proposed_outcomes(conn, tables, payload.get("outcomes", []))
+        _update_proposed_receptions(conn, tables, payload.get("receptions", []))
+        _update_case_notes(conn, tables, payload.get("cases", []))
+    _mark_migration(conn, "review_readiness_v1")
+
+
+def _update_proposed_arguments(conn: sqlite3.Connection, tables: set[str], rows: list[dict]) -> None:
+    if "arguments" not in tables:
+        return
+    for item in rows:
+        current = conn.execute(
+            "SELECT review_status, is_synthetic FROM arguments WHERE id = ?",
+            (item["id"],),
+        ).fetchone()
+        if current is None or current[0] != "proposed" or current[1]:
+            continue
+        conn.execute(
+            """
+            UPDATE arguments
+            SET summary = ?, reasons = ?, passage = ?, location_ref = ?,
+                legal_authorities = ?, principle = ?, application = ?,
+                remedy_requested = ?, public_limitation = ?, evidence_basis = ?
+            WHERE id = ? AND review_status = 'proposed' AND is_synthetic = 0
+            """,
+            (
+                item.get("summary", ""),
+                item.get("reasons", ""),
+                item.get("passage", ""),
+                item.get("location_ref", ""),
+                item.get("legal_authorities", ""),
+                item.get("principle", ""),
+                item.get("application", ""),
+                item.get("remedy_requested", ""),
+                item.get("public_limitation", ""),
+                item.get("evidence_basis", "not_yet_established"),
+                item["id"],
+            ),
+        )
+        if "argument_labels" not in tables:
+            continue
+        conn.execute("DELETE FROM argument_labels WHERE argument_id = ?", (item["id"],))
+        for label in item.get("labels") or []:
+            conn.execute(
+                "INSERT INTO argument_labels (argument_id, label) VALUES (?, ?)",
+                (item["id"], label),
+            )
+
+
+def _update_proposed_outcomes(conn: sqlite3.Connection, tables: set[str], rows: list[dict]) -> None:
+    if "outcome_events" not in tables:
+        return
+    for item in rows:
+        current = conn.execute(
+            "SELECT review_status, is_synthetic FROM outcome_events WHERE id = ?",
+            (item["id"],),
+        ).fetchone()
+        if current is None or current[0] != "proposed" or current[1]:
+            continue
+        conn.execute(
+            """
+            UPDATE outcome_events
+            SET event_type = ?, description = ?, evidence_label = ?,
+                procedural_stage = ?, finality = ?, public_limitation = ?,
+                evidence_basis = ?, decision_id = ?
+            WHERE id = ? AND review_status = 'proposed' AND is_synthetic = 0
+            """,
+            (
+                item["event_type"],
+                item["description"],
+                item["evidence_label"],
+                item.get("procedural_stage"),
+                item.get("finality"),
+                item.get("public_limitation", ""),
+                item.get("evidence_basis", "not_yet_established"),
+                item.get("decision_id"),
+                item["id"],
+            ),
+        )
+
+
+def _update_proposed_receptions(conn: sqlite3.Connection, tables: set[str], rows: list[dict]) -> None:
+    if "reception_observations" not in tables:
+        return
+    for item in rows:
+        current = conn.execute(
+            "SELECT review_status, is_synthetic FROM reception_observations WHERE id = ?",
+            (item["id"],),
+        ).fetchone()
+        if current is None or current[0] != "proposed" or current[1]:
+            continue
+        conn.execute(
+            """
+            UPDATE reception_observations
+            SET status = ?, source_id = ?, passage = ?, location_ref = ?,
+                observer_note = ?, account_type = ?, public_limitation = ?,
+                evidence_basis = ?, reasoning_checked = 0
+            WHERE id = ? AND review_status = 'proposed' AND is_synthetic = 0
+            """,
+            (
+                item["status"],
+                item.get("source_id"),
+                item.get("passage", ""),
+                item.get("location_ref", ""),
+                item.get("observer_note", ""),
+                item.get("account_type", "not_yet_established"),
+                item.get("public_limitation", ""),
+                item.get("evidence_basis", "not_yet_established"),
+                item["id"],
+            ),
+        )
+
+
+def _update_case_notes(conn: sqlite3.Connection, tables: set[str], rows: list[dict]) -> None:
+    if "cases" not in tables:
+        return
+    for item in rows:
+        conn.execute(
+            """
+            UPDATE cases
+            SET unresolved_questions = ?
+            WHERE id = ? AND is_synthetic = 0
+            """,
+            (item.get("unresolved_questions", ""), item["id"]),
+        )
