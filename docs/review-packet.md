@@ -2,7 +2,7 @@
 
 Valentina Silva approved `pl_arg_legality` and `pl_arg_proportionality` on 10 October 2026. She also authorized approval of the three Poland appeal rows as one HFHR organization account. Every other real row remains `proposed`, including reception of Lisa Davis’s report. Nothing here authorizes deployment or redistribution of a PDF.
 
-The current approved-only export is [public-data-contract.md](public-data-contract.md) and [public-export.sample.json](public-export.sample.json). Pull request 4 is on `cursor/evidence-review-safeguards-5c2e`.
+The current approved-only export is [frontend-handoff.md](frontend-handoff.md), [public-data-contract.md](public-data-contract.md), and [public-export.sample.json](public-export.sample.json). The existing pull request is https://github.com/valentinasilva8/human-rights-advocacy-tracker/pull/5 on `cursor/evidence-review-safeguards-5c2e`. The next proposed packet is [supreme-court-2024-review-packet.md](supreme-court-2024-review-packet.md). It is not approved.
 
 ## What is already public
 
@@ -10,7 +10,7 @@ With no argument-label filter, and with country set to Poland, the public explor
 
 ## Public preview if the appeal is approved
 
-`appeal_outcome_preview` does not itself approve a row. The stored appeal rows are approved as `Single-source report` with basis `organization_account`. The gate still refuses an Unverified outcome. The dated-outcome statement says an incomplete list is not a finding that no other development occurred.
+`appeal_outcome_preview` does not itself approve a row. The stored appeal rows are approved as `Single-source report` with basis `organization_account`. The gate still refuses an Unverified outcome. The public timeline caption is “Latest approved event in this dataset.” That is not a claim that the timeline is current.
 
 Beside the two approved arguments, the three defendant rows would show one shared decision, `pl_decision_appeal_2022-01-12`. They would not count as three decisions. Each row would carry the HFHR-attributed claim, the organization-account caption, and this public limitation:
 
@@ -110,7 +110,7 @@ Counts for the Poland proceeding: 3 defendants, 1 proceeding, 2 decisions (the 2
 
 **English translation.** The Regional Court in Płock upheld the acquitting judgment of three activists accused of offending religious feelings. rp.pl says the Helsinki Foundation for Human Rights, which filed an amicus opinion, is the source of that account.
 
-rp.pl’s provenance on each appeal row is `derived_from_shared_original`. It draws on HFHR’s account. It is not an independent confirmation. OKO.press is provenance `independent` after a reading of its same-day courtroom report, which does not cite HFHR. `independent_support_count` is 1. ARTICLE 19’s brief stays `unknown` and does not add to that count.
+rp.pl’s provenance on each appeal row is `derived_from_shared_original`. It draws on HFHR’s account. It is not an independent confirmation, and it is a different article from the 28 March 2024 rp.pl report. OKO.press is provenance `independent` and `support_scope` `identity_and_reported_result`. It names the three defendants and reports that the appellate court upheld the acquittal on 12 January 2022. That does not corroborate that HFHR reported the result, or every other sentence on the outcome record, so `independent_support_count` is 0. ARTICLE 19’s brief stays provenance `unknown` and scope `identity`. It does not add to that count. The approved public limitation still says OKO.press supports the identity match. That sentence was not rewritten, because the approval was left unchanged. The link scope is the precise field.
 
 **Evidence category and public limitation.** The approval gate refuses `Unverified`. The reviewed category is evidence label **Single-source report** and evidence basis `organization_account`. That is an identified organization’s account. It is not `Primary-source supported` and not a finding read from the judgment. Public limitation, stored on each row: “HFHR reported this result. The appeal judgment itself was not retrieved. This is an organization account, not a finding read from the judgment. HFHR is an amicus participant; the brief was not retrieved. rp.pl draws on the HFHR account and is not an independent origin. OKO.press is a separate same-day courtroom report that names the three defendants and supports that identity match; it is not the judgment. This outcome does not establish acceptance or rejection of Lisa Davis's arguments. It is not a statement that 12 January 2022 is the latest known development. An incomplete list is not a finding that no other development occurred.”
 

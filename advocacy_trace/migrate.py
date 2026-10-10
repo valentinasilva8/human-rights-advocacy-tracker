@@ -35,6 +35,7 @@ _COLUMN_ADDITIONS = {
     },
     "evidence_links": {
         "provenance": "TEXT NOT NULL DEFAULT 'unknown'",
+        "support_scope": "TEXT NOT NULL DEFAULT 'whole_claim'",
     },
     "cases": {
         "proceeding_note": "TEXT NOT NULL DEFAULT ''",
@@ -89,6 +90,7 @@ def migrate(conn: sqlite3.Connection) -> None:
     _apply_poland_preview(conn)
     _keep_article_quotations(conn)
     _record_appeal_account(conn)
+    _record_support_scope(conn)
     conn.commit()
 
 
@@ -488,6 +490,42 @@ def _record_appeal_account(conn: sqlite3.Connection) -> None:
                     (item.get("rights_note", ""), item["id"]),
                 )
     _mark_migration(conn, "appeal_account_approval_v1")
+
+
+def _record_support_scope(conn: sqlite3.Connection) -> None:
+    """Scope partial support. Do not rewrite an approved claim or its lock fields."""
+
+    if _migration_applied(conn, "support_scope_v1"):
+        return
+    tables = {
+        row[0]
+        for row in conn.execute("SELECT name FROM sqlite_master WHERE type = 'table'")
+    }
+    if "evidence_links" in tables and "support_scope" in {
+        row[1] for row in conn.execute("PRAGMA table_info(evidence_links)")
+    }:
+        scoped = (
+            ("identity_and_reported_result", "pl_link_oko_podlesna"),
+            ("identity_and_reported_result", "pl_link_oko_prus"),
+            ("identity_and_reported_result", "pl_link_oko_gzyra"),
+            ("identity", "pl_link_article19_podlesna"),
+            ("identity", "pl_link_article19_prus"),
+            ("identity", "pl_link_article19_gzyra"),
+        )
+        conn.executemany(
+            "UPDATE evidence_links SET support_scope = ? WHERE id = ?",
+            scoped,
+        )
+    if "sources" in tables and RESEARCH_PATH.exists():
+        payload = json.loads(RESEARCH_PATH.read_text(encoding="utf-8"))
+        for item in payload.get("sources", []):
+            if item["id"] != "pl_src_oko":
+                continue
+            conn.execute(
+                "UPDATE sources SET rights_note = ? WHERE id = ?",
+                (item.get("rights_note", ""), item["id"]),
+            )
+    _mark_migration(conn, "support_scope_v1")
 
 
 def _update_case_notes(conn: sqlite3.Connection, tables: set[str], rows: list[dict]) -> None:

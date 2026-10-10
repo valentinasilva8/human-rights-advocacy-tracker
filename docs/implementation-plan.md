@@ -8,7 +8,7 @@ Live alignment with the Google Doc tab `t.avvzu4g5dzi9` is pending. That tab was
 
 ## Where this slice stands
 
-The safeguards in the current build are in the store, the explorer, the case screen, and `public_export`. Valentina Silva approved `pl_arg_legality` and `pl_arg_proportionality` on 10 October 2026. On the same date she authorized approval of the three Poland appeal rows as one HFHR organization account, labeled `Single-source report`. Reception of the report stays proposed. A 28 March 2024 Supreme Court report is a separate research lead and is not approved. The current approved-only export is [public-data-contract.md](public-data-contract.md) and [public-export.sample.json](public-export.sample.json). The search log is [research-log.md](research-log.md). The packet is [review-packet.md](review-packet.md).
+The safeguards in the current build are in the store, the explorer, the case screen, and `public_export`. Valentina Silva approved `pl_arg_legality` and `pl_arg_proportionality` on 10 October 2026. On the same date she authorized approval of the three Poland appeal rows as one HFHR organization account, labeled `Single-source report`. Reception of the report stays proposed. The 28 March 2024 Supreme Court reports are proposed records in [supreme-court-2024-review-packet.md](supreme-court-2024-review-packet.md) and are not approved. The current approved-only export is [frontend-handoff.md](frontend-handoff.md), [public-data-contract.md](public-data-contract.md), and [public-export.sample.json](public-export.sample.json). The search log is [research-log.md](research-log.md). The January appeal packet is [review-packet.md](review-packet.md).
 
 ## What is already in the repository
 
