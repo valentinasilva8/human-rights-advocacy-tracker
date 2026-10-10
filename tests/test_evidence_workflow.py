@@ -930,6 +930,87 @@ def test_proposed_research_stays_out_of_public_outputs(demo):
         )
 
 
+def test_recorded_approval_keeps_the_quotations_and_leaves_the_rest_proposed(tmp_path):
+    import json
+
+    from advocacy_trace.approvals import apply_recorded_approvals
+    from advocacy_trace.seed import open_store
+    from advocacy_trace.views import case_view
+
+    store = open_store(tmp_path / "approved.sqlite")
+    legality = store.get_argument("pl_arg_legality")
+    proportionality = store.get_argument("pl_arg_proportionality")
+    assert legality["review_status"] == "approved"
+    assert proportionality["review_status"] == "approved"
+    assert legality["claim_supported"] is True
+    assert "unfettered discretion" in legality["passage"]
+    assert "exceptionally grave acts" in proportionality["passage"]
+    actions = store.conn.execute(
+        """
+        SELECT reviewer, claim_text, evidence_ref, claim_supported, is_simulated
+        FROM review_actions
+        WHERE action = 'approve' AND target_id IN ('pl_arg_legality', 'pl_arg_proportionality')
+        """
+    ).fetchall()
+    assert len(actions) == 2
+    for reviewer, claim_text, evidence_ref, supported, simulated in actions:
+        assert reviewer == "Valentina Silva"
+        assert supported == 1
+        assert simulated == 0
+        assert "quotation:" in evidence_ref
+        assert claim_text
+    exported = store.public_export()
+    assert exported["real_case_count"] == 1
+    exported_arguments = {item["id"]: item for item in exported["arguments"]}
+    assert exported_arguments["pl_arg_legality"]["passage"] == legality["passage"]
+    assert exported_arguments["pl_arg_proportionality"]["passage"] == proportionality["passage"]
+    assert "should likewise be rejected" in exported_arguments["pl_arg_legality"]["remedy_requested"]
+    assert exported["outcome_events"] == []
+    assert {item["id"] for item in exported["cases"]} == {"case_poland"}
+    blob = json.dumps(exported)
+    assert "case_tam" not in blob
+    assert "unresolved_questions" not in blob
+    public_case = case_view(store, "case_poland", audience="public")
+    assert public_case["omitted"] is False
+    shown = {item["argument"]["id"] for item in public_case["arguments"]}
+    assert shown == {"pl_arg_legality", "pl_arg_proportionality"}
+    assert public_case["outcomes"] == []
+    assert "not a finding that the court ignored the argument" in " ".join(public_case["gaps"])
+    assert store.get_argument("tam_arg_breadth")["review_status"] == "proposed"
+    assert store.get_outcome("out_pl_appeal_podlesna")["review_status"] == "proposed"
+    hfhr = store.get_outcome("out_pl_appeal_podlesna")["description"]
+    assert "HFHR reported" in hfhr
+    assert "utrzymał w mocy" in hfhr
+    assert "informuje Helsińska Fundacja Praw Człowieka" in hfhr
+    assert store.get_outcome("out_pl_appeal_podlesna")["review_status"] == "proposed"
+    store.close()
+    reopened = open_store(tmp_path / "approved.sqlite")
+    again = apply_recorded_approvals(reopened)
+    assert again == []
+    assert reopened.get_argument("pl_arg_legality")["passage"] == legality["passage"]
+    count = reopened.conn.execute(
+        """
+        SELECT COUNT(*) FROM review_actions
+        WHERE action = 'approve' AND target_id = 'pl_arg_legality'
+        """
+    ).fetchone()[0]
+    assert count == 1
+    reopened.conn.execute(
+        """
+        UPDATE arguments
+        SET review_status = 'proposed', claim_supported = 0, passage = ?
+        WHERE id = 'pl_arg_legality'
+        """,
+        ("A rewritten quotation that was not approved.",),
+    )
+    reopened.conn.commit()
+    refused = apply_recorded_approvals(reopened)
+    assert "pl_arg_legality" not in refused
+    assert reopened.get_argument("pl_arg_legality")["review_status"] == "proposed"
+    assert reopened.get_argument("pl_arg_proportionality")["review_status"] == "approved"
+    reopened.close()
+
+
 def test_review_readiness_migration_keeps_links_and_does_not_relabel(tmp_path):
     import sqlite3
 

@@ -1,6 +1,6 @@
 # Approval packet
 
-This packet does not approve any record. Every real row remains `proposed`. Nothing here authorizes deployment, a pull request, or redistribution of a PDF.
+Valentina Silva approved `pl_arg_legality` and `pl_arg_proportionality` on 10 October 2026. The quotations in those two records are the proof and stay on the rows. Every other real row remains `proposed`. Nothing here authorizes deployment or redistribution of a PDF.
 
 Quotation and paraphrase are labeled separately. A requested remedy that sits outside the argument passage has its own citation.
 

@@ -1635,7 +1635,12 @@ class EvidenceStore:
             )
             evidence = " | ".join(
                 part
-                for part in (argument.get("source_id") or "", argument["location_ref"])
+                for part in (
+                    argument.get("source_id") or "",
+                    argument["location_ref"],
+                    f"quotation: {argument['passage']}" if argument["passage"] else "",
+                    f"remedy: {argument['remedy_requested']}" if argument.get("remedy_requested") else "",
+                )
                 if part
             )
             return claim, evidence
