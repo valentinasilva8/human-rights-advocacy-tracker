@@ -1,20 +1,20 @@
 # Appeal-outcome review packet
 
-Valentina Silva approved `pl_arg_legality` and `pl_arg_proportionality` on 10 October 2026. The quotations in those two records are the proof and stay on the rows. Every other real row remains `proposed`. This packet asks for a decision on the reported appeal. It does not approve that outcome. Nothing here authorizes deployment or redistribution of a PDF.
+Valentina Silva approved `pl_arg_legality` and `pl_arg_proportionality` on 10 October 2026. She also authorized approval of the three Poland appeal rows as one HFHR organization account. Every other real row remains `proposed`, including reception of Lisa Davis’s report. Nothing here authorizes deployment or redistribution of a PDF.
 
 The current approved-only export is [public-data-contract.md](public-data-contract.md) and [public-export.sample.json](public-export.sample.json). Pull request 4 is on `cursor/evidence-review-safeguards-5c2e`.
 
 ## What is already public
 
-With no argument-label filter, and with country set to Poland, the public explorer shows one real case and two approved arguments: `pl_arg_legality` and `pl_arg_proportionality`. `real_cases_with_approved_argument` is 1. A Proportionality-only filter matches only `pl_arg_proportionality`. The live outcome summary stays unknown. The approved-only export has `real_case_count` 1, `approved_argument_count` 2, and no outcome events.
+With no argument-label filter, and with country set to Poland, the public explorer shows one real case and two approved arguments: `pl_arg_legality` and `pl_arg_proportionality`. `real_cases_with_approved_argument` is 1. A Proportionality-only filter matches only `pl_arg_proportionality`. The approved-only export has `real_case_count` 1, `approved_argument_count` 2, and three outcome rows for one decision.
 
 ## Public preview if the appeal is approved
 
-`appeal_outcome_preview` does not approve the rows and does not change the Unverified label. The current gate refuses approval of an unverified outcome. The live dated-outcome summary also omits Unverified events, so the explorer would still report no verified subsequent outcome until that gate is met. The block below is the display text for a decision. It is not that decision.
+`appeal_outcome_preview` does not itself approve a row. The stored appeal rows are approved as `Single-source report` with basis `organization_account`. The gate still refuses an Unverified outcome. The dated-outcome statement says an incomplete list is not a finding that no other development occurred.
 
 Beside the two approved arguments, the three defendant rows would show one shared decision, `pl_decision_appeal_2022-01-12`. They would not count as three decisions. Each row would carry the HFHR-attributed claim, the organization-account caption, and this public limitation:
 
-“HFHR reported this result. The appeal judgment was not retrieved, including from a check of the official Polish judgment portal. rp.pl draws on the HFHR account and is not an independent origin. Zero independent origins is not zero evidence. This is not a documented response to the fairness report.”
+“HFHR reported this result. The appeal judgment itself was not retrieved. This is an organization account, not a finding read from the judgment.”
 
 The preview states that reception of Lisa Davis’s report remains unestablished and that the reported affirmance does not establish acceptance of her arguments. It leaves out the proposed trial acquittals, the Tam records, reviewer notes, unresolved questions, and search notes.
 
@@ -84,9 +84,7 @@ One decision, three defendant rows: `out_pl_appeal_podlesna`, `out_pl_appeal_pru
 
 Counts for the Poland proceeding: 3 defendants, 1 proceeding, 2 decisions (the 2 March 2021 acquittal and this reported appeal), 1 intervention (the fairness report), 6 outcome rows. HFHR is an amicus participant, not a fourth defendant and not a second intervention document. The amicus brief was not retrieved.
 
-**Exact proposed public claim, for `out_pl_appeal_podlesna`.** HFHR reported that on 12 January 2022 the Regional Court in Płock upheld the acquittal of Elżbieta Podleśna, together with the other two defendants in II K 296/20, and said the appeals were unfounded. This row is this defendant's result of that shared decision. It is an identified organization's account, not a finding read from the appeal judgment. rp.pl draws on the HFHR account.
-
-The same sentence is stored for Anna Prus on `out_pl_appeal_prus` and for Joanna Gzyra-Iskandar on `out_pl_appeal_gzyra`, with that defendant’s name in place of Elżbieta Podleśna. The claim is attributed to HFHR. It is not a finding read from the appeal judgment.
+**Approved public claim, the same on each of the three rows.** HFHR reported that the Regional Court in Płock upheld the three defendants' acquittal on 12 January 2022.
 
 **HFHR source.** [https://hfhr.pl/aktualnosci/tecza-nie-obraza-wyrok-uniewinnienie](https://hfhr.pl/aktualnosci/tecza-nie-obraza-wyrok-uniewinnienie). Source id `pl_src_hfhr`. The page is dated 13.01.2022. Stored publication date: 2022-01-13.
 
@@ -112,15 +110,13 @@ The same sentence is stored for Anna Prus on `out_pl_appeal_prus` and for Joanna
 
 **English translation.** The Regional Court in Płock upheld the acquitting judgment of three activists accused of offending religious feelings. rp.pl says the Helsinki Foundation for Human Rights, which filed an amicus opinion, is the source of that account.
 
-rp.pl’s provenance on each appeal row is `derived_from_shared_original`. It draws on HFHR’s account. It is not an independent confirmation and it is not a second origin. `independent_support_count` for each appeal row is 0. Zero independent origins is not zero evidence.
+rp.pl’s provenance on each appeal row is `derived_from_shared_original`. It draws on HFHR’s account. It is not an independent confirmation. OKO.press is provenance `independent` after a reading of its same-day courtroom report, which does not cite HFHR. `independent_support_count` is 1. ARTICLE 19’s brief stays `unknown` and does not add to that count.
 
-**Evidence category and public limitation.** Evidence label remains **Unverified**. Evidence basis is `organization_account`: an identified organization reported this event, and that is not a finding read from the judgment. Public limitation, stored on each row: “HFHR reported this result. The appeal judgment was not retrieved, including from a check of the official Polish judgment portal. rp.pl draws on the HFHR account and is not an independent origin. Zero independent origins is not zero evidence. This is not a documented response to the fairness report.”
-
-The label was not changed. The current approval gate refuses an Unverified outcome. Changing the label only to make approval possible would still leave the judgment unread.
+**Evidence category and public limitation.** The approval gate refuses `Unverified`. The reviewed category is evidence label **Single-source report** and evidence basis `organization_account`. That is an identified organization’s account. It is not `Primary-source supported` and not a finding read from the judgment. Public limitation, stored on each row: “HFHR reported this result. The appeal judgment itself was not retrieved. This is an organization account, not a finding read from the judgment. HFHR is an amicus participant; the brief was not retrieved. rp.pl draws on the HFHR account and is not an independent origin. OKO.press is a separate same-day courtroom report that names the three defendants and supports that identity match; it is not the judgment. This outcome does not establish acceptance or rejection of Lisa Davis's arguments. It is not a statement that 12 January 2022 is the latest known development. An incomplete list is not a finding that no other development occurred.”
 
 **Reception of Lisa Davis’s report.** `pl_rec_legality` and `pl_rec_proportionality` stay proposed. Status: Decision not yet retrieved. Evidence basis: `response_not_established`. The reported appeal result does not establish that the court accepted her arguments. The absence of a reviewed reception is not a finding that the court ignored the arguments.
 
-**Recommendation.** Awaiting your decision on the three rows below. This packet does not approve them. A claim that the court made this finding, read from the judgment, stays blocked. The wording above is the organization-reported claim.
+**Decision.** Valentina Silva authorized approval on 10 October 2026 as an AI-assisted review. She did not personally inspect the appeal judgment. The assistant did not retrieve the HFHR page again. The approved wording is the sentence in the claim above. Review action time: 2026-10-10T00:48:39+00:00.
 
 ## 4. Tam counsel and reception
 
@@ -162,7 +158,7 @@ No claim below is approved. The appeal rows are the decision in front of you. Th
 
 | Record | Status |
 | --- | --- |
-| `out_pl_appeal_podlesna`, `out_pl_appeal_prus`, `out_pl_appeal_gzyra` | Awaiting your decision. Label stays Unverified. One shared decision. |
+| `out_pl_appeal_podlesna`, `out_pl_appeal_prus`, `out_pl_appeal_gzyra` | Approved as one HFHR organization account. Label `Single-source report`. |
 | `out_pl_acquit_*` | The report cites a 2 March 2021 acquittal that predates the report. The judgment was not retrieved. Shared decision `pl_decision_trial_2021-03-02`. |
 | `pl_rec_legality`, `pl_rec_proportionality` | Decision not yet retrieved. The HFHR account is not reception of the report and is not acceptance of Lisa Davis’s arguments. |
 | `tam_arg_breadth`, `tam_arg_sentence` | Report claims. The sentence quotation covers political speech and organising an unauthorised assembly together. It does not divide the sentence by count. |
@@ -171,10 +167,14 @@ No claim below is approved. The appeal rows are the decision in front of you. Th
 | `out_tam_conviction`, `out_tam_ca`, `out_tam_cfa` | Dates and dismissals read from unauthenticated copies. Dismissals are outcomes, not reception of the May 2022 report. |
 | `tam_arg_dykes`, `tam_rec_dykes` | Counsel’s proportionality limb. Not this decision. |
 
-## Awaiting your decision
+## Approved outcome wording
 
-These three records are one reported decision, `pl_decision_appeal_2022-01-12`. This packet does not approve them.
+These three records are one decision, `pl_decision_appeal_2022-01-12`. Approved wording, the same on each row:
+
+HFHR reported that the Regional Court in Płock upheld the three defendants' acquittal on 12 January 2022.
 
 1. `out_pl_appeal_podlesna`
 2. `out_pl_appeal_prus`
 3. `out_pl_appeal_gzyra`
+
+A 28 March 2024 Amnesty Slovakia report is logged as research lead `pl_search_amnesty_2024`. It is not approved and is not in the public export.

@@ -1,7 +1,7 @@
 {
   "recorded_on": "2026-10-10",
   "reviewer": "Valentina Silva",
-  "scope": "Only these two argument records. No outcome, reception, or other argument is approved by this file.",
+  "scope": "Two argument records, plus the three Poland appeal outcome rows as one shared organization account. No reception and no other outcome is approved by this file.",
   "approvals": [
     {
       "argument_id": "pl_arg_legality",
@@ -28,6 +28,47 @@
       "source_id": "pl_src_report",
       "remedy_requested": "Not in the argument passage. Printed p. 4, PDF page 5: “The prosecution’s appeal in the present case, which is scheduled to be heard on November 10, should likewise be rejected.” and “While the legislature should repeal Article 196…” Printed p. 31, PDF page 32, conclusion: “on November 10 the appellate court in Plock should dismiss the prosecution’s appeal against the acquittal.” Same page, Recommendations from Professor Lisa Davis: to the Polish legislature, Article 196 should be repealed; to the Polish judiciary, the court should dismiss the prosecution’s appeal against the acquittal of Podlesna, Prus, and Gzyra-Iskandar. The November 10 sentence does not restate the year.",
       "disclaimer_text": "The views expressed herein represent the opinions of the authors. They have not been reviewed or approved by the House of Delegates or the Board of Governors of the American Bar Association and, accordingly, should not be construed as representing the position of the Association or any of its entities. Furthermore, nothing in this report should be considered legal advice for specific cases. Additionally, the views expressed in this report are not necessarily those of the Clooney Foundation for Justice."
+    }
+  ],
+  "outcome_approvals": [
+    {
+      "outcome_id": "out_pl_appeal_podlesna",
+      "reviewer": "Valentina Silva",
+      "note": "Valentina Silva authorized this approval on 10 October 2026 after an AI-assisted source review. The review is AI-assisted. She did not personally inspect the appeal judgment. The assistant did not directly retrieve the HFHR page for this approval. The approved wording is HFHR's attributed report that the Regional Court in Płock upheld the three defendants' acquittal on 12 January 2022. Evidence basis remains organization_account. Evidence label is Single-source report, the smallest existing category the approval gate accepts for a reviewed organization account. Unverified still cannot be approved. This is not a primary-source finding. The actual approval time is the review action timestamp.",
+      "description": "HFHR reported that the Regional Court in Płock upheld the three defendants' acquittal on 12 January 2022.",
+      "evidence_label": "Single-source report",
+      "evidence_basis": "organization_account",
+      "public_limitation": "HFHR reported this result. The appeal judgment itself was not retrieved. This is an organization account, not a finding read from the judgment. HFHR is an amicus participant; the brief was not retrieved. rp.pl draws on the HFHR account and is not an independent origin. OKO.press is a separate same-day courtroom report that names the three defendants and supports that identity match; it is not the judgment. This outcome does not establish acceptance or rejection of Lisa Davis's arguments. It is not a statement that 12 January 2022 is the latest known development. An incomplete list is not a finding that no other development occurred.",
+      "decision_id": "pl_decision_appeal_2022-01-12",
+      "event_type": "Appeal decided",
+      "event_date": "2022-01-12",
+      "approved_at": "2026-10-10T00:48:39+00:00"
+    },
+    {
+      "outcome_id": "out_pl_appeal_prus",
+      "reviewer": "Valentina Silva",
+      "note": "Valentina Silva authorized this approval on 10 October 2026 after an AI-assisted source review. The review is AI-assisted. She did not personally inspect the appeal judgment. The assistant did not directly retrieve the HFHR page for this approval. The approved wording is HFHR's attributed report that the Regional Court in Płock upheld the three defendants' acquittal on 12 January 2022. Evidence basis remains organization_account. Evidence label is Single-source report, the smallest existing category the approval gate accepts for a reviewed organization account. Unverified still cannot be approved. This is not a primary-source finding. The actual approval time is the review action timestamp.",
+      "description": "HFHR reported that the Regional Court in Płock upheld the three defendants' acquittal on 12 January 2022.",
+      "evidence_label": "Single-source report",
+      "evidence_basis": "organization_account",
+      "public_limitation": "HFHR reported this result. The appeal judgment itself was not retrieved. This is an organization account, not a finding read from the judgment. HFHR is an amicus participant; the brief was not retrieved. rp.pl draws on the HFHR account and is not an independent origin. OKO.press is a separate same-day courtroom report that names the three defendants and supports that identity match; it is not the judgment. This outcome does not establish acceptance or rejection of Lisa Davis's arguments. It is not a statement that 12 January 2022 is the latest known development. An incomplete list is not a finding that no other development occurred.",
+      "decision_id": "pl_decision_appeal_2022-01-12",
+      "event_type": "Appeal decided",
+      "event_date": "2022-01-12",
+      "approved_at": "2026-10-10T00:48:39+00:00"
+    },
+    {
+      "outcome_id": "out_pl_appeal_gzyra",
+      "reviewer": "Valentina Silva",
+      "note": "Valentina Silva authorized this approval on 10 October 2026 after an AI-assisted source review. The review is AI-assisted. She did not personally inspect the appeal judgment. The assistant did not directly retrieve the HFHR page for this approval. The approved wording is HFHR's attributed report that the Regional Court in Płock upheld the three defendants' acquittal on 12 January 2022. Evidence basis remains organization_account. Evidence label is Single-source report, the smallest existing category the approval gate accepts for a reviewed organization account. Unverified still cannot be approved. This is not a primary-source finding. The actual approval time is the review action timestamp.",
+      "description": "HFHR reported that the Regional Court in Płock upheld the three defendants' acquittal on 12 January 2022.",
+      "evidence_label": "Single-source report",
+      "evidence_basis": "organization_account",
+      "public_limitation": "HFHR reported this result. The appeal judgment itself was not retrieved. This is an organization account, not a finding read from the judgment. HFHR is an amicus participant; the brief was not retrieved. rp.pl draws on the HFHR account and is not an independent origin. OKO.press is a separate same-day courtroom report that names the three defendants and supports that identity match; it is not the judgment. This outcome does not establish acceptance or rejection of Lisa Davis's arguments. It is not a statement that 12 January 2022 is the latest known development. An incomplete list is not a finding that no other development occurred.",
+      "decision_id": "pl_decision_appeal_2022-01-12",
+      "event_type": "Appeal decided",
+      "event_date": "2022-01-12",
+      "approved_at": "2026-10-10T00:48:39+00:00"
     }
   ]
 }

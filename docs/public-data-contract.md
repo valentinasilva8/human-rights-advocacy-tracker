@@ -10,13 +10,13 @@ Do not treat this file as a request to another agent, and do not change a fronte
 - `approved_argument_count`: 2
 - `cases`: `case_poland` only
 - `arguments`: `pl_arg_legality` and `pl_arg_proportionality`
-- `outcome_events`: empty
+- `outcome_events`: `out_pl_appeal_podlesna`, `out_pl_appeal_prus`, and `out_pl_appeal_gzyra`, one shared `decision_id` `pl_decision_appeal_2022-01-12`
 - `receptions`: empty
-- `sources`: the fairness-report source for those two arguments
+- `sources`: the fairness report, HFHR, rp.pl, OKO.press, and the ARTICLE 19 brief
 - `interventions`: the Poland fairness-report intervention
 - `includes_full_documents`: false
 
-The Poland appeal rows are still proposed. They are not in this export. Reception of Lisa Davis’s report is still proposed, so it is not in this export either. An empty reception list is not a finding that the court ignored the arguments.
+Reception of Lisa Davis’s report stays proposed, so it is not in this export. An empty reception list is not a finding that the court ignored the arguments. The 28 March 2024 research lead is not in this export. The January 2022 outcome is not a statement that the timeline is complete.
 
 ## Rules
 
@@ -30,8 +30,8 @@ Participants are not a top-level key. The case title names the three defendants.
 
 ## Explorer
 
-When the filter matches both approved arguments (no label filter, country Poland or any country), the public explorer reports one real case and two approved arguments. A Proportionality-only filter matches `pl_arg_proportionality` alone. The live outcome summary for that case stays unknown, because the appeal rows are proposed and Unverified.
+When the filter matches both approved arguments (no label filter, country Poland or any country), the public explorer reports one real case and two approved arguments. A Proportionality-only filter matches `pl_arg_proportionality` alone. The outcome summary for that case lists the one approved January 2022 decision. Its statement says an incomplete list is not a finding that no other development occurred.
 
 ## Separate from this contract
 
-`appeal_outcome_preview` shows how the reported appeal would read beside the two approved arguments if those outcome rows were later approved. That function does not approve them, and its result is not this export.
+`appeal_outcome_preview` reads the stored appeal display and does not approve anything. The sample file is the approved-only export.

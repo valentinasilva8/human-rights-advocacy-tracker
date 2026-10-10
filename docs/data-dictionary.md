@@ -75,7 +75,7 @@ A dated event for one defendant. Adding an appeal does not delete the earlier ev
 
 `decision_id` groups defendant-specific rows that come from one decision. Counting defendants, proceedings, decisions, and interventions stays separate from the outcome-row count.
 
-`evidence_basis` is one of: `not_yet_established`, `author_document`, `authenticated_judgment`, `organization_account`, `official_press_summary`, `unauthenticated_judgment_copy`, `response_not_established`. It is shown with the claim. It does not replace `evidence_label`. An organization account can stay `Unverified`. Zero independent origins is not zero evidence.
+`evidence_basis` is one of: `not_yet_established`, `author_document`, `authenticated_judgment`, `organization_account`, `official_press_summary`, `unauthenticated_judgment_copy`, `response_not_established`. It is shown with the claim. It does not replace `evidence_label`. An organization account can stay `Unverified` until a person approves it. Approval of that account uses `Single-source report` with `organization_account`. The gate still refuses `Unverified`. That pair is not `Primary-source supported`. Zero independent origins is not zero evidence.
 
 `public_limitation` is the evidence limit that stays beside the claim in a public view. It is not a reviewer note. `observer_note`, `unresolved_questions`, and `research_attempts` stay internal.
 

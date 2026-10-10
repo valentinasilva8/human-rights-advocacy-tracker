@@ -357,9 +357,12 @@ IDENTIFICATION_NOTE = (
     "The HFHR passage does not name Elżbieta Podleśna, Anna Prus, or Joanna Gzyra-Iskandar, "
     "and it does not cite II K 296/20. It identifies three activists, the Regional Court in Płock, "
     "12 January 2022, a charge of offending religious feelings, and 2019 stickers of Our Lady of "
-    "Częstochowa with a rainbow halo. The November 2021 fairness report names those three defendants "
-    "and cites II K 296/20 as the District Court of Płock trial number for the justification dated "
-    "2 March 2021. The three appeal rows use that match. II K 296/20 is not an appeal docket. "
+    "Częstochowa with a rainbow halo. OKO.press, a same-day courtroom report, names Elżbieta Podleśna, "
+    "Anna Prus, and Joanna Gzyra-Iskandar and says the appellate court on 12 January 2022 upheld the "
+    "acquittal. That report supports the identity match. The November 2021 fairness report cites "
+    "II K 296/20 as the District Court of Płock trial number for the justification dated 2 March 2021. "
+    "II K 296/20 remains the trial number. ARTICLE 19 footnote 1 cites V Ka 418/21 for the 12 January 2022 "
+    "judgment from an unofficial translation. That number is recorded only with ARTICLE 19's attribution. "
     "Each row is one defendant's result of the same decision. Three rows are not three decisions."
 )
 
@@ -462,11 +465,13 @@ def appeal_outcome_preview(store: EvidenceStore) -> dict:
         "preview_only": True,
         "this_call_approved_nothing": True,
         "approval_gate": (
-            "These outcome rows stay proposed. Their evidence label stays Unverified. "
-            "The current approval gate refuses an unverified outcome. "
-            "This preview does not change that label and does not approve the rows. "
-            "The live dated-outcome summary also omits Unverified events, so the public "
-            "explorer still reports no verified subsequent outcome."
+            "Calling this preview approves nothing. "
+            "The approval gate still refuses an Unverified outcome. "
+            "A reviewed organization account uses evidence label Single-source report "
+            "and evidence basis organization_account. "
+            "That is not a primary-source finding. "
+            f"Stored label: {rows[0]['evidence_label'] if rows else 'missing'}. "
+            f"Stored review status: {rows[0]['stored_review_status'] if rows else 'missing'}."
         ),
         "current_public_explorer": {
             "filter": "Poland, no argument-label filter, so both approved arguments match",
@@ -517,7 +522,7 @@ def appeal_outcome_preview(store: EvidenceStore) -> dict:
                 "role_in_case": amicus[0]["role_in_case"] if amicus else "",
                 "brief_retrieved": False,
             },
-            "evidence_category": "Unverified",
+            "evidence_category": rows[0]["evidence_label"] if rows else "",
             "evidence_basis": "organization_account",
             "evidence_basis_caption": evidence_basis_caption("organization_account"),
             "public_limitation": rows[0]["public_limitation"] if rows else "",

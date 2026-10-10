@@ -70,4 +70,18 @@ On 10 October 2026 Valentina Silva approved `pl_arg_legality` and `pl_arg_propor
 
 ## Appeal-outcome packet, 10 October 2026
 
-The packet for `out_pl_appeal_podlesna`, `out_pl_appeal_prus`, and `out_pl_appeal_gzyra` was prepared for review. It does not approve those rows. The evidence label stays Unverified. The HFHR page still does not name the three defendants or cite II K 296/20. The match is the report’s defendants and the trial number, against HFHR’s account of three activists, Płock, 12 January 2022, offending religious feelings, and the 2019 rainbow-halo stickers. rp.pl stays `derived_from_shared_original`. Reception of Lisa Davis’s report stays “Decision not yet retrieved.” The reported affirmance is not treated as acceptance of her arguments. No new case was added.
+The packet for `out_pl_appeal_podlesna`, `out_pl_appeal_prus`, and `out_pl_appeal_gzyra` was prepared for review. It did not approve those rows. The HFHR page does not name the three defendants or cite II K 296/20. rp.pl stays `derived_from_shared_original`.
+
+## Appeal account approval, 10 October 2026
+
+Valentina Silva authorized approval of those three rows as one shared decision, `pl_decision_appeal_2022-01-12`. The review is AI-assisted. She did not personally inspect the appeal judgment. The assistant did not retrieve the HFHR page again for this approval. The HFHR quotations already in the record were retained on the HFHR source.
+
+The approval gate refuses `Unverified`. The smallest change that uses the existing gate is evidence label `Single-source report` with evidence basis `organization_account`. That is not `Primary-source supported`. The public claim is: HFHR reported that the Regional Court in Płock upheld the three defendants' acquittal on 12 January 2022.
+
+OKO.press, read 10 October 2026, [Tęcza nie obraża](https://oko.press/tecza-nie-obraza-prawomocny-wyrok-sadu-apelacyjnego-w-plocku), is a same-day courtroom report by Maciek Piasecki and Agnieszka Jędrzejczyk. It names Elżbieta Podleśna, Anna Prus, and Joanna Gzyra-Iskandar and says the appellate court on 12 January 2022 upheld the district-court acquittal. It does not cite HFHR, and it says OKO.press transmitted the hearing. Provenance is `independent` for that identity match. The independence count is 1. The evidence label stays `Single-source report` because the approved claim is HFHR’s attributed account.
+
+ARTICLE 19’s brief, [Amicus_Poland-Rainbow-Holy-Mary_EN.pdf](https://www.article19.org/wp-content/uploads/2024/03/Amicus_Poland-Rainbow-Holy-Mary_EN.pdf), footnote 1, cites Ref. No. V Ka 418/21 for a 12 January 2022 judgment of the District Court in Płock, Fifth Criminal Appeals Division, from an unofficial translation. V Ka 418/21 is stored only with that attribution. II K 296/20 remains the trial number. The brief is captioned Case no. V KK 430/22. That caption is not verified against a judgment. Its provenance stays `unknown`, so it does not raise the independence count.
+
+Reception rows `pl_rec_legality` and `pl_rec_proportionality` stay proposed. The outcome does not establish acceptance or rejection of Lisa Davis’s arguments.
+
+Amnesty Slovakia, 28 March 2024, [Elżbieta Podleśna sa dočkala spravodlivosti](https://www.amnesty.sk/elzbieta-podlesna-sa-dockala-spravodlivosti/), is a separate proposed research lead. It says the Supreme Court on 28 March 2024 rejected the state authorities’ appeal against the January 2022 acquittal and names the three defendants. It is not an outcome record and not part of this approval. January 2022 is not recorded as the latest known development.

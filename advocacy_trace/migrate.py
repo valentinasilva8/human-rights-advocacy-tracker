@@ -88,6 +88,7 @@ def migrate(conn: sqlite3.Connection) -> None:
     _apply_review_readiness(conn)
     _apply_poland_preview(conn)
     _keep_article_quotations(conn)
+    _record_appeal_account(conn)
     conn.commit()
 
 
@@ -420,6 +421,73 @@ def _keep_article_quotations(conn: sqlite3.Connection) -> None:
                 (item["description"], item["id"]),
             )
     _mark_migration(conn, "article_quotations_v1")
+
+
+def _record_appeal_account(conn: sqlite3.Connection) -> None:
+    """Narrow the proposed appeal claim and record the reviewed organization account.
+
+    This does not approve the rows. Approval stays in the recorded-approval file.
+    An already approved row is left as stored.
+    """
+
+    if _migration_applied(conn, "appeal_account_approval_v1"):
+        return
+    tables = {
+        row[0]
+        for row in conn.execute("SELECT name FROM sqlite_master WHERE type = 'table'")
+    }
+    if RESEARCH_PATH.exists() and "outcome_events" in tables:
+        payload = json.loads(RESEARCH_PATH.read_text(encoding="utf-8"))
+        wanted = {
+            "out_pl_appeal_podlesna",
+            "out_pl_appeal_prus",
+            "out_pl_appeal_gzyra",
+        }
+        for item in payload.get("outcomes", []):
+            if item["id"] not in wanted:
+                continue
+            current = conn.execute(
+                "SELECT review_status, is_synthetic FROM outcome_events WHERE id = ?",
+                (item["id"],),
+            ).fetchone()
+            if current is None or current[0] != "proposed" or current[1]:
+                continue
+            conn.execute(
+                """
+                UPDATE outcome_events
+                SET description = ?, evidence_label = ?, public_limitation = ?,
+                    evidence_basis = ?, finality = ?, decision_id = ?
+                WHERE id = ? AND review_status = 'proposed' AND is_synthetic = 0
+                """,
+                (
+                    item["description"],
+                    item["evidence_label"],
+                    item.get("public_limitation", ""),
+                    item.get("evidence_basis", "organization_account"),
+                    item.get("finality"),
+                    item.get("decision_id"),
+                    item["id"],
+                ),
+            )
+        if "cases" in tables and "proceeding_note" in {
+            row[1] for row in conn.execute("PRAGMA table_info(cases)")
+        }:
+            for item in payload.get("cases", []):
+                if item["id"] != "case_poland":
+                    continue
+                conn.execute(
+                    "UPDATE cases SET proceeding_note = ? WHERE id = 'case_poland' AND is_synthetic = 0",
+                    (item.get("proceeding_note", ""),),
+                )
+        if "sources" in tables:
+            for item in payload.get("sources", []):
+                if item["id"] not in {"pl_src_hfhr", "pl_src_rp"}:
+                    continue
+                conn.execute(
+                    "UPDATE sources SET rights_note = ? WHERE id = ?",
+                    (item.get("rights_note", ""), item["id"]),
+                )
+    _mark_migration(conn, "appeal_account_approval_v1")
 
 
 def _update_case_notes(conn: sqlite3.Connection, tables: set[str], rows: list[dict]) -> None:
