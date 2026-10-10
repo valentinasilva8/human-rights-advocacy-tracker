@@ -57,3 +57,13 @@ This pass did not add cases. It did not approve any row. The approval packet is 
 - orzeczenia.ms.gov.pl: the Article 196 appeal was not returned. Nearby Płock files II Ko 28/21 (4 January 2022) and II Ko 37/21 (18 January 2022) are different cases. The Poland appeal rows stay `Unverified`. The proposed wording is “HFHR reported…”. HFHR is recorded as an amicus participant because it reported filing an amicus. The brief was not retrieved. rp.pl stays `derived_from_shared_original`. One organization’s account plus a derivative article is evidence. It is not zero evidence, and it is not an authenticated judgment.
 
 **What stays internal.** Search queries, the name-search note, and unresolved questions stay off public views. `public_limitation` is what a public user would see beside a claim.
+
+## Poland links and trial number, 10 October 2026
+
+The report page is https://cfj.org/reports/poland-vs-elzbieta-podlesna-anna-prus-and-joanna-gzyra-iskandar/. It says Published 21 January 2022. The PDF linked from that page is https://cfj.org/wp-content/uploads/2023/07/trial-observation-report-poland-lgbt.pdf. The cover says November 2021. The downloaded PDF is the same file previously read for the passages.
+
+Footnote 2 on printed p. 3 cites District Court of Plock, Justification for a Judgment, Case No. II K 296/20, March 2, 2021. That is the trial number. No appeal docket number was found in the report. The appeal rows are not relabeled with II K 296/20 as if it were the appeal case number.
+
+The author and disclaimer are on printed p. 1, PDF page 2. The boxed disclaimer includes the sentence that nothing in the report should be considered legal advice for specific cases. Remedies are not in the legality passage. They appear on printed p. 4 and again on printed p. 31 under the conclusion and under “Recommendations from Professor Lisa Davis.”
+
+On 10 October 2026 Valentina Silva approved `pl_arg_legality` and `pl_arg_proportionality`. The approval is stored only while the claim, quotation, remedy text, and disclaimer still match the text she reviewed. The HFHR and rp.pl quotations stay on the proposed appeal rows. They were not approved. rp.pl was read again on 10 October 2026. Its publication line is still 13.01.2022. The page also showed an update stamp of 10.10.2026. The lede still says the Regional Court in Płock upheld the acquittal, and it still attributes the account to HFHR.

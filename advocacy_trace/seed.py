@@ -25,9 +25,11 @@ def open_store(path: Path | None = None) -> EvidenceStore:
     store = EvidenceStore(db_path)
     if is_new:
         load_fixture(store)
+    from advocacy_trace.approvals import apply_recorded_approvals
     from advocacy_trace.research import load_proposed_research
 
     load_proposed_research(store)
+    apply_recorded_approvals(store)
     return store
 
 

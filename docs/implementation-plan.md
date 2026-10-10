@@ -8,7 +8,7 @@ Live alignment with the Google Doc tab `t.avvzu4g5dzi9` is pending. That tab was
 
 ## Where this slice stands
 
-The safeguards in the current build are in the store, the explorer, the case screen, and `public_export`. Poland and Tam Tak-chi are loaded as proposed records, with the search log in [research-log.md](research-log.md) and the claims awaiting review in [review-packet.md](review-packet.md). None of those real rows is approved. The recommended first demonstration case is Poland, because the report is dated to precede a named appeal and later secondary accounts describe a development in that proceeding. The appeal judgment is still unread, so reception of the report is “Decision not yet retrieved.”
+The safeguards in the current build are in the store, the explorer, the case screen, and `public_export`. Valentina Silva approved `pl_arg_legality` and `pl_arg_proportionality` on 10 October 2026. Those two rows keep the report quotations as the proof. Every other Poland or Tam row stays proposed. The appeal judgment is still unread, so reception of the report is “Decision not yet retrieved,” and the HFHR account of the appeal stays an unverified outcome. The search log is [research-log.md](research-log.md). The packet is [review-packet.md](review-packet.md).
 
 ## What is already in the repository
 

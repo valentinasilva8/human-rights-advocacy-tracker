@@ -12,6 +12,7 @@ One proceeding. A person can appear in more than one case. Cases are not merged 
 | --- | --- |
 | id, title | Stable id and human title |
 | country, court, case_number, charges | Proceeding identity. Empty means unknown |
+| proceeding_note | What the case number refers to. Public. For Poland, II K 296/20 is the trial number. An appeal docket has not been verified |
 | proceeding_type, procedural_stage, finality | Stage and finality. Not a success label |
 | sensitive | Restricted from public export |
 | is_synthetic | Fictional demonstration row |
@@ -55,6 +56,8 @@ One argument advanced or described in a source.
 `claim_supported` is set only by a human approval that records the check. A quotation and a page are not enough. Untrusted extraction cannot set it. If the claim, attribution, or supporting evidence changes after approval, the row returns to `proposed` and `claim_supported` is cleared.
 
 `passage` and `location_ref` are required before approval. `review_status` is `proposed`, `approved`, or `rejected`.
+
+`proceeding_note` on a case says what a case number refers to. For Poland, `II K 296/20` is the trial number cited for the District Court of Płock judgment of 2 March 2021. An appeal docket has not been verified, so that number is not stored as an appeal number.
 
 `public_limitation` is displayed beside an approved claim. `evidence_basis` says what kind of source supports it. Neither field is a private reviewer note.
 

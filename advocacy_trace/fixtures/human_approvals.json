@@ -1,0 +1,33 @@
+{
+  "recorded_on": "2026-10-10",
+  "reviewer": "Valentina Silva",
+  "scope": "Only these two argument records. No outcome, reception, or other argument is approved by this file.",
+  "approvals": [
+    {
+      "argument_id": "pl_arg_legality",
+      "reviewer": "Valentina Silva",
+      "note": "Approved by Valentina Silva on 10 October 2026 after review of the PDF pages. The claim and the quotation were checked against the report. The quotation is retained as the proof.",
+      "summary": "The report argues that Article 196 is not precise and is so broad that it gives the authorities unfettered discretion.",
+      "passage": "Article 196 is not precise, clear, or accessible. In criminalizing acts that “offend the religious feelings of other persons” through public insult, by nature a subjective concept, Article 196 is so broad as to afford the authorities unfettered discretion in its application, making it ripe for abuse.",
+      "location_ref": "Fairness report, printed p. 3, PDF page 4",
+      "author_actor": "Lisa Davis",
+      "attribution_role": "partner_argument",
+      "source_id": "pl_src_report",
+      "remedy_requested": "Not in the argument passage. Printed p. 4, PDF page 5: “The prosecution’s appeal in the present case, which is scheduled to be heard on November 10, should likewise be rejected.” and “While the legislature should repeal Article 196…” Printed p. 31, PDF page 32, conclusion: “on November 10 the appellate court in Plock should dismiss the prosecution’s appeal against the acquittal.” Same page, Recommendations from Professor Lisa Davis: to the Polish legislature, Article 196 should be repealed; to the Polish judiciary, the court should dismiss the prosecution’s appeal against the acquittal of Podlesna, Prus, and Gzyra-Iskandar. The November 10 sentence does not restate the year.",
+      "disclaimer_text": "The views expressed herein represent the opinions of the authors. They have not been reviewed or approved by the House of Delegates or the Board of Governors of the American Bar Association and, accordingly, should not be construed as representing the position of the Association or any of its entities. Furthermore, nothing in this report should be considered legal advice for specific cases. Additionally, the views expressed in this report are not necessarily those of the Clooney Foundation for Justice."
+    },
+    {
+      "argument_id": "pl_arg_proportionality",
+      "reviewer": "Valentina Silva",
+      "note": "Approved by Valentina Silva on 10 October 2026 after review of the PDF pages. The claim and the quotation were checked against the report. The quotation is retained as the proof.",
+      "summary": "The report argues that the prosecution failed necessity and proportionality because the posters were not an exceptionally grave speech offense.",
+      "passage": "Third, the case against the accused failed to meet necessity and proportionality requirements. With respect to this requirement, international and regional bodies have made clear that criminal prosecutions for speech offenses should be reserved for exceptionally grave acts, such as incitement to genocide and terrorism. The accused’s posting of stickers and posters featuring a rainbow halo clearly did not rise to this level of gravity.",
+      "location_ref": "Fairness report, printed p. 4, PDF page 5",
+      "author_actor": "Lisa Davis",
+      "attribution_role": "partner_argument",
+      "source_id": "pl_src_report",
+      "remedy_requested": "Not in the argument passage. Printed p. 4, PDF page 5: “The prosecution’s appeal in the present case, which is scheduled to be heard on November 10, should likewise be rejected.” and “While the legislature should repeal Article 196…” Printed p. 31, PDF page 32, conclusion: “on November 10 the appellate court in Plock should dismiss the prosecution’s appeal against the acquittal.” Same page, Recommendations from Professor Lisa Davis: to the Polish legislature, Article 196 should be repealed; to the Polish judiciary, the court should dismiss the prosecution’s appeal against the acquittal of Podlesna, Prus, and Gzyra-Iskandar. The November 10 sentence does not restate the year.",
+      "disclaimer_text": "The views expressed herein represent the opinions of the authors. They have not been reviewed or approved by the House of Delegates or the Board of Governors of the American Bar Association and, accordingly, should not be construed as representing the position of the Association or any of its entities. Furthermore, nothing in this report should be considered legal advice for specific cases. Additionally, the views expressed in this report are not necessarily those of the Clooney Foundation for Justice."
+    }
+  ]
+}

@@ -6,7 +6,7 @@ from pathlib import Path
 
 import streamlit as st
 
-from advocacy_trace.constants import ARGUMENT_LABELS, INTERVENTION_TYPES
+from advocacy_trace.constants import ARGUMENT_LABELS, INTERVENTION_TYPES, RECEPTION_NOT_ESTABLISHED
 from advocacy_trace.errors import MissingCredentialError, UnreadablePdfError, ValidationError
 from advocacy_trace.importing import read_pdf_excerpt, require_search_provider
 from advocacy_trace.seed import open_store
@@ -103,7 +103,11 @@ def _explorer(store) -> None:
                 st.warning(gap)
             st.subheader("What was argued")
             st.text(argument["summary"])
+            st.caption("Quotation")
             st.text(argument["passage"])
+            if argument.get("remedy_requested"):
+                st.caption("Requested remedy, cited separately from the quotation")
+                st.text(argument["remedy_requested"])
             affiliation = argument.get("institutional_affiliation") or "affiliation not recorded"
             disclaimer = _disclaimer_line(argument)
             st.caption(
@@ -120,7 +124,7 @@ def _explorer(store) -> None:
                 st.caption(argument["legal_authorities"])
             st.subheader("Documented response")
             if not row["receptions"]:
-                st.warning("No reception record. Unknown reception is a result, not acceptance.")
+                st.warning(RECEPTION_NOT_ESTABLISHED)
             for reception in row["receptions"]:
                 account = reception.get("account_type") or "not_yet_established"
                 st.text(f"{reception['status']} · {account}")
@@ -174,6 +178,7 @@ def _case(store) -> None:
             "Country": case.get("country") or "unknown",
             "Court": case.get("court") or "unknown",
             "Case number": case.get("case_number") or "unknown",
+            "Proceeding note": case.get("proceeding_note") or "none recorded",
             "Charges": case.get("charges") or "unknown",
             "Stage": case.get("procedural_stage") or "unknown",
             "Finality": case.get("finality") or "unknown",
@@ -206,7 +211,11 @@ def _case(store) -> None:
         if disclaimer:
             st.caption(disclaimer)
         st.text(argument["summary"] or "(no summary yet)")
+        st.caption("Quotation")
         st.text(argument["passage"] or "(no passage yet — cannot be approved)")
+        if argument.get("remedy_requested"):
+            st.caption("Requested remedy, cited separately from the quotation")
+            st.text(argument["remedy_requested"])
         st.caption(
             f"{argument['location_ref'] or 'location missing'} · "
             f"{', '.join(argument['labels']) or 'no label'} · {argument['review_status']}"
@@ -217,6 +226,11 @@ def _case(store) -> None:
             st.caption(
                 f"Source: {source['title']} · published {_dated(source['publication_date'], source['publication_date_precision'])}"
             )
+            if source.get("url"):
+                st.markdown(f"[Report page]({source['url']})")
+            pdf_url = _pdf_url(source.get("rights_note") or "")
+            if pdf_url:
+                st.markdown(f"[PDF]({pdf_url})")
         for reception in item["receptions"]:
             prefix = "Recital, not acceptance. " if reception["is_recital"] else ""
             account = reception.get("account_type") or "not_yet_established"
@@ -398,6 +412,14 @@ def _show_basis(record: dict) -> None:
     limitation = (record.get("public_limitation") or "").strip()
     if limitation:
         st.warning(limitation)
+
+
+def _pdf_url(text: str) -> str:
+    for token in text.split():
+        cleaned = token.strip("().,")
+        if cleaned.startswith("https://") and cleaned.lower().endswith(".pdf"):
+            return cleaned
+    return ""
 
 
 def _disclaimer_line(argument: dict) -> str:

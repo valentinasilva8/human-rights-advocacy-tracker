@@ -42,7 +42,8 @@
       "opened_on_precision": "unknown",
       "last_verified_on": "2026-10-09",
       "last_verified_on_precision": "day",
-      "unresolved_questions": "Search date 9 October 2026, not an approval. The appeal judgment was not retrieved. A search of orzeczenia.ms.gov.pl did not return the Article 196 appeal. Nearby Płock files II Ko 28/21 and II Ko 37/21 are different cases. The report cover is November 2021 and says the appeal hearing is scheduled for November 10, without repeating the year. rp.pl attributes its account of the court's reasons to HFHR, so those two pages are not independent origins. A follow-up fetch of the TVN24 URL timed out. HFHR reported filing an amicus; the brief was not retrieved. The March 2021 acquittal predates the report."
+      "unresolved_questions": "Search date 9 October 2026, not an approval. The appeal judgment was not retrieved. A search of orzeczenia.ms.gov.pl did not return the Article 196 appeal. Nearby Płock files II Ko 28/21 and II Ko 37/21 are different cases. The report cover is November 2021 and says the appeal hearing is scheduled for November 10, without repeating the year. rp.pl attributes its account of the court's reasons to HFHR, so those two pages are not independent origins. A follow-up fetch of the TVN24 URL timed out. HFHR reported filing an amicus; the brief was not retrieved. The March 2021 acquittal predates the report.",
+      "proceeding_note": "II K 296/20 is the trial case number. The report cites it for the District Court of Płock justification dated 2 March 2021, in footnote 2 on printed p. 3. An appeal docket number has not been verified."
     },
     {
       "id": "case_tam",
@@ -100,7 +101,7 @@
       "publication_date_precision": "month",
       "retrieval_date": "2026-10-09",
       "retrieval_date_precision": "day",
-      "rights_note": "Short excerpts only. This record does not include the PDF and does not authorize redistribution.",
+      "rights_note": "Report page: https://cfj.org/reports/poland-vs-elzbieta-podlesna-anna-prus-and-joanna-gzyra-iskandar/ (page line: Published 21 January 2022). PDF: https://cfj.org/wp-content/uploads/2023/07/trial-observation-report-poland-lgbt.pdf (cover: November 2021). The PDF linked from that page is the file these passages were read from. Short excerpts only. This record does not store the PDF and does not authorize redistribution.",
       "is_synthetic": false
     },
     {
@@ -215,12 +216,12 @@
       "attribution_role": "partner_argument",
       "institutional_affiliation": "City University of New York; TrialWatch Expert Panel. ABA Center for Human Rights staff helped draft the report.",
       "disclaimer_status": "stated",
-      "disclaimer_text": "The views expressed herein represent the opinions of the authors. They have not been reviewed or approved by the House of Delegates or the Board of Governors of the American Bar Association and, accordingly, should not be construed as representing the position of the Association or any of its entities. Additionally, the views expressed in this report are not necessarily those of the Clooney Foundation for Justice.",
+      "disclaimer_text": "The views expressed herein represent the opinions of the authors. They have not been reviewed or approved by the House of Delegates or the Board of Governors of the American Bar Association and, accordingly, should not be construed as representing the position of the Association or any of its entities. Furthermore, nothing in this report should be considered legal advice for specific cases. Additionally, the views expressed in this report are not necessarily those of the Clooney Foundation for Justice.",
       "summary": "The report argues that Article 196 is not precise and is so broad that it gives the authorities unfettered discretion.",
       "reasons": "The executive summary says the offense turns on offending religious feelings, which it calls a subjective concept.",
       "principle": "A restriction on expression must be precise, clear, and accessible.",
       "application": "Article 196 criminalizes offending religious feelings by public insult, and the report says that standard gives charging discretion.",
-      "remedy_requested": "Not in the legality passage. Printed p. 4, PDF page 5: the legislature should repeal Article 196, and the prosecution's appeal scheduled for November 10 should be rejected. Printed p. 31, PDF page 32: on November 10 the appellate court in Plock should dismiss the prosecution's appeal against the acquittal.",
+      "remedy_requested": "Not in the argument passage. Printed p. 4, PDF page 5: “The prosecution’s appeal in the present case, which is scheduled to be heard on November 10, should likewise be rejected.” and “While the legislature should repeal Article 196…” Printed p. 31, PDF page 32, conclusion: “on November 10 the appellate court in Plock should dismiss the prosecution’s appeal against the acquittal.” Same page, Recommendations from Professor Lisa Davis: to the Polish legislature, Article 196 should be repealed; to the Polish judiciary, the court should dismiss the prosecution’s appeal against the acquittal of Podlesna, Prus, and Gzyra-Iskandar. The November 10 sentence does not restate the year.",
       "passage": "Article 196 is not precise, clear, or accessible. In criminalizing acts that “offend the religious feelings of other persons” through public insult, by nature a subjective concept, Article 196 is so broad as to afford the authorities unfettered discretion in its application, making it ripe for abuse.",
       "location_ref": "Fairness report, printed p. 3, PDF page 4",
       "legal_authorities": "Article 196 of the Polish Criminal Code; ICCPR; ECHR, as cited in the report.",
@@ -231,7 +232,7 @@
       "argument_date": "2021-11",
       "argument_date_precision": "month",
       "is_synthetic": false,
-      "public_limitation": "This is what the named author wrote. It is not a court finding. No reviewed record establishes how a court received the argument. That absence is not a finding that the court ignored it.",
+      "public_limitation": "This is what the named author wrote. It is not a court finding. No reviewed record establishes how a court received the argument. That absence is not a finding that the court ignored it. II K 296/20 identifies the original trial cited in the report, not an appeal docket. The PDF cover says November 2021. The CFJ report page says Published 21 January 2022.",
       "evidence_basis": "author_document"
     },
     {
@@ -243,12 +244,12 @@
       "attribution_role": "partner_argument",
       "institutional_affiliation": "City University of New York; TrialWatch Expert Panel. ABA Center for Human Rights staff helped draft the report.",
       "disclaimer_status": "stated",
-      "disclaimer_text": "The views expressed herein represent the opinions of the authors. They have not been reviewed or approved by the House of Delegates or the Board of Governors of the American Bar Association and, accordingly, should not be construed as representing the position of the Association or any of its entities. Additionally, the views expressed in this report are not necessarily those of the Clooney Foundation for Justice.",
+      "disclaimer_text": "The views expressed herein represent the opinions of the authors. They have not been reviewed or approved by the House of Delegates or the Board of Governors of the American Bar Association and, accordingly, should not be construed as representing the position of the Association or any of its entities. Furthermore, nothing in this report should be considered legal advice for specific cases. Additionally, the views expressed in this report are not necessarily those of the Clooney Foundation for Justice.",
       "summary": "The report argues that the prosecution failed necessity and proportionality because the posters were not an exceptionally grave speech offense.",
       "reasons": "The executive summary reserves criminal speech prosecutions for exceptionally grave acts such as incitement to genocide and terrorism, and says the posters did not reach that gravity.",
       "principle": "Criminal prosecutions for speech offenses should be reserved for exceptionally grave acts.",
       "application": "Posting stickers and posters of a rainbow halo did not, in the report's account, reach that level of gravity.",
-      "remedy_requested": "Not in the necessity paragraph. The same printed p. 4, PDF page 5, says the prosecution's appeal, scheduled for November 10, should be rejected, and that the legislature should repeal Article 196. Printed p. 31, PDF page 32, says the appellate court in Plock should dismiss the prosecution's appeal against the acquittal. The November 10 sentence does not restate the year.",
+      "remedy_requested": "Not in the argument passage. Printed p. 4, PDF page 5: “The prosecution’s appeal in the present case, which is scheduled to be heard on November 10, should likewise be rejected.” and “While the legislature should repeal Article 196…” Printed p. 31, PDF page 32, conclusion: “on November 10 the appellate court in Plock should dismiss the prosecution’s appeal against the acquittal.” Same page, Recommendations from Professor Lisa Davis: to the Polish legislature, Article 196 should be repealed; to the Polish judiciary, the court should dismiss the prosecution’s appeal against the acquittal of Podlesna, Prus, and Gzyra-Iskandar. The November 10 sentence does not restate the year.",
       "passage": "Third, the case against the accused failed to meet necessity and proportionality requirements. With respect to this requirement, international and regional bodies have made clear that criminal prosecutions for speech offenses should be reserved for exceptionally grave acts, such as incitement to genocide and terrorism. The accused’s posting of stickers and posters featuring a rainbow halo clearly did not rise to this level of gravity.",
       "location_ref": "Fairness report, printed p. 4, PDF page 5",
       "legal_authorities": "ICCPR and ECHR standards, as cited in the report.",
@@ -259,7 +260,7 @@
       "argument_date": "2021-11",
       "argument_date_precision": "month",
       "is_synthetic": false,
-      "public_limitation": "This is what the named author wrote. It is not a court finding. No reviewed record establishes how a court received the argument. That absence is not a finding that the court ignored it.",
+      "public_limitation": "This is what the named author wrote. It is not a court finding. No reviewed record establishes how a court received the argument. That absence is not a finding that the court ignored it. II K 296/20 identifies the original trial cited in the report, not an appeal docket. The PDF cover says November 2021. The CFJ report page says Published 21 January 2022.",
       "evidence_basis": "author_document"
     },
     {
@@ -397,7 +398,7 @@
       "case_id": "case_poland",
       "participant_id": "pl_podlesna",
       "event_type": "Appeal decided",
-      "description": "HFHR reported that on 12 January 2022 the Regional Court in Płock upheld the acquittal of Elżbieta Podleśna, together with the other two defendants in II K 296/20, and said the appeals were unfounded. This row is this defendant's result of that shared decision. It is an identified organization's account, not a finding read from the appeal judgment. rp.pl draws on the HFHR account.",
+      "description": "HFHR reported that on 12 January 2022 the Regional Court in Płock upheld the acquittal of Elżbieta Podleśna, together with the other two defendants in II K 296/20, and said the appeals were unfounded. This row is this defendant's result of that shared decision. It is an identified organization's account, not a finding read from the appeal judgment. rp.pl draws on the HFHR account. Quotation from HFHR, 13 January 2022: “12 stycznia 2022 r. Sąd Okręgowy w Płocku utrzymał w mocy wyrok uniewinniający trzy aktywistki oskarżone o obrazę uczuć religijnych za to, że w 2019 r. rozpowszechniały naklejki z wizerunkiem Matki Bożej Częstochowskiej z tęczową aureolą. Wyrok jest prawomocny.” Quotation from HFHR: “Sąd drugiej instancji 12 stycznia 2022 utrzymał w mocy zaskarżony wyrok i uniewinnił aktywistki. Sąd Okręgowy w Płocku zaznaczył w uzasadnieniu, że wniesione apelacje były bezzasadne.” Quotation from HFHR: “Helsińska Fundacja Praw Człowieka złożyła w sprawie opinię przyjaciela sądu.” Translation: On 12 January 2022 the Regional Court in Płock upheld the acquitting judgment. The second-instance court said the appeals were unfounded. HFHR said it filed an amicus opinion. Quotation from rp.pl, publication line 13.01.2022, read again on 10 October 2026: “Sąd Okręgowy w Płocku utrzymał w mocy wyrok uniewinniający trzy aktywistki oskarżone o obrazę uczuć religijnych.” Quotation from rp.pl: “informuje Helsińska Fundacja Praw Człowieka, która złożyła w sprawie opinię przyjaciela sądu.” Translation: The Regional Court in Płock upheld the acquitting judgment of three activists accused of offending religious feelings. rp.pl says HFHR, which filed an amicus opinion, is the source of that account.",
       "evidence_label": "Unverified",
       "event_date": "2022-01-12",
       "event_date_precision": "day",
@@ -413,7 +414,7 @@
       "case_id": "case_poland",
       "participant_id": "pl_prus",
       "event_type": "Appeal decided",
-      "description": "HFHR reported that on 12 January 2022 the Regional Court in Płock upheld the acquittal of Anna Prus, together with the other two defendants in II K 296/20, and said the appeals were unfounded. This row is this defendant's result of that shared decision. It is an identified organization's account, not a finding read from the appeal judgment. rp.pl draws on the HFHR account.",
+      "description": "HFHR reported that on 12 January 2022 the Regional Court in Płock upheld the acquittal of Anna Prus, together with the other two defendants in II K 296/20, and said the appeals were unfounded. This row is this defendant's result of that shared decision. It is an identified organization's account, not a finding read from the appeal judgment. rp.pl draws on the HFHR account. Quotation from HFHR, 13 January 2022: “12 stycznia 2022 r. Sąd Okręgowy w Płocku utrzymał w mocy wyrok uniewinniający trzy aktywistki oskarżone o obrazę uczuć religijnych za to, że w 2019 r. rozpowszechniały naklejki z wizerunkiem Matki Bożej Częstochowskiej z tęczową aureolą. Wyrok jest prawomocny.” Quotation from HFHR: “Sąd drugiej instancji 12 stycznia 2022 utrzymał w mocy zaskarżony wyrok i uniewinnił aktywistki. Sąd Okręgowy w Płocku zaznaczył w uzasadnieniu, że wniesione apelacje były bezzasadne.” Quotation from HFHR: “Helsińska Fundacja Praw Człowieka złożyła w sprawie opinię przyjaciela sądu.” Translation: On 12 January 2022 the Regional Court in Płock upheld the acquitting judgment. The second-instance court said the appeals were unfounded. HFHR said it filed an amicus opinion. Quotation from rp.pl, publication line 13.01.2022, read again on 10 October 2026: “Sąd Okręgowy w Płocku utrzymał w mocy wyrok uniewinniający trzy aktywistki oskarżone o obrazę uczuć religijnych.” Quotation from rp.pl: “informuje Helsińska Fundacja Praw Człowieka, która złożyła w sprawie opinię przyjaciela sądu.” Translation: The Regional Court in Płock upheld the acquitting judgment of three activists accused of offending religious feelings. rp.pl says HFHR, which filed an amicus opinion, is the source of that account.",
       "evidence_label": "Unverified",
       "event_date": "2022-01-12",
       "event_date_precision": "day",
@@ -429,7 +430,7 @@
       "case_id": "case_poland",
       "participant_id": "pl_gzyra",
       "event_type": "Appeal decided",
-      "description": "HFHR reported that on 12 January 2022 the Regional Court in Płock upheld the acquittal of Joanna Gzyra-Iskandar, together with the other two defendants in II K 296/20, and said the appeals were unfounded. This row is this defendant's result of that shared decision. It is an identified organization's account, not a finding read from the appeal judgment. rp.pl draws on the HFHR account.",
+      "description": "HFHR reported that on 12 January 2022 the Regional Court in Płock upheld the acquittal of Joanna Gzyra-Iskandar, together with the other two defendants in II K 296/20, and said the appeals were unfounded. This row is this defendant's result of that shared decision. It is an identified organization's account, not a finding read from the appeal judgment. rp.pl draws on the HFHR account. Quotation from HFHR, 13 January 2022: “12 stycznia 2022 r. Sąd Okręgowy w Płocku utrzymał w mocy wyrok uniewinniający trzy aktywistki oskarżone o obrazę uczuć religijnych za to, że w 2019 r. rozpowszechniały naklejki z wizerunkiem Matki Bożej Częstochowskiej z tęczową aureolą. Wyrok jest prawomocny.” Quotation from HFHR: “Sąd drugiej instancji 12 stycznia 2022 utrzymał w mocy zaskarżony wyrok i uniewinnił aktywistki. Sąd Okręgowy w Płocku zaznaczył w uzasadnieniu, że wniesione apelacje były bezzasadne.” Quotation from HFHR: “Helsińska Fundacja Praw Człowieka złożyła w sprawie opinię przyjaciela sądu.” Translation: On 12 January 2022 the Regional Court in Płock upheld the acquitting judgment. The second-instance court said the appeals were unfounded. HFHR said it filed an amicus opinion. Quotation from rp.pl, publication line 13.01.2022, read again on 10 October 2026: “Sąd Okręgowy w Płocku utrzymał w mocy wyrok uniewinniający trzy aktywistki oskarżone o obrazę uczuć religijnych.” Quotation from rp.pl: “informuje Helsińska Fundacja Praw Człowieka, która złożyła w sprawie opinię przyjaciela sądu.” Translation: The Regional Court in Płock upheld the acquitting judgment of three activists accused of offending religious feelings. rp.pl says HFHR, which filed an amicus opinion, is the source of that account.",
       "evidence_label": "Unverified",
       "event_date": "2022-01-12",
       "event_date_precision": "day",

@@ -272,6 +272,9 @@ def public_preview(store: EvidenceStore, argument_id: str) -> dict:
             "url": raw.get("url"),
             "author_actor": raw["author_actor"],
             "document_type": raw["document_type"],
+            "publication_date": raw.get("publication_date"),
+            "publication_date_precision": raw.get("publication_date_precision"),
+            "rights_note": raw.get("rights_note") or "",
         }
     approved_receptions = _approved_receptions(store, argument_id)
     return {
@@ -286,6 +289,9 @@ def public_preview(store: EvidenceStore, argument_id: str) -> dict:
             "author_actor": argument["author_actor"],
             "attribution_role": argument["attribution_role"],
             "labels": argument["labels"],
+            "disclaimer_status": argument.get("disclaimer_status"),
+            "disclaimer_text": argument.get("disclaimer_text") or "",
+            "remedy_requested": argument.get("remedy_requested") or "",
             "evidence_basis": argument.get("evidence_basis") or "not_yet_established",
             "evidence_basis_caption": evidence_basis_caption(argument.get("evidence_basis")),
             "public_limitation": argument.get("public_limitation") or "",
@@ -294,7 +300,9 @@ def public_preview(store: EvidenceStore, argument_id: str) -> dict:
             "id": case["id"],
             "title": case["title"],
             "country": case.get("country"),
+            "court": case.get("court"),
             "case_number": case.get("case_number"),
+            "proceeding_note": case.get("proceeding_note") or "",
         },
         "source": source,
         "receptions": approved_receptions,
