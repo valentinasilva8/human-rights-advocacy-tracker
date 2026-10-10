@@ -1,0 +1,124 @@
+{
+  "approved_argument_count": 2,
+  "arguments": [
+    {
+      "application": "Article 196 criminalizes offending religious feelings by public insult, and the report says that standard gives charging discretion.",
+      "argument_date": "2021-11",
+      "argument_date_precision": "month",
+      "attribution_role": "partner_argument",
+      "author_actor": "Lisa Davis",
+      "case_id": "case_poland",
+      "claim_supported": true,
+      "disclaimer_status": "stated",
+      "disclaimer_text": "The views expressed herein represent the opinions of the authors. They have not been reviewed or approved by the House of Delegates or the Board of Governors of the American Bar Association and, accordingly, should not be construed as representing the position of the Association or any of its entities. Furthermore, nothing in this report should be considered legal advice for specific cases. Additionally, the views expressed in this report are not necessarily those of the Clooney Foundation for Justice.",
+      "evidence_basis": "author_document",
+      "id": "pl_arg_legality",
+      "institutional_affiliation": "City University of New York; TrialWatch Expert Panel. ABA Center for Human Rights staff helped draft the report.",
+      "intervention_id": "pl_int_report",
+      "is_synthetic": false,
+      "labels": [
+        "Broadness",
+        "Legality"
+      ],
+      "legal_authorities": "Article 196 of the Polish Criminal Code; ICCPR; ECHR, as cited in the report.",
+      "location_ref": "Fairness report, printed p. 3, PDF page 4",
+      "passage": "Article 196 is not precise, clear, or accessible. In criminalizing acts that “offend the religious feelings of other persons” through public insult, by nature a subjective concept, Article 196 is so broad as to afford the authorities unfettered discretion in its application, making it ripe for abuse.",
+      "principle": "A restriction on expression must be precise, clear, and accessible.",
+      "public_limitation": "This is what the named author wrote. It is not a court finding. No reviewed record establishes how a court received the argument. That absence is not a finding that the court ignored it. II K 296/20 identifies the original trial cited in the report, not an appeal docket. The PDF cover says November 2021. The CFJ report page says Published 21 January 2022.",
+      "reasons": "The executive summary says the offense turns on offending religious feelings, which it calls a subjective concept.",
+      "remedy_requested": "Not in the argument passage. Printed p. 4, PDF page 5: “The prosecution’s appeal in the present case, which is scheduled to be heard on November 10, should likewise be rejected.” and “While the legislature should repeal Article 196…” Printed p. 31, PDF page 32, conclusion: “on November 10 the appellate court in Plock should dismiss the prosecution’s appeal against the acquittal.” Same page, Recommendations from Professor Lisa Davis: to the Polish legislature, Article 196 should be repealed; to the Polish judiciary, the court should dismiss the prosecution’s appeal against the acquittal of Podlesna, Prus, and Gzyra-Iskandar. The November 10 sentence does not restate the year.",
+      "review_status": "approved",
+      "source_id": "pl_src_report",
+      "summary": "The report argues that Article 196 is not precise and is so broad that it gives the authorities unfettered discretion."
+    },
+    {
+      "application": "Posting stickers and posters of a rainbow halo did not, in the report's account, reach that level of gravity.",
+      "argument_date": "2021-11",
+      "argument_date_precision": "month",
+      "attribution_role": "partner_argument",
+      "author_actor": "Lisa Davis",
+      "case_id": "case_poland",
+      "claim_supported": true,
+      "disclaimer_status": "stated",
+      "disclaimer_text": "The views expressed herein represent the opinions of the authors. They have not been reviewed or approved by the House of Delegates or the Board of Governors of the American Bar Association and, accordingly, should not be construed as representing the position of the Association or any of its entities. Furthermore, nothing in this report should be considered legal advice for specific cases. Additionally, the views expressed in this report are not necessarily those of the Clooney Foundation for Justice.",
+      "evidence_basis": "author_document",
+      "id": "pl_arg_proportionality",
+      "institutional_affiliation": "City University of New York; TrialWatch Expert Panel. ABA Center for Human Rights staff helped draft the report.",
+      "intervention_id": "pl_int_report",
+      "is_synthetic": false,
+      "labels": [
+        "Necessity",
+        "Proportionality"
+      ],
+      "legal_authorities": "ICCPR and ECHR standards, as cited in the report.",
+      "location_ref": "Fairness report, printed p. 4, PDF page 5",
+      "passage": "Third, the case against the accused failed to meet necessity and proportionality requirements. With respect to this requirement, international and regional bodies have made clear that criminal prosecutions for speech offenses should be reserved for exceptionally grave acts, such as incitement to genocide and terrorism. The accused’s posting of stickers and posters featuring a rainbow halo clearly did not rise to this level of gravity.",
+      "principle": "Criminal prosecutions for speech offenses should be reserved for exceptionally grave acts.",
+      "public_limitation": "This is what the named author wrote. It is not a court finding. No reviewed record establishes how a court received the argument. That absence is not a finding that the court ignored it. II K 296/20 identifies the original trial cited in the report, not an appeal docket. The PDF cover says November 2021. The CFJ report page says Published 21 January 2022.",
+      "reasons": "The executive summary reserves criminal speech prosecutions for exceptionally grave acts such as incitement to genocide and terrorism, and says the posters did not reach that gravity.",
+      "remedy_requested": "Not in the argument passage. Printed p. 4, PDF page 5: “The prosecution’s appeal in the present case, which is scheduled to be heard on November 10, should likewise be rejected.” and “While the legislature should repeal Article 196…” Printed p. 31, PDF page 32, conclusion: “on November 10 the appellate court in Plock should dismiss the prosecution’s appeal against the acquittal.” Same page, Recommendations from Professor Lisa Davis: to the Polish legislature, Article 196 should be repealed; to the Polish judiciary, the court should dismiss the prosecution’s appeal against the acquittal of Podlesna, Prus, and Gzyra-Iskandar. The November 10 sentence does not restate the year.",
+      "review_status": "approved",
+      "source_id": "pl_src_report",
+      "summary": "The report argues that the prosecution failed necessity and proportionality because the posters were not an exceptionally grave speech offense."
+    }
+  ],
+  "cases": [
+    {
+      "case_number": "II K 296/20",
+      "charges": "Article 196 of the Polish Criminal Code",
+      "country": "Poland",
+      "court": "District Court of Płock",
+      "created_at": "",
+      "finality": "not established from the appeal judgment",
+      "id": "case_poland",
+      "is_synthetic": false,
+      "last_verified_on": "2026-10-09",
+      "last_verified_on_precision": "day",
+      "opened_on": null,
+      "opened_on_precision": "unknown",
+      "procedural_stage": "appeal result reported by secondary accounts; appeal judgment not retrieved",
+      "proceeding_note": "II K 296/20 is the trial case number. The report cites it for the District Court of Płock justification dated 2 March 2021, in footnote 2 on printed p. 3. An appeal docket number has not been verified.",
+      "proceeding_type": "criminal",
+      "sensitive": false,
+      "title": "Poland v. Podleśna, Prus, and Gzyra-Iskandar"
+    }
+  ],
+  "count_note": "real_case_count is the number of non-synthetic cases with at least one approved, non-sensitive argument or outcome in this export. It is not a count of verified cases. approved_argument_count is approved non-synthetic arguments in this export, excluding AI suggestions. Approval does not authorize redistribution of the source PDF or other copyrighted text.",
+  "includes_full_documents": false,
+  "interventions": [
+    {
+      "actor": "Lisa Davis",
+      "attribution_basis": "named author on the report; ABA Center for Human Rights staff helped draft; implementing partner of TrialWatch",
+      "case_id": "case_poland",
+      "description": "Fairness report released in the month of the appeal hearing it says is scheduled for November 10. The day of release is not stated. This is not an institutional TrialWatch authorship merely because the author sits on the TrialWatch Expert Panel.",
+      "id": "pl_int_report",
+      "intervention_date": "2021-11",
+      "intervention_date_precision": "month",
+      "intervention_type": "fairness_report",
+      "source_id": "pl_src_report"
+    }
+  ],
+  "omitted_sensitive_count": 1,
+  "outcome_events": [],
+  "real_case_count": 1,
+  "receptions": [],
+  "sources": [
+    {
+      "author_actor": "Lisa Davis",
+      "document_type": "fairness_report",
+      "duplicate_of_source_id": null,
+      "extraction_version": null,
+      "fingerprint": null,
+      "full_document_included": false,
+      "id": "pl_src_report",
+      "is_synthetic": false,
+      "publication_date": "2021-11",
+      "publication_date_precision": "month",
+      "retrieval_date": "2026-10-09",
+      "retrieval_date_precision": "day",
+      "rights_note": "Report page: https://cfj.org/reports/poland-vs-elzbieta-podlesna-anna-prus-and-joanna-gzyra-iskandar/ (page line: Published 21 January 2022). PDF: https://cfj.org/wp-content/uploads/2023/07/trial-observation-report-poland-lgbt.pdf (cover: November 2021). The PDF linked from that page is the file these passages were read from. Short excerpts only. This record does not store the PDF and does not authorize redistribution.",
+      "title": "Poland vs. Elzbieta Podlesna, Anna Prus, and Joanna Gzyra-Iskandar",
+      "url": "https://cfj.org/reports/poland-vs-elzbieta-podlesna-anna-prus-and-joanna-gzyra-iskandar/"
+    }
+  ]
+}

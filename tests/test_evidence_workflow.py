@@ -1219,6 +1219,154 @@ def test_review_readiness_migration_keeps_links_and_does_not_relabel(tmp_path):
     reopened.close()
 
 
+def test_appeal_preview_does_not_approve_and_explorer_counts_one_case(tmp_path):
+    import json
+
+    from advocacy_trace.seed import open_store
+    from advocacy_trace.views import appeal_outcome_preview, explorer_view
+
+    store = open_store(tmp_path / "appeal-preview.sqlite")
+    before = {
+        outcome_id: store.get_outcome(outcome_id)["review_status"]
+        for outcome_id in (
+            "out_pl_appeal_podlesna",
+            "out_pl_appeal_prus",
+            "out_pl_appeal_gzyra",
+        )
+    }
+    preview = appeal_outcome_preview(store)
+    assert preview["preview_only"] is True
+    assert preview["this_call_approved_nothing"] is True
+    assert before == {
+        "out_pl_appeal_podlesna": "proposed",
+        "out_pl_appeal_prus": "proposed",
+        "out_pl_appeal_gzyra": "proposed",
+    }
+    for outcome_id in before:
+        event = store.get_outcome(outcome_id)
+        assert event["review_status"] == "proposed"
+        assert event["evidence_label"] == "Unverified"
+    assert store.get_argument("pl_arg_legality")["review_status"] == "approved"
+    assert store.get_argument("pl_arg_proportionality")["review_status"] == "approved"
+    assert store.get_argument("tam_arg_breadth")["review_status"] == "proposed"
+    for argument_id in ("pl_arg_legality", "pl_arg_proportionality"):
+        reception = store.receptions_for_argument(argument_id)[0]
+        assert reception["review_status"] == "proposed"
+        assert reception["status"] == "Decision not yet retrieved"
+        assert reception["evidence_basis"] == "response_not_established"
+    both = explorer_view(
+        store,
+        label=None,
+        country="Poland",
+        intervention_type=None,
+        date_from=None,
+        date_to=None,
+        review_status="approved",
+        include_synthetic=False,
+    )
+    assert both["argument_count"] == 2
+    assert both["unique_cases"] == 1
+    assert both["real_cases_with_approved_argument"] == 1
+    assert {row["argument"]["id"] for row in both["rows"]} == {
+        "pl_arg_legality",
+        "pl_arg_proportionality",
+    }
+    assert both["rows"][0]["outcome"]["status"] == "unknown"
+    only_proportionality = explorer_view(
+        store,
+        label="Proportionality",
+        country="Poland",
+        intervention_type=None,
+        date_from=None,
+        date_to=None,
+        review_status="approved",
+        include_synthetic=False,
+    )
+    assert only_proportionality["argument_count"] == 1
+    assert only_proportionality["real_cases_with_approved_argument"] == 1
+    current = preview["current_public_explorer"]
+    assert current["argument_count"] == 2
+    assert current["unique_cases"] == 1
+    assert current["real_cases_with_approved_argument"] == 1
+    display = preview["if_approved_display"]
+    assert display["shared_decision_id"] == "pl_decision_appeal_2022-01-12"
+    assert display["appeal_outcome_rows"] == 3
+    assert display["appeal_decisions"] == 1
+    assert display["case_counts"]["decisions"] == 2
+    assert display["case_counts"]["outcome_rows"] == 6
+    assert {row["id"] for row in display["defendant_rows"]} == set(before)
+    assert {row["decision_id"] for row in display["defendant_rows"]} == {
+        "pl_decision_appeal_2022-01-12"
+    }
+    assert display["event_date"] == "2022-01-12"
+    assert display["hfhr_publication_date"] == "2022-01-13"
+    assert display["hfhr_source"]["url"] == (
+        "https://hfhr.pl/aktualnosci/tecza-nie-obraza-wyrok-uniewinnienie"
+    )
+    assert display["english_translation_label"] == "English translation"
+    assert "does not name" in display["identification"]
+    assert "II K 296/20" in display["identification"]
+    assert "not three decisions" in display["decision_count_note"]
+    assert display["amicus"]["role_in_case"] == "amicus"
+    assert display["amicus"]["brief_retrieved"] is False
+    assert display["evidence_basis"] == "organization_account"
+    assert "not a finding read from the judgment" in display["evidence_basis_caption"]
+    assert display["rp_pl"]["provenance"] == "derived_from_shared_original"
+    assert "not an independent confirmation" in display["rp_pl"]["role"]
+    assert "does not establish that the court accepted" in display["reception"]
+    for row in display["defendant_rows"]:
+        assert row["stored_review_status"] == "proposed"
+        assert row["independent_support_count"] == 0
+        assert row["proposed_public_claim"].startswith("HFHR reported")
+        assert "II K 296/20" in row["proposed_public_claim"]
+        provenances = {item["provenance"] for item in row["sources"]}
+        assert "derived_from_shared_original" in provenances
+        encoded = json.dumps(preview, ensure_ascii=False)
+        for passage in display["polish_passage"]:
+            assert passage in store.get_outcome("out_pl_appeal_podlesna")["description"]
+            assert passage in encoded
+    assert "case_tam" not in encoded
+    assert "out_pl_acquit_podlesna" not in encoded
+    assert "II Ko 28/21" not in encoded
+    assert store.public_export()["outcome_events"] == []
+    with pytest.raises(ValidationError, match="unverified outcome cannot be approved"):
+        store.review(
+            "outcome_event",
+            "out_pl_appeal_podlesna",
+            "approve",
+            reviewer="ada",
+            claim_supported=True,
+        )
+    assert store.get_outcome("out_pl_appeal_podlesna")["review_status"] == "proposed"
+    store.close()
+
+
+def test_approved_only_sample_export_matches_the_public_contract(tmp_path):
+    import json
+    from pathlib import Path
+
+    from advocacy_trace.seed import open_store
+
+    sample_path = Path(__file__).resolve().parents[1] / "docs" / "public-export.sample.json"
+    sample = json.loads(sample_path.read_text(encoding="utf-8"))
+    store = open_store(tmp_path / "contract.sqlite")
+    live = store.public_export()
+    for case in live["cases"]:
+        case["created_at"] = ""
+    assert live == sample
+    assert sample["real_case_count"] == 1
+    assert sample["approved_argument_count"] == 2
+    assert sample["outcome_events"] == []
+    assert sample["receptions"] == []
+    assert sample["includes_full_documents"] is False
+    assert {item["id"] for item in sample["arguments"]} == {
+        "pl_arg_legality",
+        "pl_arg_proportionality",
+    }
+    assert {item["id"] for item in sample["cases"]} == {"case_poland"}
+    store.close()
+
+
 def test_public_preview_keeps_uncertainty_and_hides_private_material(store):
     import json
 
