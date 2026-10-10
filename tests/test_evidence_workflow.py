@@ -905,7 +905,11 @@ def test_proposed_research_stays_out_of_public_outputs(demo):
     counts = demo.decision_counts("case_poland")
     assert counts["defendants"] == 3
     assert counts["proceedings"] == 1
-    assert counts["decisions"] == 4
+    assert counts["decisions"] == 3
+    assert counts["procedural_actions"] == 1
+    assert counts["procedural_action_ids"] == ["pl_action_sn_prosecutor_withdrawal"]
+    assert "pl_action_sn_prosecutor_withdrawal" not in counts["decision_ids"]
+    assert "pl_decision_sn_dismissal_2024-03-28" in counts["decision_ids"]
     assert counts["outcome_rows"] == 12
     dismissal = demo.get_outcome("out_pl_sn_dismissal_podlesna")
     withdrawal = demo.get_outcome("out_pl_sn_withdrawal_podlesna")
@@ -916,7 +920,11 @@ def test_proposed_research_stays_out_of_public_outputs(demo):
     assert withdrawal["review_status"] == "proposed"
     assert withdrawal["event_type"] == "Appeal withdrawn"
     assert withdrawal["event_date"] is None
-    assert withdrawal["decision_id"] == "pl_decision_sn_prosecutor_withdrawal"
+    assert withdrawal["decision_id"] == "pl_action_sn_prosecutor_withdrawal"
+    assert "procedural action" in withdrawal["public_limitation"]
+    assert "event date stays unknown" in withdrawal["public_limitation"]
+    assert "decision" in dismissal["public_limitation"]
+    assert "postanowienie and wyrok" in dismissal["finality"]
     assert demo.independent_support_count("out_pl_sn_dismissal_podlesna") == 0
     assert counts["interventions"] == 1
     tam_counts = demo.decision_counts("case_tam")
@@ -1350,7 +1358,8 @@ def test_appeal_preview_does_not_approve_and_explorer_counts_one_case(tmp_path):
     assert display["shared_decision_id"] == "pl_decision_appeal_2022-01-12"
     assert display["appeal_outcome_rows"] == 3
     assert display["appeal_decisions"] == 1
-    assert display["case_counts"]["decisions"] == 4
+    assert display["case_counts"]["decisions"] == 3
+    assert display["case_counts"]["procedural_actions"] == 1
     assert display["case_counts"]["outcome_rows"] == 12
     assert {row["id"] for row in display["defendant_rows"]} == set(before)
     assert {row["decision_id"] for row in display["defendant_rows"]} == {

@@ -26,6 +26,7 @@ from advocacy_trace.constants import (
     LINK_TARGETS,
     NO_UPDATE_EVENT,
     NOT_STATED,
+    PROCEDURAL_ACTION_EVENT_TYPES,
     PROVENANCE_VALUES,
     PUBLIC_ARGUMENT_ROLES,
     PUBLIC_EXPORT_SCHEMA_VERSION,
@@ -1097,10 +1098,12 @@ class EvidenceStore:
         return len(origins)
 
     def decision_counts(self, case_id: str) -> dict:
-        """Separate defendants, the proceeding, shared decisions, and interventions.
+        """Separate defendants, the proceeding, judicial decisions, and interventions.
 
         Several defendant-specific outcome rows can share one decision_id.
-        The row count is not the decision count.
+        The row count is not the decision count. A withdrawal of a challenge is a
+        procedural action. Sharing an id across defendants does not make that
+        withdrawal a judicial decision.
         """
 
         self._get_case(case_id)
@@ -1115,22 +1118,32 @@ class EvidenceStore:
             if event["event_type"] != NO_UPDATE_EVENT
         ]
         decision_ids: list[str] = []
-        seen: set[str] = set()
+        action_ids: list[str] = []
+        seen_decisions: set[str] = set()
+        seen_actions: set[str] = set()
         for event in events:
             key = (event.get("decision_id") or "").strip() or event["id"]
-            if key not in seen:
-                seen.add(key)
+            if event["event_type"] in PROCEDURAL_ACTION_EVENT_TYPES:
+                if key not in seen_actions:
+                    seen_actions.add(key)
+                    action_ids.append(key)
+                continue
+            if key not in seen_decisions:
+                seen_decisions.add(key)
                 decision_ids.append(key)
         return {
             "defendants": len(defendants),
             "proceedings": 1,
             "decisions": len(decision_ids),
             "decision_ids": decision_ids,
+            "procedural_actions": len(action_ids),
+            "procedural_action_ids": action_ids,
             "interventions": len(self.interventions_for_case(case_id)),
             "outcome_rows": len(events),
             "note": (
-                "Defendants, proceedings, decisions, and interventions are counted separately. "
-                "Outcome rows can repeat one decision for each defendant. "
+                "Defendants, proceedings, judicial decisions, and interventions are counted separately. "
+                "A withdrawal of a challenge is a procedural action and is not counted as a judicial decision. "
+                "Outcome rows can repeat one decision, or one procedural action, for each defendant. "
                 "These figures are not a success rate."
             ),
         }

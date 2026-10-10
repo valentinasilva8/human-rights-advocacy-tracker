@@ -68,6 +68,9 @@ EVENT_TYPES = (
 
 NO_UPDATE_EVENT = "No verified recent update"
 
+# A withdrawal of a challenge is something a party did. It is not a court disposition.
+PROCEDURAL_ACTION_EVENT_TYPES = frozenset({"Appeal withdrawn"})
+
 EVIDENCE_LABELS = (
     "Primary-source supported",
     "Corroborated by independent sources",

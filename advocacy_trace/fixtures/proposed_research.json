@@ -503,10 +503,10 @@
       "event_date": "2024-03-28",
       "event_date_precision": "day",
       "procedural_stage": "Supreme Court cassation: dismissal of the auxiliary prosecutors' cassations",
-      "finality": "Proposed. The Supreme Court order was not retrieved. This is not an approved public outcome.",
+      "finality": "Proposed. The Supreme Court decision was not inspected. KPH uses both postanowienie and wyrok, so the document form stays unresolved. This is not an approved public outcome.",
       "is_synthetic": false,
       "decision_id": "pl_decision_sn_dismissal_2024-03-28",
-      "public_limitation": "KPH reported this dismissal. The Supreme Court order was not retrieved. This is an organization account, not a finding read from the order. KPH's page uses both postanowienie and wyrok; the form of the decision is not resolved. Kaja Godek and Tadeusz Łebkowski are two challengers in one reported order, not two decisions. The District Prosecutor in Płock's cassation is a separate withdrawal record. The 28 March 2024 rp.pl article is a different piece from the January 2022 article that draws on HFHR. It reports the same dismissal and does not corroborate that KPH reported it. V KK 430/22 is cited by KPH and by that rp.pl article. It has not been verified against the order. This does not establish acceptance or rejection of Lisa Davis's arguments. This row is proposed and is not a public outcome.",
+      "public_limitation": "KPH reported this dismissal. That attribution is what KPH's page says. rp.pl's 28 March 2024 article separately reports the underlying dismissal of the cassations of Kaja Godek and the Płock priest. Reporting the event is not the same as verifying that KPH reported it. The Supreme Court decision was not inspected. KPH uses both postanowienie and wyrok, so this record says decision and does not resolve the document form. Kaja Godek and Tadeusz Łebkowski are the named challengers in one dismissal. The three defendant rows share that dismissal. The prosecutor's withdrawal is a separate procedural action and is not a judicial decision. V KK 430/22 is a citation in the articles, not a document that was read. This does not establish acceptance or rejection of Lisa Davis's arguments. This row is proposed.",
       "evidence_basis": "organization_account"
     },
     {
@@ -519,10 +519,10 @@
       "event_date": "2024-03-28",
       "event_date_precision": "day",
       "procedural_stage": "Supreme Court cassation: dismissal of the auxiliary prosecutors' cassations",
-      "finality": "Proposed. The Supreme Court order was not retrieved. This is not an approved public outcome.",
+      "finality": "Proposed. The Supreme Court decision was not inspected. KPH uses both postanowienie and wyrok, so the document form stays unresolved. This is not an approved public outcome.",
       "is_synthetic": false,
       "decision_id": "pl_decision_sn_dismissal_2024-03-28",
-      "public_limitation": "KPH reported this dismissal. The Supreme Court order was not retrieved. This is an organization account, not a finding read from the order. KPH's page uses both postanowienie and wyrok; the form of the decision is not resolved. Kaja Godek and Tadeusz Łebkowski are two challengers in one reported order, not two decisions. The District Prosecutor in Płock's cassation is a separate withdrawal record. The 28 March 2024 rp.pl article is a different piece from the January 2022 article that draws on HFHR. It reports the same dismissal and does not corroborate that KPH reported it. V KK 430/22 is cited by KPH and by that rp.pl article. It has not been verified against the order. This does not establish acceptance or rejection of Lisa Davis's arguments. This row is proposed and is not a public outcome.",
+      "public_limitation": "KPH reported this dismissal. That attribution is what KPH's page says. rp.pl's 28 March 2024 article separately reports the underlying dismissal of the cassations of Kaja Godek and the Płock priest. Reporting the event is not the same as verifying that KPH reported it. The Supreme Court decision was not inspected. KPH uses both postanowienie and wyrok, so this record says decision and does not resolve the document form. Kaja Godek and Tadeusz Łebkowski are the named challengers in one dismissal. The three defendant rows share that dismissal. The prosecutor's withdrawal is a separate procedural action and is not a judicial decision. V KK 430/22 is a citation in the articles, not a document that was read. This does not establish acceptance or rejection of Lisa Davis's arguments. This row is proposed.",
       "evidence_basis": "organization_account"
     },
     {
@@ -535,10 +535,10 @@
       "event_date": "2024-03-28",
       "event_date_precision": "day",
       "procedural_stage": "Supreme Court cassation: dismissal of the auxiliary prosecutors' cassations",
-      "finality": "Proposed. The Supreme Court order was not retrieved. This is not an approved public outcome.",
+      "finality": "Proposed. The Supreme Court decision was not inspected. KPH uses both postanowienie and wyrok, so the document form stays unresolved. This is not an approved public outcome.",
       "is_synthetic": false,
       "decision_id": "pl_decision_sn_dismissal_2024-03-28",
-      "public_limitation": "KPH reported this dismissal. The Supreme Court order was not retrieved. This is an organization account, not a finding read from the order. KPH's page uses both postanowienie and wyrok; the form of the decision is not resolved. Kaja Godek and Tadeusz Łebkowski are two challengers in one reported order, not two decisions. The District Prosecutor in Płock's cassation is a separate withdrawal record. The 28 March 2024 rp.pl article is a different piece from the January 2022 article that draws on HFHR. It reports the same dismissal and does not corroborate that KPH reported it. V KK 430/22 is cited by KPH and by that rp.pl article. It has not been verified against the order. This does not establish acceptance or rejection of Lisa Davis's arguments. This row is proposed and is not a public outcome.",
+      "public_limitation": "KPH reported this dismissal. That attribution is what KPH's page says. rp.pl's 28 March 2024 article separately reports the underlying dismissal of the cassations of Kaja Godek and the Płock priest. Reporting the event is not the same as verifying that KPH reported it. The Supreme Court decision was not inspected. KPH uses both postanowienie and wyrok, so this record says decision and does not resolve the document form. Kaja Godek and Tadeusz Łebkowski are the named challengers in one dismissal. The three defendant rows share that dismissal. The prosecutor's withdrawal is a separate procedural action and is not a judicial decision. V KK 430/22 is a citation in the articles, not a document that was read. This does not establish acceptance or rejection of Lisa Davis's arguments. This row is proposed.",
       "evidence_basis": "organization_account"
     },
     {
@@ -551,10 +551,10 @@
       "event_date": null,
       "event_date_precision": "unknown",
       "procedural_stage": "Supreme Court cassation: withdrawal of the District Prosecutor in Płock's cassation",
-      "finality": "Proposed. Withdrawal is not a dismissal. The day was not stated. This is not an approved public outcome.",
+      "finality": "Proposed. This is a procedural action, not a judicial decision. The day was not stated. This is not an approved public outcome.",
       "is_synthetic": false,
-      "decision_id": "pl_decision_sn_prosecutor_withdrawal",
-      "public_limitation": "KPH reported that the prosecutor's cassation was effectively withdrawn. The day was not stated. The 28 March 2024 rp.pl article says the Płock prosecution withdrew its cassation in recent days before the Thursday hearing. That phrase is not a date, and the publication date is not the event date. Withdrawal is not a dismissal. The auxiliary prosecutors' cassations are a separate dismissal record. The Supreme Court order was not retrieved. Amnesty Slovakia's account that the Supreme Court rejected the state authorities' appeal collapses these actions and is not the basis of this claim. This row is proposed and is not a public outcome.",
+      "decision_id": "pl_action_sn_prosecutor_withdrawal",
+      "public_limitation": "KPH reported that the prosecutor's cassation was effectively withdrawn. That attribution is what KPH's page says. rp.pl reports the underlying event: the Płock prosecution withdrew its cassation in recent days. That supports the withdrawal. It does not verify that KPH reported it, and it is not a date. The publication date is not the event date, so the event date stays unknown. This is one procedural action shared by the three defendant rows. It is not counted as a judicial decision. The 28 March 2024 dismissal of the named challengers' cassations is a separate record. The judicial document was not inspected. Amnesty Slovakia's account collapses the withdrawal and the dismissal and is not this claim. This does not establish acceptance or rejection of Lisa Davis's arguments. This row is proposed.",
       "evidence_basis": "organization_account"
     },
     {
@@ -567,10 +567,10 @@
       "event_date": null,
       "event_date_precision": "unknown",
       "procedural_stage": "Supreme Court cassation: withdrawal of the District Prosecutor in Płock's cassation",
-      "finality": "Proposed. Withdrawal is not a dismissal. The day was not stated. This is not an approved public outcome.",
+      "finality": "Proposed. This is a procedural action, not a judicial decision. The day was not stated. This is not an approved public outcome.",
       "is_synthetic": false,
-      "decision_id": "pl_decision_sn_prosecutor_withdrawal",
-      "public_limitation": "KPH reported that the prosecutor's cassation was effectively withdrawn. The day was not stated. The 28 March 2024 rp.pl article says the Płock prosecution withdrew its cassation in recent days before the Thursday hearing. That phrase is not a date, and the publication date is not the event date. Withdrawal is not a dismissal. The auxiliary prosecutors' cassations are a separate dismissal record. The Supreme Court order was not retrieved. Amnesty Slovakia's account that the Supreme Court rejected the state authorities' appeal collapses these actions and is not the basis of this claim. This row is proposed and is not a public outcome.",
+      "decision_id": "pl_action_sn_prosecutor_withdrawal",
+      "public_limitation": "KPH reported that the prosecutor's cassation was effectively withdrawn. That attribution is what KPH's page says. rp.pl reports the underlying event: the Płock prosecution withdrew its cassation in recent days. That supports the withdrawal. It does not verify that KPH reported it, and it is not a date. The publication date is not the event date, so the event date stays unknown. This is one procedural action shared by the three defendant rows. It is not counted as a judicial decision. The 28 March 2024 dismissal of the named challengers' cassations is a separate record. The judicial document was not inspected. Amnesty Slovakia's account collapses the withdrawal and the dismissal and is not this claim. This does not establish acceptance or rejection of Lisa Davis's arguments. This row is proposed.",
       "evidence_basis": "organization_account"
     },
     {
@@ -583,10 +583,10 @@
       "event_date": null,
       "event_date_precision": "unknown",
       "procedural_stage": "Supreme Court cassation: withdrawal of the District Prosecutor in Płock's cassation",
-      "finality": "Proposed. Withdrawal is not a dismissal. The day was not stated. This is not an approved public outcome.",
+      "finality": "Proposed. This is a procedural action, not a judicial decision. The day was not stated. This is not an approved public outcome.",
       "is_synthetic": false,
-      "decision_id": "pl_decision_sn_prosecutor_withdrawal",
-      "public_limitation": "KPH reported that the prosecutor's cassation was effectively withdrawn. The day was not stated. The 28 March 2024 rp.pl article says the Płock prosecution withdrew its cassation in recent days before the Thursday hearing. That phrase is not a date, and the publication date is not the event date. Withdrawal is not a dismissal. The auxiliary prosecutors' cassations are a separate dismissal record. The Supreme Court order was not retrieved. Amnesty Slovakia's account that the Supreme Court rejected the state authorities' appeal collapses these actions and is not the basis of this claim. This row is proposed and is not a public outcome.",
+      "decision_id": "pl_action_sn_prosecutor_withdrawal",
+      "public_limitation": "KPH reported that the prosecutor's cassation was effectively withdrawn. That attribution is what KPH's page says. rp.pl reports the underlying event: the Płock prosecution withdrew its cassation in recent days. That supports the withdrawal. It does not verify that KPH reported it, and it is not a date. The publication date is not the event date, so the event date stays unknown. This is one procedural action shared by the three defendant rows. It is not counted as a judicial decision. The 28 March 2024 dismissal of the named challengers' cassations is a separate record. The judicial document was not inspected. Amnesty Slovakia's account collapses the withdrawal and the dismissal and is not this claim. This does not establish acceptance or rejection of Lisa Davis's arguments. This row is proposed.",
       "evidence_basis": "organization_account"
     },
     {

@@ -91,6 +91,7 @@ def migrate(conn: sqlite3.Connection) -> None:
     _keep_article_quotations(conn)
     _record_appeal_account(conn)
     _record_support_scope(conn)
+    _clarify_2024_actions(conn)
     conn.commit()
 
 
@@ -526,6 +527,54 @@ def _record_support_scope(conn: sqlite3.Connection) -> None:
                 (item.get("rights_note", ""), item["id"]),
             )
     _mark_migration(conn, "support_scope_v1")
+
+
+def _clarify_2024_actions(conn: sqlite3.Connection) -> None:
+    """Keep the 2024 withdrawal a procedural action. Do not touch an approval."""
+
+    if _migration_applied(conn, "poland_2024_action_wording_v1"):
+        return
+    tables = {
+        row[0]
+        for row in conn.execute("SELECT name FROM sqlite_master WHERE type = 'table'")
+    }
+    if RESEARCH_PATH.exists() and "outcome_events" in tables:
+        payload = json.loads(RESEARCH_PATH.read_text(encoding="utf-8"))
+        wanted = {
+            "out_pl_sn_dismissal_podlesna",
+            "out_pl_sn_dismissal_prus",
+            "out_pl_sn_dismissal_gzyra",
+            "out_pl_sn_withdrawal_podlesna",
+            "out_pl_sn_withdrawal_prus",
+            "out_pl_sn_withdrawal_gzyra",
+        }
+        for item in payload.get("outcomes", []):
+            if item["id"] not in wanted:
+                continue
+            current = conn.execute(
+                "SELECT review_status, is_synthetic FROM outcome_events WHERE id = ?",
+                (item["id"],),
+            ).fetchone()
+            if current is None or current[0] != "proposed" or current[1]:
+                continue
+            conn.execute(
+                """
+                UPDATE outcome_events
+                SET description = ?, public_limitation = ?, finality = ?, decision_id = ?,
+                    event_date = ?, event_date_precision = ?
+                WHERE id = ? AND review_status = 'proposed' AND is_synthetic = 0
+                """,
+                (
+                    item["description"],
+                    item.get("public_limitation", ""),
+                    item.get("finality"),
+                    item.get("decision_id"),
+                    item.get("event_date"),
+                    item.get("event_date_precision", "unknown"),
+                    item["id"],
+                ),
+            )
+    _mark_migration(conn, "poland_2024_action_wording_v1")
 
 
 def _update_case_notes(conn: sqlite3.Connection, tables: set[str], rows: list[dict]) -> None:
