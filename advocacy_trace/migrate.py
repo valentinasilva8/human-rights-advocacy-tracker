@@ -36,6 +36,9 @@ _COLUMN_ADDITIONS = {
     "evidence_links": {
         "provenance": "TEXT NOT NULL DEFAULT 'unknown'",
     },
+    "cases": {
+        "proceeding_note": "TEXT NOT NULL DEFAULT ''",
+    },
     "review_actions": {
         "claim_text": "TEXT NOT NULL DEFAULT ''",
         "evidence_ref": "TEXT NOT NULL DEFAULT ''",
@@ -83,6 +86,7 @@ def migrate(conn: sqlite3.Connection) -> None:
         demote_legacy_real=("arguments", "claim_supported") in added,
     )
     _apply_review_readiness(conn)
+    _apply_poland_preview(conn)
     conn.commit()
 
 
@@ -318,6 +322,67 @@ def _update_proposed_receptions(conn: sqlite3.Connection, tables: set[str], rows
                 item["id"],
             ),
         )
+
+
+def _apply_poland_preview(conn: sqlite3.Connection) -> None:
+    """Record that II K 296/20 is the trial docket. Do not approve the arguments."""
+
+    if _migration_applied(conn, "poland_trial_docket_v1"):
+        return
+    tables = {
+        row[0]
+        for row in conn.execute("SELECT name FROM sqlite_master WHERE type = 'table'")
+    }
+    if RESEARCH_PATH.exists() and "cases" in tables:
+        payload = json.loads(RESEARCH_PATH.read_text(encoding="utf-8"))
+        cases = {item["id"]: item for item in payload.get("cases", [])}
+        poland = cases.get("case_poland")
+        if poland and "proceeding_note" in {
+            row[1] for row in conn.execute("PRAGMA table_info(cases)")
+        }:
+            conn.execute(
+                """
+                UPDATE cases
+                SET proceeding_note = ?
+                WHERE id = 'case_poland' AND is_synthetic = 0
+                """,
+                (poland.get("proceeding_note", ""),),
+            )
+        if "arguments" in tables:
+            wanted = {
+                item["id"]: item
+                for item in payload.get("arguments", [])
+                if item["id"] in {"pl_arg_legality", "pl_arg_proportionality"}
+            }
+            for item_id, item in wanted.items():
+                current = conn.execute(
+                    "SELECT review_status, is_synthetic FROM arguments WHERE id = ?",
+                    (item_id,),
+                ).fetchone()
+                if current is None or current[0] != "proposed" or current[1]:
+                    continue
+                conn.execute(
+                    """
+                    UPDATE arguments
+                    SET public_limitation = ?, remedy_requested = ?, disclaimer_text = ?
+                    WHERE id = ? AND review_status = 'proposed' AND is_synthetic = 0
+                    """,
+                    (
+                        item.get("public_limitation", ""),
+                        item.get("remedy_requested", ""),
+                        item.get("disclaimer_text", ""),
+                        item_id,
+                    ),
+                )
+        if "sources" in tables:
+            for item in payload.get("sources", []):
+                if item["id"] != "pl_src_report":
+                    continue
+                conn.execute(
+                    "UPDATE sources SET rights_note = ? WHERE id = 'pl_src_report'",
+                    (item.get("rights_note", ""),),
+                )
+    _mark_migration(conn, "poland_trial_docket_v1")
 
 
 def _update_case_notes(conn: sqlite3.Connection, tables: set[str], rows: list[dict]) -> None:

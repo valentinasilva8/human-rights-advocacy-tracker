@@ -835,6 +835,19 @@ def test_proposed_research_stays_out_of_public_outputs(demo):
     load_proposed_research(demo)
     poland = demo.get_argument("pl_arg_proportionality")
     assert poland["review_status"] == "proposed"
+    assert "appeal docket" in poland["public_limitation"]
+    assert "legal advice" in poland["disclaimer_text"]
+    assert "Recommendations from Professor Lisa Davis" in poland["remedy_requested"]
+    from advocacy_trace.views import public_preview
+
+    preview = public_preview(demo, "pl_arg_legality")
+    assert preview["this_call_approved_nothing"] is True
+    assert preview["stored_review_status"] == "proposed"
+    assert preview["case"]["case_number"] == "II K 296/20"
+    assert "trial case number" in preview["case"]["proceeding_note"]
+    assert "appeal docket" in preview["case"]["proceeding_note"]
+    assert "wp-content/uploads/2023/07/trial-observation-report-poland-lgbt.pdf" in preview["source"]["rights_note"]
+    assert demo.get_argument("pl_arg_legality")["review_status"] == "proposed"
     assert poland["author_actor"] == "Lisa Davis"
     assert poland["attribution_role"] == "partner_argument"
     assert demo.independent_support_count("out_pl_appeal_podlesna") == 0

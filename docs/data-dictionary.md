@@ -56,6 +56,8 @@ One argument advanced or described in a source.
 
 `passage` and `location_ref` are required before approval. `review_status` is `proposed`, `approved`, or `rejected`.
 
+`proceeding_note` on a case says what a case number refers to. For Poland, `II K 296/20` is the trial number cited for the District Court of Płock judgment of 2 March 2021. An appeal docket has not been verified, so that number is not stored as an appeal number.
+
 `public_limitation` is displayed beside an approved claim. `evidence_basis` says what kind of source supports it. Neither field is a private reviewer note.
 
 ## argument_labels

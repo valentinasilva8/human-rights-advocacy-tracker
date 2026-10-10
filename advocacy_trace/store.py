@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS cases (
     proceeding_type TEXT,
     procedural_stage TEXT,
     finality TEXT,
+    proceeding_note TEXT NOT NULL DEFAULT '',
     sensitive INTEGER NOT NULL DEFAULT 0 CHECK (sensitive IN (0, 1)),
     is_synthetic INTEGER NOT NULL DEFAULT 0 CHECK (is_synthetic IN (0, 1)),
     opened_on TEXT,
@@ -314,6 +315,7 @@ class EvidenceStore:
         proceeding_type: str | None = None,
         procedural_stage: str | None = None,
         finality: str | None = None,
+        proceeding_note: str = "",
         sensitive: bool = False,
         is_synthetic: bool = False,
         opened_on: str | None = None,
@@ -331,10 +333,10 @@ class EvidenceStore:
             """
             INSERT INTO cases (
                 id, title, country, court, case_number, charges, proceeding_type,
-                procedural_stage, finality, sensitive, is_synthetic, opened_on,
+                procedural_stage, finality, proceeding_note, sensitive, is_synthetic, opened_on,
                 opened_on_precision, last_verified_on, last_verified_on_precision,
                 unresolved_questions, created_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 case_id,
@@ -346,6 +348,7 @@ class EvidenceStore:
                 _blank(proceeding_type),
                 _blank(procedural_stage),
                 _blank(finality),
+                proceeding_note.strip(),
                 int(bool(sensitive)),
                 int(bool(is_synthetic)),
                 opened,

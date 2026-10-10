@@ -36,7 +36,9 @@ The full preview also includes the passage, printed page, and the report URL. It
 
 **Proposed public claim.** Lisa Davis’s fairness report argues that Article 196 is not precise and is so broad that it gives the authorities unfettered discretion.
 
-**Source.** [Poland vs. Elzbieta Podlesna, Anna Prus, and Joanna Gzyra-Iskandar](https://cfj.org/reports/poland-vs-elzbieta-podlesna-anna-prus-and-joanna-gzyra-iskandar/)
+**Report page.** [Poland vs. Elzbieta Podlesna, Anna Prus, and Joanna Gzyra-Iskandar](https://cfj.org/reports/poland-vs-elzbieta-podlesna-anna-prus-and-joanna-gzyra-iskandar/). The page says Published 21 January 2022.
+
+**PDF.** [trial-observation-report-poland-lgbt.pdf](https://cfj.org/wp-content/uploads/2023/07/trial-observation-report-poland-lgbt.pdf). The cover says November 2021. This is the file the passages were read from.
 
 **Quotation.** “Article 196 is not precise, clear, or accessible. In criminalizing acts that “offend the religious feelings of other persons” through public insult, by nature a subjective concept, Article 196 is so broad as to afford the authorities unfettered discretion in its application, making it ripe for abuse.”
 
@@ -46,7 +48,7 @@ The full preview also includes the passage, printed page, and the report URL. It
 
 **Author and role.** Lisa Davis. `partner_argument`. Affiliation: City University of New York; TrialWatch Expert Panel. ABA Center for Human Rights staff helped draft the report. The stated disclaimer says the views are the authors’, not the ABA House of Delegates or Board of Governors, and not necessarily those of the Clooney Foundation for Justice.
 
-**Dates and proceeding.** Report cover: November 2021, month precision. Proceeding: District Court of Płock, II K 296/20. Defendants: Elżbieta Podleśna, Anna Prus, Joanna Gzyra-Iskandar.
+**Dates and proceeding.** PDF cover: November 2021, month precision. The CFJ report page says Published 21 January 2022. Those are different dates. The stored argument date remains the cover month. II K 296/20 is the trial case number. Footnote 2 on printed p. 3 cites “District Court of Plock, Justification for a Judgment, Case No. II K 296/20, March 2, 2021.” An appeal docket has not been verified. Defendants: Elżbieta Podleśna, Anna Prus, Joanna Gzyra-Iskandar.
 
 **Proposed label.** Legality and Broadness. The passage states both lack of precision and breadth. They were not collapsed into one label.
 
@@ -54,11 +56,13 @@ The full preview also includes the passage, printed page, and the report URL. It
 
 **Public limitation.** “This is what the named author wrote. It is not a court finding. No reviewed record establishes how a court received the argument. That absence is not a finding that the court ignored it.”
 
-**Remedy, cited separately.** The legality passage does not request a remedy.
+**Remedy, cited separately.** The legality passage on printed p. 3 does not request a remedy.
 
-Quotation, printed p. 4, PDF page 5: “While the legislature should repeal Article 196, which – as described above – does not conform with international and regional standards…” and “The prosecution’s appeal in the present case, which is scheduled to be heard on November 10, should likewise be rejected.”
+Quotation, printed p. 4, PDF page 5: “The prosecution’s appeal in the present case, which is scheduled to be heard on November 10, should likewise be rejected.” And: “While the legislature should repeal Article 196, which – as described above – does not conform with international and regional standards…”
 
-Quotation, printed p. 31, PDF page 32: “on November 10 the appellate court in Plock should dismiss the prosecution’s appeal against the acquittal.”
+Quotation, printed p. 31, PDF page 32, conclusion: “on November 10 the appellate court in Plock should dismiss the prosecution’s appeal against the acquittal.”
+
+Same page, under “Recommendations from Professor Lisa Davis.” To the Polish legislature: “Article 196 and other laws functionally criminalizing expressions of solidarity with the LGBTIQ+ community should be repealed.” To the Polish judiciary: “the court should dismiss the prosecution’s appeal against the acquittal of Podlesna, Prus, and Gzyra-Iskandar.”
 
 The November 10 sentence does not restate the year.
 
@@ -68,7 +72,7 @@ The November 10 sentence does not restate the year.
 
 **Proposed public claim.** Lisa Davis’s fairness report argues that the prosecution failed necessity and proportionality because the posters were not an exceptionally grave speech offense.
 
-**Source.** Same report URL as `pl_arg_legality`.
+**Report page and PDF.** Same two links as `pl_arg_legality`.
 
 **Quotation.** “Third, the case against the accused failed to meet necessity and proportionality requirements. With respect to this requirement, international and regional bodies have made clear that criminal prosecutions for speech offenses should be reserved for exceptionally grave acts, such as incitement to genocide and terrorism. The accused’s posting of stickers and posters featuring a rainbow halo clearly did not rise to this level of gravity.”
 
@@ -84,7 +88,7 @@ The November 10 sentence does not restate the year.
 
 **Public limitation.** Same author-document limitation as `pl_arg_legality`.
 
-**Remedy, cited separately.** The necessity paragraph does not itself tell the court what to do. The repeal and November 10 requests are the quotations in section 1, on the same printed p. 4 and again in the conclusion on printed p. 31.
+**Remedy, cited separately.** The necessity sentences do not themselves tell the court what to do. The repeal and November 10 requests, and the recommendations to the legislature and the judiciary, are the quotations in section 1. They are on printed p. 4 and printed p. 31.
 
 **Recommendation.** Ready for review. The claim is about what the report says.
 

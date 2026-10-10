@@ -174,6 +174,7 @@ def _case(store) -> None:
             "Country": case.get("country") or "unknown",
             "Court": case.get("court") or "unknown",
             "Case number": case.get("case_number") or "unknown",
+            "Proceeding note": case.get("proceeding_note") or "none recorded",
             "Charges": case.get("charges") or "unknown",
             "Stage": case.get("procedural_stage") or "unknown",
             "Finality": case.get("finality") or "unknown",
