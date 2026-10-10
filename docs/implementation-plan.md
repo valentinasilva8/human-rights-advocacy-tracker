@@ -1,35 +1,33 @@
-# Phased implementation plan
+# Implementation plan
 
-The phases below follow the hackathon brief. This repository has the local scaffold, one synthetic chain, and a link index of public TrialWatch reports. It does not commit the PDFs.
+Updated 9 October 2026. This is the working plan for the evidence tracker. It replaces the earlier phase list that named Kong Raiya as the next real chain and treated comparison as a current screen.
 
-## Phase 1 — Source feasibility
+The product question is: what was argued, by whom and through which intervention; what documented response exists; and what happened afterward. The tracker looks for patterns and gaps. It does not claim that an argument caused an outcome.
 
-The trials hub is not a case database. The usable queue is the 47 graded freedom-of-expression reports listed in [trialwatch-report-index.md](trialwatch-report-index.md), copied from the argument-bank index of 9 October 2026. What to reuse from that pipeline, and what to leave behind, is in [argument-bank-assessment.md](argument-bank-assessment.md). See also [source-reuse-policy.md](source-reuse-policy.md).
+Live alignment with the Google Doc tab `t.avvzu4g5dzi9` is pending. That tab was not readable. The two uploaded PDFs are not treated as a current copy of it.
 
-`https://cfj.org/trialwatch/trials/` is a category hub. Public sitemaps expose report, news, story, topic, and country URLs. A sampled report page has a title, a short blurb, a publication date, and a PDF link. The argument text is in the PDF. News posts are often announcements. No public terms page was found that grants republication. Real cases stay out of the repository until one evidence chain is chosen and reviewed, and until reuse is clearer.
+## Where this slice stands
 
-## Phase 2 — Classification guide
+The safeguards in the current build are in the store, the explorer, the case screen, and `public_export`. Valentina Silva approved `pl_arg_legality` and `pl_arg_proportionality` on 10 October 2026. Those two rows keep the report quotations as the proof. Every other Poland or Tam row stays proposed. The appeal judgment is still unread, so reception of the report is “Decision not yet retrieved,” and the HFHR account of the appeal stays an unverified outcome. The search log is [research-log.md](research-log.md). The packet is [review-packet.md](review-packet.md).
 
-The annotation guide is in [annotation-guide.md](annotation-guide.md). It is flagged for legal-mentor review. The five labels are not expanded in this version.
+## What is already in the repository
 
-## Phase 3 — One end-to-end case
+A synthetic chain, Exampleland v. A. Rivera, exercises approval, chronology, separate proceedings, and duplicate articles. The database is created with `CREATE TABLE IF NOT EXISTS` and is migrated in place. It is not deleted and reseeded to add columns. Real fairness-report PDFs are not in git. Proposed clusters from six reports are notes in [first-argument-clusters.md](first-argument-clusters.md), not approved rows.
 
-Implemented with a fictional record, `Exampleland v. A. Rivera`. It has a proportionality argument with a page citation, a separately sourced later outcome, a reception record that is not treated as acceptance, and a human review action.
+## Current build
 
-The next real chain is Cambodia v. Kong Raiya, already on the core list. A local PDF has been read. The arguments stay proposed until a person checks them. The fairness grade in the index is not the outcome. Developments after the November 2020 report are unknown until a later source is confirmed.
+These steps run together. Research does not wait for the last code step. Real rows from research stay proposed until a person approves them.
 
-## Phase 4 — Assisted extraction
+1. **Product language and counts.** The brief, the explorer, and the learning brief use the question above. A count says what it counts. One approved argument is not a verified case.
+2. **Attribution.** The default explorer shows approved named-expert and partner analysis with author, affiliation, role, and disclaimer. Affiliation alone is not institutional TrialWatch attribution. Defense submissions and authority findings stay distinct. Ingestion cannot grant itself a TrialWatch role or a support check.
+3. **Export and public views.** Approval and sensitivity apply to each argument, outcome, and reception in the explorer, the case screen, and `public_export`. Proposed rows, reviewer notes, and research notes stay on the review screen. Approval does not permit republication of a PDF.
+4. **Fields the workflow needs.** Principle, application, and remedy (or “not stated”). Disclaimer status distinguishes “not stated in source” from “not yet checked.” A human support check, with reviewer, time, claim, and evidence. Changing claim text, attribution, or supporting evidence returns the row to proposed. Reception statuses separate “not yet retrieved,” “sought but unavailable,” “reasoning insufficient,” and “not addressed in the available decision.” Explicit reception names the authority’s own document or is labeled a secondary account. Evidence links record duplication, shared underlying reporting, same organization, independent corroboration, or unknown. Unknown independence does not add to the support count.
+5. **Bounded research.** About 30 minutes, read-only, on Poland v. Podleśna, Prus, and Gzyra-Iskandar and on Hong Kong SAR v. Tam Tak-chi. Record queries and results. “Not found in this search” is not “does not exist.” Prefer a dated intervention and a later development in the same proceeding. A verdict that predates the report is not a response to that report.
 
-Not started. Structured model output, when added, must quote only passages that exist in the source and must land in the review queue as proposed records. Retrieved text is data, never an instruction.
+## After several reviewed cases
 
-## Phase 5 — Outcome research
+See [cross-case-roadmap.md](cross-case-roadmap.md). Comparison across cases, and any lawyer-facing drafting, wait until several person-approved cases exist. They are not part of this build.
 
-Not started. Manual file import works. Automated search is an empty adapter that reports a missing credential instead of calling a network service. Duplicate articles and mismatched proceedings are represented in the data model.
+## Not in this build
 
-## Phase 6 — Argument comparison
-
-The explorer filters reviewed records and shows unique-case counts, unknown outcomes, and synthetic exclusions. The learning brief is editable and is not sent.
-
-## Phase 7 — Demo and documentation
-
-The demo runs from the committed synthetic fixture and needs no live API. Six to ten reviewed real cases are not in this version. Known gaps are listed in the README and the source policy.
+Bulk PDF ingestion. A draft generator. The Indonesia reform classifier. Success scores or “winning arguments.” A new deployment or a public upload of source files.

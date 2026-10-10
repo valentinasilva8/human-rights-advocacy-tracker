@@ -25,16 +25,23 @@ def open_store(path: Path | None = None) -> EvidenceStore:
     store = EvidenceStore(db_path)
     if is_new:
         load_fixture(store)
+    from advocacy_trace.approvals import apply_recorded_approvals
+    from advocacy_trace.research import load_proposed_research
+
+    load_proposed_research(store)
+    apply_recorded_approvals(store)
     return store
 
 
 def main() -> None:
     path = database_path()
-    if path.exists():
-        path.unlink()
+    existed = path.exists()
     store = open_store(path)
     store.close()
-    print(f"Seeded demonstration database at {path}")
+    if existed:
+        print(f"Migrated the existing database at {path}. Existing rows were kept.")
+    else:
+        print(f"Seeded demonstration database at {path}")
 
 
 if __name__ == "__main__":

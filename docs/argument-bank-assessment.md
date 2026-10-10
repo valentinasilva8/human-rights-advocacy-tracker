@@ -2,7 +2,7 @@
 
 The notes in the other repository's argument-bank pipeline, and the open outcomes pull request, were checked against Advocacy Trace. The useful part is the map of public reports. The keyword tags and the "ended well" suggestion are not records this project can approve.
 
-Source repository: [valentinasilva8/fairtrial-ai-hackathon](https://github.com/valentinasilva8/fairtrial-ai-hackathon). Report index: [trialwatch-report-index.md](trialwatch-report-index.md). Outcomes pull request: [fairtrial-ai-hackathon#11](https://github.com/valentinasilva8/fairtrial-ai-hackathon/pull/11).
+Source repository: [valentinasilva8/fairtrial-ai-hackathon](https://github.com/valentinasilva8/fairtrial-ai-hackathon). Report index: [trialwatch-report-index.md](trialwatch-report-index.md). Outcomes pull request: [fairtrial-ai-hackathon#11](https://github.com/valentinasilva8/fairtrial-ai-hackathon/pull/11). The shared rules, including the Fatia and Haris draft screen, are in [team-alignment.md](team-alignment.md).
 
 ## Use
 

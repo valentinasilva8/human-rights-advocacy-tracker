@@ -8,7 +8,9 @@ The tool does not give legal advice, decide whether a prosecution was lawful, or
 
 ## The question it answers
 
-Show cases where TrialWatch advanced a proportionality argument. What exactly was argued, what response is documented, and what happened to the defendant afterward?
+What was argued, by whom and through which intervention; what documented response exists; and what happened afterward?
+
+The default explorer includes an approved institutional TrialWatch argument and an approved named-expert or partner analysis, with the author and any disclaimer from the source. It does not treat affiliation as institutional authorship.
 
 Labels in use: Vagueness, Broadness, Legality, Necessity, and Proportionality. They overlap. Other points stay `unmapped—review required`.
 
@@ -31,9 +33,9 @@ No API key is required. Optional variable names are listed in `.env.example`. Th
 
 Three screens:
 
-- **Argument Explorer.** Filter reviewed arguments. Unique cases are counted once. Missing reception or a missing later event is shown as a gap. The verified real-case count stays at zero while the only records are synthetic.
-- **Case Evidence.** Proceeding, interventions, cited passages, outcome events, reception, last-verified date, and open questions.
-- **Review and Learning.** Approve, reject, or edit a proposed row. Each action is stored. The learning brief is an editable draft. The app does not send it.
+- **Argument Explorer.** Approved TrialWatch and partner arguments. Counts follow the filters on screen. One approved argument does not mark the case verified. Proposed and sensitive rows stay out.
+- **Case Evidence.** Approved records only: proceeding, interventions, cited passages, outcome events, and reception. Open questions and research notes stay on the review screen.
+- **Review and Learning.** The internal view of proposed rows. Approve only after checking that the passage supports the claim. The learning brief is an editable draft. The app does not send it.
 
 You can attach a local file on the review screen. A file that is not a PDF, a failed download, or a missing search credential produces an explicit error and does not invent a record. Automated search is not configured.
 
@@ -50,7 +52,7 @@ Publication date, event date, retrieval date, and last-verified date are stored 
 
 The committed example is fictional: Exampleland v. A. Rivera. It is marked synthetic and is excluded from real-case metrics. Do not add real reports or articles to git. See [docs/source-reuse-policy.md](docs/source-reuse-policy.md).
 
-A separate index lists the public TrialWatch report pages, including 47 graded freedom-of-expression reports: [docs/trialwatch-report-index.md](docs/trialwatch-report-index.md). Those rows are links and fairness grades, not extracted arguments. How that index should and should not be used is in [docs/argument-bank-assessment.md](docs/argument-bank-assessment.md). Proposed clusters from the first six reports are in [docs/first-argument-clusters.md](docs/first-argument-clusters.md). They are not approved and they are not in the demo database.
+A separate index lists the public TrialWatch report pages, including 47 graded freedom-of-expression reports: [docs/trialwatch-report-index.md](docs/trialwatch-report-index.md). Those rows are links and fairness grades, not extracted arguments. How that index should and should not be used is in [docs/argument-bank-assessment.md](docs/argument-bank-assessment.md). Proposed clusters from the first six reports are in [docs/first-argument-clusters.md](docs/first-argument-clusters.md). They are not approved and they are not in the demo database. How that work lines up with the other repository's downloader, outcome sheet, and lawyer-screen mockup is in [docs/team-alignment.md](docs/team-alignment.md).
 
 ## TrialWatch pages
 
@@ -59,7 +61,8 @@ A separate index lists the public TrialWatch report pages, including 47 graded f
 ## Limits
 
 - The annotation guide still needs legal-mentor review.
-- No real case has been imported, and no second reviewer has scored classifications. Accuracy on real cases is not measured.
+- Proposed records from a bounded read of the Poland and Tam Tak-chi reports are in the local database. They are not approved. The search log is [docs/research-log.md](docs/research-log.md). The claims awaiting review are [docs/review-packet.md](docs/review-packet.md).
+- No person has approved a real row. Accuracy on real cases is not measured. Comparison across cases waits. See [docs/cross-case-roadmap.md](docs/cross-case-roadmap.md).
 - A favorable event is not evidence that an argument was accepted, and an accepted argument is not evidence that advocacy caused the event.
 - Comparisons in the brief are descriptive counts. They include the denominator, unknowns, and the fact that the demo set is synthetic.
 - Sensitive rows are omitted from the public export function. Do not commit them in order to hide them in the interface.
@@ -75,3 +78,7 @@ A separate index lists the public TrialWatch report pages, including 47 graded f
 - [TrialWatch report index](docs/trialwatch-report-index.md)
 - [Argument bank assessment](docs/argument-bank-assessment.md)
 - [First argument clusters](docs/first-argument-clusters.md)
+- [Team alignment](docs/team-alignment.md)
+- [Cross-case roadmap](docs/cross-case-roadmap.md)
+- [Research log](docs/research-log.md)
+- [Review packet](docs/review-packet.md)

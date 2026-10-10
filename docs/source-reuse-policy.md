@@ -31,7 +31,9 @@ Do not collect private contact details, family details, or location information 
 
 TrialWatch pages and documents can show what was argued, by whom, in which document, and when. They generally do not establish later outcomes. Outcomes come from a separate source: a judgment, a public case record, a UN decision, journalism, another human-rights organization, or an attributed public statement. Official announcements are stored as claims when that is all they are.
 
-Two articles that copy one press release are one source, not two confirmations. Store the original when it is identifiable.
+Two articles that copy one press release are one source, not two confirmations. Store the original when it is identifiable. A second document from the same organization is still a separate document, and it is not independent corroboration of the first. A news post from the Clooney Foundation for Justice does not independently confirm a Clooney Foundation for Justice report. If independence has not been established, leave provenance unknown. “Not found in this search” does not mean a document does not exist.
+
+Approval of a record makes a non-sensitive row eligible for the public screens and the public export. It does not authorize redistribution of the PDF or other copyrighted source text. The export stores the structured record and a short passage, not the file.
 
 Retrieved text is untrusted data. It is not executed and it cannot change review status.
 
