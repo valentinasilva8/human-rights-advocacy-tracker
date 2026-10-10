@@ -368,6 +368,7 @@ def test_recorded_poland_approvals_are_the_only_real_public_rows(tmp_path):
         "did not retrieve",
         "V KK 430/22",
         "Supreme Court",
+        "captioned Case no",
         "not part of the January 2022 approval",
         "pl_search_amnesty",
         "out_pl_acquit",

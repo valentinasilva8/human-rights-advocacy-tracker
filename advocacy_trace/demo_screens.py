@@ -1196,9 +1196,11 @@ def _source_passages(note: str) -> list[dict]:
 
 
 def _public_sentences(text: str) -> list[str]:
+    protected = re.sub(r"\b((?:Ref\. )?[Nn]o)\.", lambda match: match.group(1) + "\u0000", text)
+    protected = re.sub(r"(\d)\.(\d)", lambda match: match.group(1) + "\u0000" + match.group(2), protected)
     kept = []
-    for sentence in re.split(r"(?<=[.!?])\s+", text.strip()):
-        sentence = sentence.strip()
+    for sentence in re.split(r"(?<=[.!?])\s+", protected.strip()):
+        sentence = sentence.replace("\u0000", ".").strip()
         if sentence and not _PRIVATE_PASSAGE.search(sentence):
             kept.append(sentence)
     return kept

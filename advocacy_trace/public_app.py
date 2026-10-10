@@ -367,6 +367,7 @@ def _brief(brief: dict) -> None:
         st.write(f"Role: {author['role']}")
         st.write(f"Quotation: {item['quotation']}")
         st.write(f"Page reference: {item['location']}")
+        st.write(f"Argument date: {item['when']}")
         _remedy(item.get("remedy"), item.get("remedy_note"))
         st.write(f"Source: {item['source_title']}")
         _write_links(item.get("links"), item.get("source_url"))
